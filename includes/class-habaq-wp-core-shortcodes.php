@@ -60,6 +60,8 @@ class Habaq_WP_Core_Shortcodes {
 
         $rows[] = array('الحالة', $label_status);
 
+        self::enqueue_styles();
+
         $output = '<div class="habaq-job-fields">';
         foreach ($rows as $row) {
             if (!$row[1]) {
@@ -68,13 +70,6 @@ class Habaq_WP_Core_Shortcodes {
             $output .= '<div class="habaq-job-fields__row"><span class="k">' . esc_html($row[0]) . '</span><span class="v">' . esc_html($row[1]) . '</span></div>';
         }
         $output .= '</div>';
-
-        $output .= '<style>
-            .habaq-job-fields{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:12px;margin:14px 0;display:grid;gap:8px}
-            .habaq-job-fields__row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-            .habaq-job-fields .k{opacity:.7;font-size:13px}
-            .habaq-job-fields .v{font-weight:600}
-        </style>';
 
         return $output;
     }
@@ -94,8 +89,10 @@ class Habaq_WP_Core_Shortcodes {
         $status = Habaq_WP_Core_Helpers::job_get_status($post_id);
         $expired = Habaq_WP_Core_Helpers::job_is_expired($post_id);
 
+        self::enqueue_styles();
+
         if ($status === 'closed' || $expired) {
-            return '<div style="padding:12px;border:1px solid rgba(0,0,0,.12);border-radius:12px;margin-top:16px;">انتهى التقديم لهذه الفرصة.</div>';
+            return '<div class="habaq-job-apply__ended">' . esc_html__('انتهى التقديم لهذه الفرصة.', 'habaq-wp-core') . '</div>';
         }
 
         $attrs = shortcode_atts(array(
@@ -119,13 +116,30 @@ class Habaq_WP_Core_Shortcodes {
         $mailto = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
         $form_link = esc_url(trailingslashit(home_url($attrs['form_url'])) . '?job=' . $slug);
 
-        $output = '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">';
+        $output = '<div class="habaq-job-apply">';
         if ($mailto) {
-            $output .= '<a class="wp-block-button__link wp-element-button" href="' . esc_url($mailto) . '">' . esc_html($attrs['email_label']) . '</a>';
+            $output .= '<a class="habaq-job-apply__button" href="' . esc_url($mailto) . '">' . esc_html($attrs['email_label']) . '</a>';
         }
-        $output .= '<a class="wp-block-button__link wp-element-button" href="' . $form_link . '">' . esc_html($attrs['form_label']) . '</a>';
+        $output .= '<a class="habaq-job-apply__button" href="' . $form_link . '">' . esc_html($attrs['form_label']) . '</a>';
         $output .= '</div>';
 
         return $output;
+    }
+
+    /**
+     * Enqueue frontend styles.
+     *
+     * @return void
+     */
+    private static function enqueue_styles() {
+        $css = '.habaq-job-fields{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:14px;margin:16px 0;display:grid;gap:8px;background:#fff}
+.habaq-job-fields__row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.habaq-job-fields .k{opacity:.7;font-size:.9rem}
+.habaq-job-fields .v{font-weight:600}
+.habaq-job-apply{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.habaq-job-apply__button{background:#111;color:#fff;padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center}
+.habaq-job-apply__ended{padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:12px;margin-top:16px;background:#fafafa}';
+
+        Habaq_WP_Core_Helpers::enqueue_inline_style($css);
     }
 }
