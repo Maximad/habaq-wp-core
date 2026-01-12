@@ -143,12 +143,13 @@ class Habaq_WP_Core_Shortcodes {
      *
      * @return string
      */
-    public static function render_deadline() {
-        if (!is_singular('job')) {
+    public static function render_deadline($atts) {
+        $post_id = self::resolve_job_post_id($atts);
+        if (!$post_id) {
             return '';
         }
 
-        $deadline = get_post_meta(get_the_ID(), 'habaq_deadline', true);
+        $deadline = get_post_meta($post_id, 'habaq_deadline', true);
         if (!$deadline) {
             return '';
         }
@@ -163,12 +164,14 @@ class Habaq_WP_Core_Shortcodes {
      * @return string
      */
     public static function render_job_meta($atts) {
-        if (!is_singular('job')) {
+        $post_id = self::resolve_job_post_id($atts);
+        if (!$post_id) {
             return '';
         }
 
         $attrs = shortcode_atts(array(
             'key' => '',
+            'post_id' => 0,
         ), $atts);
 
         $allowed = array(
@@ -184,7 +187,7 @@ class Habaq_WP_Core_Shortcodes {
             return '';
         }
 
-        $value = get_post_meta(get_the_ID(), $key, true);
+        $value = get_post_meta($post_id, $key, true);
         if ($value === '') {
             return '';
         }
@@ -207,13 +210,15 @@ class Habaq_WP_Core_Shortcodes {
      * @return string
      */
     public static function render_job_terms($atts) {
-        if (!is_singular('job')) {
+        $post_id = self::resolve_job_post_id($atts);
+        if (!$post_id) {
             return '';
         }
 
         $attrs = shortcode_atts(array(
             'taxonomy' => '',
             'separator' => '، ',
+            'post_id' => 0,
         ), $atts);
 
         $taxonomy = sanitize_key($attrs['taxonomy']);
@@ -221,13 +226,41 @@ class Habaq_WP_Core_Shortcodes {
             return '';
         }
 
-        $terms = get_the_terms(get_the_ID(), $taxonomy);
+        $terms = get_the_terms($post_id, $taxonomy);
         if (is_wp_error($terms) || empty($terms)) {
             return '';
         }
 
         $names = wp_list_pluck($terms, 'name');
         return esc_html(implode($attrs['separator'], $names));
+    }
+
+    /**
+     * Resolve job post ID for shortcodes.
+     *
+     * @param array $atts Shortcode attributes.
+     * @return int
+     */
+    private static function resolve_job_post_id($atts) {
+        $post_id = 0;
+
+        if (is_array($atts) && isset($atts['post_id'])) {
+            $post_id = absint($atts['post_id']);
+        }
+
+        if (!$post_id) {
+            $post_id = get_the_ID();
+        }
+
+        if (!$post_id) {
+            $post_id = get_queried_object_id();
+        }
+
+        if (!$post_id || get_post_type($post_id) !== 'job') {
+            return 0;
+        }
+
+        return $post_id;
     }
 
     /**
