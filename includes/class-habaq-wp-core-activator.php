@@ -11,7 +11,6 @@ class Habaq_WP_Core_Activator {
      * @return void
      */
     public static function activate() {
-        Habaq_WP_Core_CPTs::register();
-        flush_rewrite_rules();
+        // Placeholder for activation logic.
     }
 }

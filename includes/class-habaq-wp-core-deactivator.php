@@ -11,6 +11,6 @@ class Habaq_WP_Core_Deactivator {
      * @return void
      */
     public static function deactivate() {
-        flush_rewrite_rules();
+        // Placeholder for deactivation logic.
     }
 }

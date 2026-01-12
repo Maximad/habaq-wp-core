@@ -40,10 +40,7 @@ class Habaq_WP_Core {
      * @return void
      */
     private function define_admin_hooks() {
-        $this->loader->add_action('init', 'Habaq_WP_Core_Roles', 'register');
-        $this->loader->add_action('add_meta_boxes', 'Habaq_WP_Core_Job_Admin', 'register_metaboxes');
-        $this->loader->add_action('manage_job_application_posts_custom_column', 'Habaq_WP_Core_Job_Admin', 'render_columns', 10, 2);
-        $this->loader->add_filter('manage_job_application_posts_columns', 'Habaq_WP_Core_Job_Admin', 'add_columns');
+        // Placeholder for admin hooks.
     }
 
     /**
@@ -52,15 +49,7 @@ class Habaq_WP_Core {
      * @return void
      */
     private function define_public_hooks() {
-        $this->loader->add_action('init', 'Habaq_WP_Core_CPTs', 'register');
-        $this->loader->add_action('init', 'Habaq_WP_Core_Shortcodes', 'register');
-        $this->loader->add_action('init', 'Habaq_WP_Core_Job_Applications', 'register_cpt');
-        $this->loader->add_action('init', 'Habaq_WP_Core_Job_Applications', 'register_shortcodes');
-        $this->loader->add_action('init', 'Habaq_WP_Core_Job_Filters', 'register_shortcodes');
-        $this->loader->add_action('pre_get_posts', 'Habaq_WP_Core_Job_Filters', 'filter_job_archive');
-        $this->loader->add_action('template_redirect', 'Habaq_WP_Core_Job_Applications', 'handle_submission');
-        $this->loader->add_action('wp_footer', 'Habaq_WP_Core_Job_Applications', 'render_notice');
-        $this->loader->add_action('template_redirect', 'Habaq_WP_Core_Access', 'enforce_zones');
+        // Placeholder for public hooks.
     }
 
     /**
