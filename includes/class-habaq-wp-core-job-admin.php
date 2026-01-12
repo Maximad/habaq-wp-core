@@ -6,6 +6,35 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Job_Admin {
     /**
+     * Enqueue admin styles for job screens.
+     *
+     * @return void
+     */
+    public static function enqueue_admin_styles() {
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (!$screen) {
+            return;
+        }
+
+        $allowed = array('job_application', 'edit-job_application', 'job');
+        if (!in_array($screen->id, $allowed, true)) {
+            return;
+        }
+
+        if (!wp_style_is('habaq-core-admin', 'registered')) {
+            wp_register_style('habaq-core-admin', false, array(), HABAQ_WP_CORE_VERSION);
+        }
+        wp_enqueue_style('habaq-core-admin');
+        wp_add_inline_style(
+            'habaq-core-admin',
+            '.habaq-job-application__details{display:grid;grid-template-columns:1fr 2fr;gap:8px 16px;margin:0}
+.habaq-job-application__details dt{font-weight:600}
+.habaq-job-application__details dd{margin:0}
+.habaq-job-application__links{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.habaq-job-application__badge{display:inline-flex;align-items:center;border:1px solid rgba(0,0,0,.2);border-radius:8px;padding:6px 10px}'
+        );
+    }
+    /**
      * Register admin metaboxes.
      *
      * @return void

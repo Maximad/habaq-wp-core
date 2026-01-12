@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class Habaq_WP_Core_CPTs {
+    const REWRITE_OPTION = 'habaq_rewrite_flushed_version';
     /**
      * Register CPTs and taxonomies.
      *
@@ -86,7 +87,11 @@ class Habaq_WP_Core_CPTs {
             return;
         }
 
-        if (!self::has_job_rewrite_rule()) {
+        $version = get_option(self::REWRITE_OPTION, '');
+        $archive_link = get_post_type_archive_link('job');
+        $needs_flush = ($version !== HABAQ_WP_CORE_VERSION) || !$archive_link || !self::has_job_rewrite_rule();
+
+        if ($needs_flush) {
             self::render_notice();
         }
     }
@@ -118,5 +123,14 @@ class Habaq_WP_Core_CPTs {
      */
     private static function render_notice() {
         echo '<div class="notice notice-warning"><p>' . esc_html__('قد تحتاج إلى إعادة حفظ إعدادات الروابط الدائمة: الإعدادات > الروابط الدائمة > حفظ التغييرات.', 'habaq-wp-core') . '</p></div>';
+    }
+
+    /**
+     * Mark rewrite rules as flushed for the current version.
+     *
+     * @return void
+     */
+    public static function mark_rewrite_flushed() {
+        update_option(self::REWRITE_OPTION, HABAQ_WP_CORE_VERSION);
     }
 }

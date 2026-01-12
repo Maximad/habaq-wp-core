@@ -6,6 +6,81 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Job_Filters {
     /**
+     * Filter for job requests with non-slug values and redirect.
+     *
+     * @return void
+     */
+    public static function maybe_redirect_bad_filters() {
+        if (is_admin() || !is_post_type_archive('job')) {
+            return;
+        }
+
+        if (empty($_GET)) {
+            return;
+        }
+
+        $taxonomies = self::get_taxonomies();
+        $mapped = array();
+
+        foreach ($taxonomies as $taxonomy) {
+            if (!isset($_GET[$taxonomy])) {
+                continue;
+            }
+
+            $raw = wp_unslash($_GET[$taxonomy]);
+            $values = is_array($raw) ? $raw : array($raw);
+            $values = array_map('sanitize_text_field', $values);
+            $values = array_values(array_filter($values));
+
+            if (empty($values)) {
+                continue;
+            }
+
+            $name_map = self::get_term_name_to_slug_map($taxonomy);
+            $updated = array();
+            $changed = false;
+            foreach ($values as $value) {
+                $slug = sanitize_title($value);
+                if (isset($name_map[$value])) {
+                    $slug = $name_map[$value];
+                    $changed = true;
+                } elseif ($slug !== $value) {
+                    $changed = true;
+                }
+                $updated[] = $slug;
+            }
+
+            $updated = array_values(array_unique(array_filter($updated)));
+            if ($changed) {
+                $mapped[$taxonomy] = $updated;
+            }
+        }
+
+        if (empty($mapped)) {
+            return;
+        }
+
+        $query = array();
+        foreach ($mapped as $taxonomy => $values) {
+            if (!empty($values)) {
+                $query[$taxonomy] = $values;
+            }
+        }
+
+        if (isset($_GET['job_q'])) {
+            $query['job_q'] = sanitize_text_field(wp_unslash($_GET['job_q']));
+        }
+
+        $action = get_post_type_archive_link('job');
+        if (!$action) {
+            $action = home_url('/jobs/');
+        }
+
+        $redirect = add_query_arg($query, $action);
+        wp_safe_redirect($redirect, 301);
+        exit;
+    }
+    /**
      * Register shortcode.
      *
      * @return void
@@ -88,6 +163,7 @@ class Habaq_WP_Core_Job_Filters {
         }
 
         self::enqueue_styles();
+        $counts = self::get_term_counts();
 
         $keyword = self::get_keyword();
         $output = '<form class="habaq-job-filters" method="get" action="' . esc_url($action) . '">';
@@ -98,11 +174,12 @@ class Habaq_WP_Core_Job_Filters {
         $output .= '</div>';
 
         foreach (self::get_taxonomies() as $taxonomy) {
-            $output .= self::render_taxonomy_filter($taxonomy);
+            $output .= self::render_taxonomy_filter($taxonomy, $counts);
         }
 
         $output .= '<div class="habaq-job-filters__actions">';
         $output .= '<button type="submit">' . esc_html__('تطبيق التصفية', 'habaq-wp-core') . '</button>';
+        $output .= '<a class="habaq-job-filters__reset" href="' . esc_url($action) . '">' . esc_html__('إعادة ضبط', 'habaq-wp-core') . '</a>';
         $output .= '</div>';
         $output .= '</form>';
 
@@ -115,7 +192,7 @@ class Habaq_WP_Core_Job_Filters {
      * @param string $taxonomy Taxonomy slug.
      * @return string
      */
-    private static function render_taxonomy_filter($taxonomy) {
+    private static function render_taxonomy_filter($taxonomy, $counts) {
         if (!taxonomy_exists($taxonomy)) {
             return '';
         }
@@ -137,11 +214,13 @@ class Habaq_WP_Core_Job_Filters {
         $output .= '<div class="habaq-job-filters__options">';
 
         foreach ($terms as $term) {
+            $count = isset($counts[$taxonomy][$term->term_id]) ? (int) $counts[$taxonomy][$term->term_id] : 0;
             $checked = in_array($term->slug, $selected, true);
+            $disabled = (!$checked && $count === 0) ? ' disabled' : '';
             $output .= '<label class="habaq-job-filters__option">';
-            $output .= '<input type="checkbox" name="' . esc_attr($taxonomy) . '[]" value="' . esc_attr($term->slug) . '"' . checked($checked, true, false) . ' />';
+            $output .= '<input type="checkbox" name="' . esc_attr($taxonomy) . '[]" value="' . esc_attr($term->slug) . '"' . checked($checked, true, false) . $disabled . ' />';
             $output .= '<span>' . esc_html($term->name) . '</span>';
-            $output .= '<em>' . esc_html((string) $term->count) . '</em>';
+            $output .= '<em>' . esc_html((string) $count) . '</em>';
             $output .= '</label>';
         }
 
@@ -165,8 +244,21 @@ class Habaq_WP_Core_Job_Filters {
         $raw = wp_unslash($_GET[$taxonomy]);
         $terms = is_array($raw) ? $raw : array($raw);
         $terms = array_map('sanitize_text_field', $terms);
+        $terms = array_map('sanitize_title', $terms);
+        $terms = array_values(array_filter($terms));
 
-        return array_values(array_filter($terms));
+        if (empty($terms)) {
+            return array();
+        }
+
+        $valid = array();
+        foreach ($terms as $term) {
+            if (term_exists($term, $taxonomy)) {
+                $valid[] = $term;
+            }
+        }
+
+        return array_values(array_unique($valid));
     }
 
     /**
@@ -316,24 +408,106 @@ class Habaq_WP_Core_Job_Filters {
     }
 
     /**
+     * Get term counts for active job listings.
+     *
+     * @return array
+     */
+    private static function get_term_counts() {
+        $locale = get_locale();
+        $today = current_time('Y-m-d');
+        $key = 'habaq_job_term_counts_' . md5($today . '|' . $locale);
+        $cached = get_transient($key);
+        if ($cached && is_array($cached)) {
+            return $cached;
+        }
+
+        global $wpdb;
+        $taxonomies = self::get_taxonomies();
+        $placeholders = implode(',', array_fill(0, count($taxonomies), '%s'));
+
+        $sql = "
+            SELECT tt.taxonomy, tt.term_id, COUNT(DISTINCT p.ID) as term_count
+            FROM {$wpdb->posts} p
+            INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+            INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            LEFT JOIN {$wpdb->postmeta} statusmeta ON (p.ID = statusmeta.post_id AND statusmeta.meta_key = 'habaq_job_status')
+            LEFT JOIN {$wpdb->postmeta} deadlinemeta ON (p.ID = deadlinemeta.post_id AND deadlinemeta.meta_key = 'habaq_deadline')
+            WHERE p.post_type = 'job'
+              AND p.post_status = 'publish'
+              AND tt.taxonomy IN ($placeholders)
+              AND (statusmeta.meta_value IS NULL OR statusmeta.meta_value != 'closed')
+              AND (
+                    deadlinemeta.meta_value IS NULL
+                    OR deadlinemeta.meta_value = ''
+                    OR deadlinemeta.meta_value >= %s
+                  )
+            GROUP BY tt.taxonomy, tt.term_id
+        ";
+
+        $prepared = $wpdb->prepare($sql, array_merge($taxonomies, array($today)));
+        $rows = $wpdb->get_results($prepared);
+
+        $counts = array();
+        foreach ($taxonomies as $taxonomy) {
+            $counts[$taxonomy] = array();
+        }
+
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $taxonomy = $row->taxonomy;
+                if (!isset($counts[$taxonomy])) {
+                    $counts[$taxonomy] = array();
+                }
+                $counts[$taxonomy][(int) $row->term_id] = (int) $row->term_count;
+            }
+        }
+
+        set_transient($key, $counts, 15 * MINUTE_IN_SECONDS);
+
+        return $counts;
+    }
+
+    /**
+     * Build map of term name to slug.
+     *
+     * @param string $taxonomy Taxonomy slug.
+     * @return array
+     */
+    private static function get_term_name_to_slug_map($taxonomy) {
+        $terms = get_terms(array(
+            'taxonomy' => $taxonomy,
+            'hide_empty' => false,
+        ));
+
+        $map = array();
+        if (!is_wp_error($terms)) {
+            foreach ($terms as $term) {
+                $map[$term->name] = $term->slug;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
      * Enqueue frontend styles.
      *
      * @return void
      */
     private static function enqueue_styles() {
-        $css = '.habaq-job-filters{border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:16px;display:grid;gap:16px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.habaq-job-filters__header{font-weight:700;font-size:1.05rem}
-.habaq-job-filters__section label{display:block;font-size:.9rem;margin-bottom:6px;color:#444}
+        $css = '.habaq-job-filters{border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:16px;display:grid;gap:16px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.habaq-job-filters__section label{display:block;margin-bottom:6px;color:#444}
 .habaq-job-filters__section input[type="search"]{width:100%;padding:10px 12px;border:1px solid #d5d5d5;border-radius:10px}
-.habaq-job-filters__accordion{border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:10px;background:#fafafa}
-.habaq-job-filters__accordion summary{font-weight:600;cursor:pointer;list-style:none}
+.habaq-job-filters__accordion{border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:10px}
+.habaq-job-filters__accordion summary{cursor:pointer;list-style:none}
 .habaq-job-filters__options{display:grid;gap:8px;margin-top:12px}
-.habaq-job-filters__option{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,.05)}
+.habaq-job-filters__option{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,.05)}
 .habaq-job-filters__option input{margin-inline-end:8px}
 .habaq-job-filters__option span{flex:1}
-.habaq-job-filters__option em{font-style:normal;color:#777;font-size:.85rem}
-.habaq-job-filters__actions{display:flex;justify-content:flex-start}
-.habaq-job-filters__actions button{background:#111;color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
+.habaq-job-filters__option em{font-style:normal;color:#777}
+.habaq-job-filters__actions{display:flex;flex-wrap:wrap;gap:10px}
+.habaq-job-filters__actions button,.habaq-job-filters__actions a{border:1px solid rgba(0,0,0,.2);border-radius:10px;padding:10px 16px;cursor:pointer;text-decoration:none;color:inherit}
+.habaq-job-filters__actions button:focus,.habaq-job-filters__actions a:focus{outline:2px solid currentColor;outline-offset:2px}
 @media (max-width:720px){.habaq-job-filters{padding:12px}}';
 
         Habaq_WP_Core_Helpers::enqueue_inline_style($css);

@@ -268,7 +268,7 @@ class Habaq_WP_Core_Job_Applications {
         update_post_meta($application_id, 'cv_attachment_id', $attachment_id);
         update_post_meta($application_id, 'cv_url', wp_get_attachment_url($attachment_id));
 
-        self::send_notifications($application_id, $fields['email'], $job->post_title, $attachment_id, $fields['full_name']);
+        self::send_notifications($application_id, $fields['email'], $job->post_title, $attachment_id, $fields['full_name'], $job->ID);
         set_transient($rate_key, time(), 60);
 
         self::redirect_with_notice(home_url('/'), 'success');
@@ -363,8 +363,8 @@ class Habaq_WP_Core_Job_Applications {
      * @param string $full_name Applicant name.
      * @return void
      */
-    private static function send_notifications($application_id, $email, $job_title, $attachment_id, $full_name) {
-        $to = apply_filters('habaq_apply_to_email', HABAQ_APPLY_TO);
+    private static function send_notifications($application_id, $email, $job_title, $attachment_id, $full_name, $job_id) {
+        $to = apply_filters('habaq_apply_to_email', self::get_recipient_email($job_id));
         $cv_url = wp_get_attachment_url($attachment_id);
 
         $admin_subject = sprintf(__('طلب تقديم جديد رقم %d', 'habaq-wp-core'), $application_id);
@@ -407,12 +407,12 @@ class Habaq_WP_Core_Job_Applications {
      */
     private static function redirect_with_notice($url, $message_key, $form_data = array(), $file_error = false) {
         $token = wp_generate_password(12, false);
-        set_transient('habaq_notice_' . $token, $message_key, 300);
+        set_transient('habaq_notice_' . $token, $message_key, 10 * MINUTE_IN_SECONDS);
         if (!empty($form_data)) {
             $form_data['has_file_error'] = $file_error;
-            set_transient('habaq_form_' . $token, $form_data, 300);
+            set_transient('habaq_form_' . $token, $form_data, 10 * MINUTE_IN_SECONDS);
         }
-        $redirect = add_query_arg('habaq_notice', $token, $url);
+        $redirect = add_query_arg('habaq_apply', $token, $url);
         wp_safe_redirect($redirect);
         exit;
     }
@@ -423,11 +423,11 @@ class Habaq_WP_Core_Job_Applications {
      * @return string
      */
     private static function get_notice_message($delete) {
-        if (empty($_GET['habaq_notice'])) {
+        if (empty($_GET['habaq_apply'])) {
             return '';
         }
 
-        $token = sanitize_text_field(wp_unslash($_GET['habaq_notice']));
+        $token = sanitize_text_field(wp_unslash($_GET['habaq_apply']));
         if ($token === '') {
             return '';
         }
@@ -464,11 +464,11 @@ class Habaq_WP_Core_Job_Applications {
      * @return array
      */
     private static function get_prefill_data() {
-        if (empty($_GET['habaq_notice'])) {
+        if (empty($_GET['habaq_apply'])) {
             return array();
         }
 
-        $token = sanitize_text_field(wp_unslash($_GET['habaq_notice']));
+        $token = sanitize_text_field(wp_unslash($_GET['habaq_apply']));
         if ($token === '') {
             return array();
         }
@@ -524,24 +524,61 @@ class Habaq_WP_Core_Job_Applications {
     }
 
     /**
+     * Get recipient email based on job unit mapping.
+     *
+     * @param int $job_id Job ID.
+     * @return string
+     */
+    private static function get_recipient_email($job_id) {
+        $settings = get_option('habaq_settings', array());
+        $default = isset($settings['apply_to_email']) ? sanitize_email($settings['apply_to_email']) : '';
+        if ($default === '') {
+            $default = HABAQ_APPLY_TO;
+        }
+
+        $mapping = isset($settings['unit_emails']) && is_array($settings['unit_emails']) ? $settings['unit_emails'] : array();
+        if (empty($mapping)) {
+            return $default;
+        }
+
+        $terms = get_the_terms($job_id, 'job_unit');
+        if (is_wp_error($terms) || empty($terms)) {
+            return $default;
+        }
+
+        foreach ($terms as $term) {
+            if (!empty($mapping[$term->term_id])) {
+                $email = sanitize_email($mapping[$term->term_id]);
+                if ($email) {
+                    return $email;
+                }
+            }
+        }
+
+        return $default;
+    }
+
+    /**
      * Enqueue frontend styles.
      *
      * @return void
      */
     private static function enqueue_styles() {
-        $css = '.habaq-job-application{display:grid;gap:16px;border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:18px;background:#fff}
-.habaq-job-application__field label{display:block;margin-bottom:6px;font-size:.9rem;color:#444}
+        $css = '.habaq-job-application{display:grid;gap:16px;border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.habaq-job-application__field label{display:block;margin-bottom:6px;color:#444}
 .habaq-job-application__field input[type="text"],
 .habaq-job-application__field input[type="email"],
 .habaq-job-application__field input[type="url"],
 .habaq-job-application__field input[type="file"],
 .habaq-job-application__field textarea{width:100%;padding:10px 12px;border:1px solid #d5d5d5;border-radius:10px}
-.habaq-job-application__consent label{display:flex;gap:8px;align-items:flex-start;font-size:.9rem}
-.habaq-job-application__actions button{background:#111;color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
-.habaq-job-application__message{padding:12px;border-radius:10px;background:#f0f7ff;border:1px solid #cfe2ff}
-.habaq-job-application__message--warning{background:#fff8e1;border-color:#ffe4a3}
-.habaq-job-application__notice{position:fixed;bottom:20px;left:20px;right:20px;max-width:520px;margin:auto;background:#111;color:#fff;padding:14px;border-radius:12px;z-index:9999}
-.habaq-job-application__closed{padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:12px;background:#fafafa}
+.habaq-job-application__field input:focus,
+.habaq-job-application__field textarea:focus{outline:2px solid currentColor;outline-offset:2px}
+.habaq-job-application__consent label{display:flex;gap:8px;align-items:flex-start}
+.habaq-job-application__actions button{border:1px solid rgba(0,0,0,.2);border-radius:10px;padding:10px 16px;cursor:pointer;background:transparent}
+.habaq-job-application__actions button:focus{outline:2px solid currentColor;outline-offset:2px}
+.habaq-job-application__message{padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,.12)}
+.habaq-job-application__notice{position:fixed;bottom:20px;left:20px;right:20px;max-width:520px;margin:auto;border:1px solid rgba(0,0,0,.2);padding:14px;border-radius:12px;z-index:9999;background:transparent}
+.habaq-job-application__closed{padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:12px}
 .habaq-job-application__hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 @media (max-width:720px){.habaq-job-application{padding:14px}}';
 
