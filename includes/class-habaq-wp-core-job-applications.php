@@ -16,7 +16,10 @@ class Habaq_WP_Core_Job_Applications {
         }
 
         register_post_type('job_application', array(
-            'label' => 'Job Applications',
+            'labels' => array(
+                'name' => __('طلبات التقديم', 'habaq-wp-core'),
+                'singular_name' => __('طلب تقديم', 'habaq-wp-core'),
+            ),
             'public' => false,
             'show_ui' => true,
             'supports' => array('title'),
@@ -150,8 +153,13 @@ class Habaq_WP_Core_Job_Applications {
             self::redirect_with_notice(get_permalink($job), 'cv_too_large');
         }
 
-        $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        if (!in_array($extension, array('pdf', 'doc', 'docx'), true)) {
+        $allowed_mimes = array(
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        );
+        $file_check = wp_check_filetype_and_ext($file['tmp_name'], $file['name'], $allowed_mimes);
+        if (empty($file_check['ext']) || empty($file_check['type'])) {
             self::redirect_with_notice(get_permalink($job), 'invalid_cv');
         }
 
@@ -159,7 +167,10 @@ class Habaq_WP_Core_Job_Applications {
             require_once ABSPATH . 'wp-admin/includes/file.php';
         }
 
-        $upload = wp_handle_upload($file, array('test_form' => false));
+        $upload = wp_handle_upload($file, array(
+            'test_form' => false,
+            'mimes' => $allowed_mimes,
+        ));
         if (!empty($upload['error'])) {
             self::redirect_with_notice(get_permalink($job), 'upload_failed');
         }
@@ -273,12 +284,12 @@ class Habaq_WP_Core_Job_Applications {
         $to = apply_filters('habaq_apply_to_email', HABAQ_WP_CORE_DEFAULT_APPLY_TO);
         $cv_url = wp_get_attachment_url($attachment_id);
 
-        $admin_subject = sprintf('New Job Application #%d', $application_id);
-        $admin_message = "A new job application has been submitted.\n";
-        $admin_message .= "Application ID: {$application_id}\n";
-        $admin_message .= "Job Title: {$job_title}\n";
+        $admin_subject = sprintf(__('طلب تقديم جديد رقم %d', 'habaq-wp-core'), $application_id);
+        $admin_message = __('تم استلام طلب تقديم جديد.', 'habaq-wp-core') . "\n";
+        $admin_message .= sprintf("%s %d\n", __('رقم الطلب:', 'habaq-wp-core'), $application_id);
+        $admin_message .= sprintf("%s %s\n", __('عنوان الفرصة:', 'habaq-wp-core'), $job_title);
         if ($cv_url) {
-            $admin_message .= "CV: {$cv_url}\n";
+            $admin_message .= sprintf("%s %s\n", __('السيرة الذاتية:', 'habaq-wp-core'), $cv_url);
         }
 
         wp_mail($to, $admin_subject, $admin_message);

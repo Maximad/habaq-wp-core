@@ -14,8 +14,8 @@ class Habaq_WP_Core_CPTs {
         if (!post_type_exists('project')) {
             register_post_type('project', array(
                 'labels' => array(
-                    'name' => 'Projects',
-                    'singular_name' => 'Project',
+                    'name' => __('المشاريع', 'habaq-wp-core'),
+                    'singular_name' => __('مشروع', 'habaq-wp-core'),
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -29,8 +29,8 @@ class Habaq_WP_Core_CPTs {
         if (!post_type_exists('job')) {
             register_post_type('job', array(
                 'labels' => array(
-                    'name' => 'Jobs',
-                    'singular_name' => 'Job',
+                    'name' => __('الفرص', 'habaq-wp-core'),
+                    'singular_name' => __('فرصة', 'habaq-wp-core'),
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -42,13 +42,13 @@ class Habaq_WP_Core_CPTs {
         }
 
         $taxonomies = array(
-            'project_unit' => array('project', 'Project Unit', 'project-unit', true),
-            'project_status' => array('project', 'Project Status', 'project-status', true),
-            'project_type' => array('project', 'Project Type', 'project-type', true),
-            'job_type' => array('job', 'Job Type', 'job-type', true),
-            'job_location' => array('job', 'Location', 'job-location', true),
-            'job_unit' => array('job', 'Unit', 'job-unit', true),
-            'job_level' => array('job', 'Level', 'job-level', true),
+            'project_unit' => array('project', __('وحدة المشروع', 'habaq-wp-core'), 'project-unit', true),
+            'project_status' => array('project', __('حالة المشروع', 'habaq-wp-core'), 'project-status', true),
+            'project_type' => array('project', __('نوع المشروع', 'habaq-wp-core'), 'project-type', true),
+            'job_type' => array('job', __('نوع الفرصة', 'habaq-wp-core'), 'job-type', true),
+            'job_location' => array('job', __('الموقع', 'habaq-wp-core'), 'job-location', true),
+            'job_unit' => array('job', __('الوحدة', 'habaq-wp-core'), 'job-unit', true),
+            'job_level' => array('job', __('المستوى', 'habaq-wp-core'), 'job-level', true),
         );
 
         foreach ($taxonomies as $taxonomy => $config) {
