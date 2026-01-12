@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class Habaq_WP_Core_Shortcodes {
+
     /**
      * Register shortcodes.
      *
@@ -45,10 +46,10 @@ class Habaq_WP_Core_Shortcodes {
         $post_id = get_the_ID();
 
         $deadline = get_post_meta($post_id, 'habaq_deadline', true);
-        $start = get_post_meta($post_id, 'habaq_start_date', true);
-        $commit = get_post_meta($post_id, 'habaq_time_commitment', true);
-        $comp = get_post_meta($post_id, 'habaq_compensation', true);
-        $status = Habaq_WP_Core_Helpers::job_get_status($post_id);
+        $start    = get_post_meta($post_id, 'habaq_start_date', true);
+        $commit   = get_post_meta($post_id, 'habaq_time_commitment', true);
+        $comp     = get_post_meta($post_id, 'habaq_compensation', true);
+        $status   = Habaq_WP_Core_Helpers::job_get_status($post_id);
 
         $rows = array();
 
@@ -76,7 +77,7 @@ class Habaq_WP_Core_Shortcodes {
 
         $output = '<div class="habaq-job-fields">';
         foreach ($rows as $row) {
-            if (!$row[1]) {
+            if (!isset($row[1]) || $row[1] === '' || $row[1] === null) {
                 continue;
             }
             $output .= '<div class="habaq-job-fields__row"><span class="k">' . esc_html($row[0]) . '</span><span class="v">' . esc_html($row[1]) . '</span></div>';
@@ -98,7 +99,7 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $post_id = get_the_ID();
-        $status = Habaq_WP_Core_Helpers::job_get_status($post_id);
+        $status  = Habaq_WP_Core_Helpers::job_get_status($post_id);
         $expired = Habaq_WP_Core_Helpers::job_is_expired($post_id);
 
         self::enqueue_styles();
@@ -108,16 +109,16 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $attrs = shortcode_atts(array(
-            'email' => '',
-            'form_url' => '/apply',
+            'email'       => '',
+            'form_url'    => '/apply',
             'email_label' => __('التقديم عبر البريد', 'habaq-wp-core'),
-            'form_label' => __('التقديم عبر النموذج', 'habaq-wp-core'),
+            'form_label'  => __('التقديم عبر النموذج', 'habaq-wp-core'),
         ), $atts);
 
-        $title = get_the_title();
-        $slug = get_post_field('post_name', get_post());
+        $title   = get_the_title();
+        $slug    = get_post_field('post_name', get_post());
         $subject = rawurlencode(sprintf(__('طلب تقديم: %s', 'habaq-wp-core'), $title));
-        $body = rawurlencode(
+        $body    = rawurlencode(
             __('الاسم الكامل:', 'habaq-wp-core') . "\n" .
             __('البريد الإلكتروني:', 'habaq-wp-core') . "\n" .
             __('الرابط/الملف الشخصي:', 'habaq-wp-core') . "\n" .
@@ -125,7 +126,7 @@ class Habaq_WP_Core_Shortcodes {
             __('ملاحظات:', 'habaq-wp-core') . "\n"
         );
 
-        $mailto = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
+        $mailto    = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
         $form_link = esc_url(trailingslashit(home_url($attrs['form_url'])) . '?job=' . $slug);
 
         $output = '<div class="habaq-job-apply">';
@@ -141,38 +142,67 @@ class Habaq_WP_Core_Shortcodes {
     /**
      * Render deadline shortcode.
      *
+     * Usage:
+     * - [habaq_deadline] (single job)
+     * - [habaq_deadline id="123"] (query loop safe)
+     * - [habaq_deadline post_id="123" format="Y-m-d"]
+     *
+     * @param array $atts Shortcode attributes.
      * @return string
      */
     public static function render_deadline($atts) {
-        $post_id = self::resolve_job_post_id($atts);
+        $attrs = shortcode_atts(array(
+            'id'      => 0,
+            'post_id' => 0,
+            'format'  => 'j F Y',
+        ), is_array($atts) ? $atts : array());
+
+        $post_id = self::resolve_job_post_id($attrs);
         if (!$post_id) {
             return '';
         }
 
         $deadline = get_post_meta($post_id, 'habaq_deadline', true);
-        if (!$deadline) {
+        $deadline = is_string($deadline) ? trim($deadline) : '';
+        if ($deadline === '') {
             return '';
         }
 
-        return esc_html(Habaq_WP_Core_Helpers::job_format_date($deadline));
+        // If format is the default, use helper (keeps site locale/date settings consistent)
+        if ($attrs['format'] === 'j F Y') {
+            return esc_html(Habaq_WP_Core_Helpers::job_format_date($deadline));
+        }
+
+        $ts = strtotime($deadline . ' 00:00:00');
+        if (!$ts) {
+            return '';
+        }
+
+        return esc_html(date_i18n($attrs['format'], $ts));
     }
 
     /**
      * Render a single job meta field.
      *
+     * Usage:
+     * - [habaq_job_meta key="habaq_deadline"]
+     * - [habaq_job_meta key="habaq_deadline" id="123"]
+     * - [habaq_job_meta key="habaq_time_commitment" post_id="123"]
+     *
      * @param array $atts Shortcode attributes.
      * @return string
      */
     public static function render_job_meta($atts) {
-        $post_id = self::resolve_job_post_id($atts);
+        $attrs = shortcode_atts(array(
+            'key'     => '',
+            'id'      => 0,
+            'post_id' => 0,
+        ), is_array($atts) ? $atts : array());
+
+        $post_id = self::resolve_job_post_id($attrs);
         if (!$post_id) {
             return '';
         }
-
-        $attrs = shortcode_atts(array(
-            'key' => '',
-            'post_id' => 0,
-        ), $atts);
 
         $allowed = array(
             'habaq_deadline',
@@ -188,7 +218,12 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $value = get_post_meta($post_id, $key, true);
-        if ($value === '') {
+
+        if (is_string($value)) {
+            $value = trim($value);
+        }
+
+        if ($value === '' || $value === null) {
             return '';
         }
 
@@ -206,23 +241,28 @@ class Habaq_WP_Core_Shortcodes {
     /**
      * Render job taxonomy terms.
      *
+     * Usage:
+     * - [habaq_job_terms taxonomy="job_unit"]
+     * - [habaq_job_terms taxonomy="job_unit" id="123"]
+     *
      * @param array $atts Shortcode attributes.
      * @return string
      */
     public static function render_job_terms($atts) {
-        $post_id = self::resolve_job_post_id($atts);
+        $attrs = shortcode_atts(array(
+            'taxonomy'  => '',
+            'separator' => '، ',
+            'id'        => 0,
+            'post_id'   => 0,
+        ), is_array($atts) ? $atts : array());
+
+        $post_id = self::resolve_job_post_id($attrs);
         if (!$post_id) {
             return '';
         }
 
-        $attrs = shortcode_atts(array(
-            'taxonomy' => '',
-            'separator' => '، ',
-            'post_id' => 0,
-        ), $atts);
-
         $taxonomy = sanitize_key($attrs['taxonomy']);
-        if (!taxonomy_exists($taxonomy)) {
+        if (!$taxonomy || !taxonomy_exists($taxonomy)) {
             return '';
         }
 
@@ -232,11 +272,14 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $names = wp_list_pluck($terms, 'name');
-        return esc_html(implode($attrs['separator'], $names));
+        $sep   = is_string($attrs['separator']) ? $attrs['separator'] : '، ';
+
+        return esc_html(implode($sep, $names));
     }
 
     /**
      * Resolve job post ID for shortcodes.
+     * Supports both `id` and `post_id`.
      *
      * @param array $atts Shortcode attributes.
      * @return int
@@ -244,8 +287,21 @@ class Habaq_WP_Core_Shortcodes {
     private static function resolve_job_post_id($atts) {
         $post_id = 0;
 
-        if (is_array($atts) && isset($atts['post_id'])) {
-            $post_id = absint($atts['post_id']);
+        if (is_array($atts)) {
+            if (!empty($atts['id'])) {
+                $post_id = absint($atts['id']);
+            }
+            if (!$post_id && !empty($atts['post_id'])) {
+                $post_id = absint($atts['post_id']);
+            }
+        }
+
+        // Most reliable inside loops if block rendering sets global $post
+        if (!$post_id) {
+            $p = get_post();
+            if ($p && isset($p->ID)) {
+                $post_id = (int) $p->ID;
+            }
         }
 
         if (!$post_id) {
@@ -256,11 +312,15 @@ class Habaq_WP_Core_Shortcodes {
             $post_id = get_queried_object_id();
         }
 
-        if (!$post_id || get_post_type($post_id) !== 'job') {
+        if (!$post_id) {
             return 0;
         }
 
-        return $post_id;
+        if (get_post_type($post_id) !== 'job') {
+            return 0;
+        }
+
+        return (int) $post_id;
     }
 
     /**
