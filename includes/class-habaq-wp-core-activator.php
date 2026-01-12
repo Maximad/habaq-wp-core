@@ -6,11 +6,14 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Activator {
     /**
-     * Activation hook placeholder.
+     * Activation hook.
      *
      * @return void
      */
     public static function activate() {
-        // Placeholder for activation logic.
+        Habaq_WP_Core_CPTs::register();
+        Habaq_WP_Core_Job_Applications::register_cpt();
+        flush_rewrite_rules();
+        Habaq_WP_Core_CPTs::mark_rewrite_flushed();
     }
 }

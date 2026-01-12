@@ -6,28 +6,63 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Job_Admin {
     /**
+     * Enqueue admin styles for job screens.
+     *
+     * @return void
+     */
+    public static function enqueue_admin_styles() {
+        $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+        if (!$screen) {
+            return;
+        }
+
+        $allowed = array('job_application', 'edit-job_application', 'job');
+        if (!in_array($screen->id, $allowed, true)) {
+            return;
+        }
+
+        if (!wp_style_is('habaq-core-admin', 'registered')) {
+            wp_register_style('habaq-core-admin', false, array(), HABAQ_WP_CORE_VERSION);
+        }
+        wp_enqueue_style('habaq-core-admin');
+        wp_add_inline_style(
+            'habaq-core-admin',
+            '.habaq-job-application__details{display:grid;grid-template-columns:1fr 2fr;gap:8px 16px;margin:0}
+.habaq-job-application__details dt{font-weight:600}
+.habaq-job-application__details dd{margin:0}
+.habaq-job-application__links{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.habaq-job-application__badge{display:inline-flex;align-items:center;border:1px solid rgba(0,0,0,.2);border-radius:8px;padding:6px 10px}'
+        );
+    }
+    /**
      * Register admin metaboxes.
      *
      * @return void
      */
     public static function register_metaboxes() {
-        add_meta_box(
-            'habaq_job_application_details',
-            'تفاصيل طلب التقديم',
-            array(__CLASS__, 'render_details_metabox'),
-            'job_application',
-            'normal',
-            'default'
-        );
+        global $wp_meta_boxes;
 
-        add_meta_box(
-            'habaq_job_application_links',
-            'روابط سريعة',
-            array(__CLASS__, 'render_links_metabox'),
-            'job_application',
-            'side',
-            'default'
-        );
+        if (!isset($wp_meta_boxes['job_application']['normal']['default']['habaq_job_application_details'])) {
+            add_meta_box(
+                'habaq_job_application_details',
+                'تفاصيل طلب التقديم',
+                array(__CLASS__, 'render_details_metabox'),
+                'job_application',
+                'normal',
+                'default'
+            );
+        }
+
+        if (!isset($wp_meta_boxes['job_application']['side']['default']['habaq_job_application_links'])) {
+            add_meta_box(
+                'habaq_job_application_links',
+                'روابط سريعة',
+                array(__CLASS__, 'render_links_metabox'),
+                'job_application',
+                'side',
+                'default'
+            );
+        }
     }
 
     /**
@@ -65,10 +100,9 @@ class Habaq_WP_Core_Job_Admin {
     public static function render_columns($column, $post_id) {
         if ($column === 'job_title') {
             $title = get_post_meta($post_id, 'job_title', true);
-            $slug = get_post_meta($post_id, 'job_slug', true);
-            $job = $slug ? get_page_by_path($slug, OBJECT, 'job') : null;
-            if ($job) {
-                echo '<a href="' . esc_url(get_permalink($job)) . '">' . esc_html($title) . '</a>';
+            $job_url = get_post_meta($post_id, 'job_url', true);
+            if ($job_url) {
+                echo '<a href="' . esc_url($job_url) . '">' . esc_html($title ? $title : __('غير متوفر', 'habaq-wp-core')) . '</a>';
             } else {
                 echo esc_html($title ? $title : __('غير متوفر', 'habaq-wp-core'));
             }
@@ -76,7 +110,7 @@ class Habaq_WP_Core_Job_Admin {
         }
 
         if ($column === 'job_deadline') {
-            $deadline = get_post_meta($post_id, 'job_deadline', true);
+            $deadline = get_post_meta($post_id, 'habaq_deadline', true);
             if ($deadline === '') {
                 $job_id = (int) get_post_meta($post_id, 'job_id', true);
                 if ($job_id) {
@@ -95,8 +129,7 @@ class Habaq_WP_Core_Job_Admin {
         }
 
         if ($column === 'cv_link') {
-            $cv_id = (int) get_post_meta($post_id, 'cv_attachment_id', true);
-            $cv_url = $cv_id ? wp_get_attachment_url($cv_id) : '';
+            $cv_url = get_post_meta($post_id, 'cv_url', true);
             if ($cv_url) {
                 echo '<a href="' . esc_url($cv_url) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('عرض', 'habaq-wp-core') . '</a>';
             } else {
@@ -115,11 +148,19 @@ class Habaq_WP_Core_Job_Admin {
         $fields = array(
             'full_name' => __('الاسم الكامل', 'habaq-wp-core'),
             'email' => __('البريد الإلكتروني', 'habaq-wp-core'),
+            'phone' => __('رقم الهاتف', 'habaq-wp-core'),
+            'city' => __('المدينة', 'habaq-wp-core'),
+            'availability' => __('التفرغ المتوقع', 'habaq-wp-core'),
+            'portfolio' => __('الرابط/الملف الشخصي', 'habaq-wp-core'),
             'motivation' => __('الدافع', 'habaq-wp-core'),
             'consent' => __('الموافقة', 'habaq-wp-core'),
+            'job_unit' => __('الوحدة', 'habaq-wp-core'),
+            'job_type' => __('نوع الفرصة', 'habaq-wp-core'),
+            'job_location' => __('الموقع', 'habaq-wp-core'),
+            'job_level' => __('المستوى', 'habaq-wp-core'),
         );
 
-        $deadline = get_post_meta($post->ID, 'job_deadline', true);
+        $deadline = get_post_meta($post->ID, 'habaq_deadline', true);
         if ($deadline === '') {
             $job_id = (int) get_post_meta($post->ID, 'job_id', true);
             if ($job_id) {
@@ -156,21 +197,30 @@ class Habaq_WP_Core_Job_Admin {
      * @return void
      */
     public static function render_links_metabox($post) {
-        $slug = get_post_meta($post->ID, 'job_slug', true);
-        $job = $slug ? get_page_by_path($slug, OBJECT, 'job') : null;
+        $job_url = get_post_meta($post->ID, 'job_url', true);
         $email = get_post_meta($post->ID, 'email', true);
-        $cv_id = (int) get_post_meta($post->ID, 'cv_attachment_id', true);
-        $cv_url = $cv_id ? wp_get_attachment_url($cv_id) : '';
+        $cv_url = get_post_meta($post->ID, 'cv_url', true);
+        $deadline = get_post_meta($post->ID, 'habaq_deadline', true);
+        if ($deadline === '') {
+            $job_id = (int) get_post_meta($post->ID, 'job_id', true);
+            if ($job_id) {
+                $deadline = get_post_meta($job_id, 'habaq_deadline', true);
+            }
+        }
+        $deadline_display = Habaq_WP_Core_Helpers::job_format_date($deadline);
 
         echo '<ul class="habaq-job-application__links">';
-        if ($job) {
-            echo '<li><a href="' . esc_url(get_permalink($job)) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('صفحة الفرصة', 'habaq-wp-core') . '</a></li>';
+        if ($job_url) {
+            echo '<li><a href="' . esc_url($job_url) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('صفحة الفرصة', 'habaq-wp-core') . '</a></li>';
         }
         if ($email) {
             echo '<li><a href="mailto:' . esc_attr($email) . '">' . esc_html__('مراسلة المتقدم', 'habaq-wp-core') . '</a></li>';
         }
         if ($cv_url) {
             echo '<li><a href="' . esc_url($cv_url) . '" target="_blank" rel="noopener noreferrer">' . esc_html__('فتح السيرة الذاتية', 'habaq-wp-core') . '</a></li>';
+        }
+        if ($deadline_display) {
+            echo '<li><span class="habaq-job-application__badge">' . esc_html__('آخر موعد: ', 'habaq-wp-core') . esc_html($deadline_display) . '</span></li>';
         }
         echo '</ul>';
     }
