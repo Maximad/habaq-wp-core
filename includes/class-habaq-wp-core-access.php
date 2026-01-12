@@ -44,7 +44,9 @@ class Habaq_WP_Core_Access {
                 if (!is_user_logged_in()) {
                     $login = get_page_by_path('login');
                     $login_url = $login ? get_permalink($login->ID) : wp_login_url();
-                    $target = home_url($_SERVER['REQUEST_URI']);
+                    $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+                    $request_uri = sanitize_text_field($request_uri);
+                    $target = esc_url_raw(home_url($request_uri));
                     $redirect_url = add_query_arg('redirect_to', rawurlencode($target), $login_url);
                     wp_safe_redirect($redirect_url);
                     exit;

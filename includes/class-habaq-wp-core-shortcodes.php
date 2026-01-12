@@ -101,14 +101,20 @@ class Habaq_WP_Core_Shortcodes {
         $attrs = shortcode_atts(array(
             'email' => '',
             'form_url' => '/apply',
-            'email_label' => 'Apply by email',
-            'form_label' => 'Apply via form',
+            'email_label' => __('التقديم عبر البريد', 'habaq-wp-core'),
+            'form_label' => __('التقديم عبر النموذج', 'habaq-wp-core'),
         ), $atts);
 
         $title = get_the_title();
         $slug = get_post_field('post_name', get_post());
-        $subject = rawurlencode('Application: ' . $title);
-        $body = rawurlencode("Name:\nEmail:\nLink/Portfolio:\nCV:\nNotes:\n");
+        $subject = rawurlencode(sprintf(__('طلب تقديم: %s', 'habaq-wp-core'), $title));
+        $body = rawurlencode(
+            __('الاسم الكامل:', 'habaq-wp-core') . "\n" .
+            __('البريد الإلكتروني:', 'habaq-wp-core') . "\n" .
+            __('الرابط/الملف الشخصي:', 'habaq-wp-core') . "\n" .
+            __('السيرة الذاتية:', 'habaq-wp-core') . "\n" .
+            __('ملاحظات:', 'habaq-wp-core') . "\n"
+        );
 
         $mailto = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
         $form_link = esc_url(trailingslashit(home_url($attrs['form_url'])) . '?job=' . $slug);

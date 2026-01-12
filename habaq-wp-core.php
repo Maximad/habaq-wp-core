@@ -17,11 +17,25 @@ define('HABAQ_WP_CORE_VERSION', '0.1.0');
 define('HABAQ_WP_CORE_FILE', __FILE__);
 define('HABAQ_WP_CORE_DIR', __DIR__);
 define('HABAQ_WP_CORE_URL', plugin_dir_url(__FILE__));
+if (!defined('HABAQ_WP_CORE_DEFAULT_APPLY_TO')) {
+    define('HABAQ_WP_CORE_DEFAULT_APPLY_TO', get_option('admin_email'));
+}
+if (!defined('HABAQ_WP_CORE_DEFAULT_CV_MAX_MB')) {
+    define('HABAQ_WP_CORE_DEFAULT_CV_MAX_MB', 5);
+}
 
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-loader.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-activator.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-deactivator.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-i18n.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-access.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-cpts.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-helpers.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-admin.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-applications.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-filters.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-roles.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-shortcodes.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core.php';
 
 if (!function_exists('habaq_wp_core')) {

@@ -12,10 +12,10 @@ class Habaq_WP_Core_Roles {
      */
     public static function register() {
         $roles = array(
-            'habaq_insider' => 'Habaq Insider',
-            'habaq_core' => 'Habaq Core Ops',
-            'habaq_restricted' => 'Habaq Restricted',
-            'habaq_executive' => 'Habaq Executive',
+            'habaq_insider' => __('عضو هَبَق', 'habaq-wp-core'),
+            'habaq_core' => __('عمليات هَبَق', 'habaq-wp-core'),
+            'habaq_restricted' => __('هَبَق المقيّدة', 'habaq-wp-core'),
+            'habaq_executive' => __('هَبَق التنفيذي', 'habaq-wp-core'),
         );
 
         foreach ($roles as $key => $name) {
