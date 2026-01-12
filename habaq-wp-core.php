@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Habaq Engine
  * Description: Core plugin scaffold for Habaq.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Habaq
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,12 +13,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('HABAQ_WP_CORE_VERSION', '0.1.0');
+define('HABAQ_WP_CORE_VERSION', '0.2.0');
 define('HABAQ_WP_CORE_FILE', __FILE__);
 define('HABAQ_WP_CORE_DIR', __DIR__);
 define('HABAQ_WP_CORE_URL', plugin_dir_url(__FILE__));
-if (!defined('HABAQ_WP_CORE_DEFAULT_APPLY_TO')) {
-    define('HABAQ_WP_CORE_DEFAULT_APPLY_TO', get_option('admin_email'));
+if (!defined('HABAQ_APPLY_TO')) {
+    define('HABAQ_APPLY_TO', get_option('admin_email'));
 }
 if (!defined('HABAQ_WP_CORE_DEFAULT_CV_MAX_MB')) {
     define('HABAQ_WP_CORE_DEFAULT_CV_MAX_MB', 5);
@@ -34,6 +34,7 @@ require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-helpers.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-admin.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-applications.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-filters.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-meta.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-roles.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-shortcodes.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core.php';
