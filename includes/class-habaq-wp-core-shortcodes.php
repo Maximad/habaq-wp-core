@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class Habaq_WP_Core_Shortcodes {
+
     /**
      * Register shortcodes.
      *
@@ -45,10 +46,10 @@ class Habaq_WP_Core_Shortcodes {
         $post_id = get_the_ID();
 
         $deadline = get_post_meta($post_id, 'habaq_deadline', true);
-        $start = get_post_meta($post_id, 'habaq_start_date', true);
-        $commit = get_post_meta($post_id, 'habaq_time_commitment', true);
-        $comp = get_post_meta($post_id, 'habaq_compensation', true);
-        $status = Habaq_WP_Core_Helpers::job_get_status($post_id);
+        $start    = get_post_meta($post_id, 'habaq_start_date', true);
+        $commit   = get_post_meta($post_id, 'habaq_time_commitment', true);
+        $comp     = get_post_meta($post_id, 'habaq_compensation', true);
+        $status   = Habaq_WP_Core_Helpers::job_get_status($post_id);
 
         $rows = array();
 
@@ -76,7 +77,7 @@ class Habaq_WP_Core_Shortcodes {
 
         $output = '<div class="habaq-job-fields">';
         foreach ($rows as $row) {
-            if (!$row[1]) {
+            if (!isset($row[1]) || $row[1] === '' || $row[1] === null) {
                 continue;
             }
             $output .= '<div class="habaq-job-fields__row"><span class="k">' . esc_html($row[0]) . '</span><span class="v">' . esc_html($row[1]) . '</span></div>';
@@ -98,7 +99,7 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $post_id = get_the_ID();
-        $status = Habaq_WP_Core_Helpers::job_get_status($post_id);
+        $status  = Habaq_WP_Core_Helpers::job_get_status($post_id);
         $expired = Habaq_WP_Core_Helpers::job_is_expired($post_id);
 
         self::enqueue_styles();
@@ -108,16 +109,16 @@ class Habaq_WP_Core_Shortcodes {
         }
 
         $attrs = shortcode_atts(array(
-            'email' => '',
-            'form_url' => '/apply',
+            'email'       => '',
+            'form_url'    => '/apply',
             'email_label' => __('التقديم عبر البريد', 'habaq-wp-core'),
-            'form_label' => __('التقديم عبر النموذج', 'habaq-wp-core'),
+            'form_label'  => __('التقديم عبر النموذج', 'habaq-wp-core'),
         ), $atts);
 
-        $title = get_the_title();
-        $slug = get_post_field('post_name', get_post());
+        $title   = get_the_title();
+        $slug    = get_post_field('post_name', get_post());
         $subject = rawurlencode(sprintf(__('طلب تقديم: %s', 'habaq-wp-core'), $title));
-        $body = rawurlencode(
+        $body    = rawurlencode(
             __('الاسم الكامل:', 'habaq-wp-core') . "\n" .
             __('البريد الإلكتروني:', 'habaq-wp-core') . "\n" .
             __('الرابط/الملف الشخصي:', 'habaq-wp-core') . "\n" .
@@ -125,7 +126,7 @@ class Habaq_WP_Core_Shortcodes {
             __('ملاحظات:', 'habaq-wp-core') . "\n"
         );
 
-        $mailto = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
+        $mailto    = $attrs['email'] ? "mailto:{$attrs['email']}?subject={$subject}&body={$body}" : '';
         $form_link = esc_url(trailingslashit(home_url($attrs['form_url'])) . '?job=' . $slug);
 
         $output = '<div class="habaq-job-apply">';
