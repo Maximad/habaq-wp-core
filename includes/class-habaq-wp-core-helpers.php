@@ -6,6 +6,13 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Helpers {
     /**
+     * Inline styles added.
+     *
+     * @var array
+     */
+    private static $inline_styles = array();
+
+    /**
      * Get job status (open|closed).
      *
      * @param int $post_id Job post ID.
@@ -28,7 +35,7 @@ class Habaq_WP_Core_Helpers {
             return false;
         }
 
-        $timestamp = strtotime($deadline . ' 23:59:59');
+        $timestamp = self::deadline_to_timestamp($deadline);
         if (!$timestamp) {
             return false;
         }
@@ -56,17 +63,13 @@ class Habaq_WP_Core_Helpers {
     }
 
     /**
-     * Get the job deadline string with fallback.
+     * Get the job deadline string.
      *
      * @param int $post_id Job post ID.
      * @return string
      */
     public static function get_job_deadline($post_id) {
         $deadline = get_post_meta($post_id, 'habaq_deadline', true);
-        if ($deadline === '') {
-            $deadline = get_post_meta($post_id, 'job_deadline', true);
-        }
-
         return (string) $deadline;
     }
 
@@ -83,5 +86,52 @@ class Habaq_WP_Core_Helpers {
         }
 
         return self::job_is_expired($post_id);
+    }
+
+    /**
+     * Convert a deadline to end-of-day timestamp in site timezone.
+     *
+     * @param string $deadline Y-m-d deadline.
+     * @return int
+     */
+    public static function deadline_to_timestamp($deadline) {
+        if (!$deadline) {
+            return 0;
+        }
+
+        $timezone = wp_timezone();
+        try {
+            $date = new DateTimeImmutable($deadline . ' 23:59:59', $timezone);
+        } catch (Exception $e) {
+            return 0;
+        }
+
+        return $date->getTimestamp();
+    }
+
+    /**
+     * Register inline styles once per page.
+     *
+     * @param string $css Styles.
+     * @return void
+     */
+    public static function enqueue_inline_style($css) {
+        if (trim($css) === '') {
+            return;
+        }
+
+        $hash = md5($css);
+        if (isset(self::$inline_styles[$hash])) {
+            return;
+        }
+
+        self::$inline_styles[$hash] = true;
+
+        if (!wp_style_is('habaq-wp-core-inline', 'registered')) {
+            wp_register_style('habaq-wp-core-inline', false, array(), HABAQ_WP_CORE_VERSION);
+        }
+
+        wp_enqueue_style('habaq-wp-core-inline');
+        wp_add_inline_style('habaq-wp-core-inline', $css);
     }
 }
