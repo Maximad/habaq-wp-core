@@ -44,6 +44,7 @@ class Habaq_WP_Core {
         $this->loader->add_action('init', 'Habaq_WP_Core_CPTs', 'register');
         $this->loader->add_action('init', 'Habaq_WP_Core_Job_Applications', 'register_cpt');
         $this->loader->add_action('init', 'Habaq_WP_Core_Job_Meta', 'register_meta');
+        $this->loader->add_action('init', 'Habaq_WP_Core_Blocks', 'register');
         $this->loader->add_action('init', 'Habaq_WP_Core_Settings', 'register');
         $this->loader->add_action('add_meta_boxes', 'Habaq_WP_Core_Job_Meta', 'register_metabox');
         $this->loader->add_action('save_post_job', 'Habaq_WP_Core_Job_Meta', 'save_meta');

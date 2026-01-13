@@ -13,6 +13,9 @@ Shortcodes:
 - `[habaq_job_meta key="..."]` عرض قيمة من بيانات الفرصة (الحقول المسموحة: `habaq_deadline`, `habaq_start_date`, `habaq_time_commitment`, `habaq_compensation`, `habaq_job_status`).
 - `[habaq_job_terms taxonomy="job_unit"]` عرض مصطلحات التصنيف المحدد في صفحة الفرصة.
 
+Blocks:
+- أضف “Habaq Job Dates” داخل Post Template في Query Loop لعرض تواريخ الفرصة.
+
 Filters behavior:
 - النماذج تحفظ القيم المختارة بعد الإرسال وتبقى داخل مسار `/jobs`.
 - عدادات المصطلحات تستبعد الفرص المنتهية/المغلقة.

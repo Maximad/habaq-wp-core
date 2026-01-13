@@ -31,6 +31,7 @@ require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-i18n.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-access.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-cpts.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-helpers.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-blocks.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-admin.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-applications.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-filters.php';
