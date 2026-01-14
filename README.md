@@ -23,6 +23,16 @@ Filters behavior:
 Troubleshooting:
 - إذا ظهرت 404 في `/jobs` أو ظهر تنبيه الروابط الدائمة، احفظ إعدادات الروابط الدائمة مرة واحدة.
 - إذا ظهرت روابط تصفية بأسماء عربية في الرابط، يتم تحويلها تلقائيًا إلى slugs صحيحة وإعادة توجيه الطلب.
+- لتفعيل سجلات التصفية: فعّل `WP_DEBUG` وأضف `define('HABAQ_DEBUG_FILTERS', true);` في `wp-config.php`.
+
+## Manual test checklist
+
+- `/jobs/?job_unit[]=unit-slug` يجب أن يعرض الفرص المطابقة لوحدة واحدة فقط.
+- `/jobs/?job_type[]=type-slug` يجب أن يعرض الفرص المطابقة لنوع واحد فقط.
+- `/jobs/?job_location[]=location-slug` يجب أن يعرض الفرص المطابقة لموقع واحد فقط.
+- `/jobs/?job_level[]=level-slug` يجب أن يعرض الفرص المطابقة لمستوى واحد فقط.
+- `/jobs/?job_unit[]=unit-slug&job_type[]=type-slug` يجب أن يدمج الفلاتر ويعرض النتائج المشتركة فقط.
+- `/jobs/?job_q=keyword` يجب أن يفلتر النتائج بالكلمة المفتاحية بدون مغادرة أرشيف `/jobs/`.
 
 ## Changelog
 
