@@ -1,0 +1,14 @@
+{
+  "apiVersion": 2,
+  "name": "habaq/job-dates",
+  "title": "Habaq Job Dates",
+  "category": "widgets",
+  "icon": "calendar",
+  "description": "عرض تواريخ الفرصة داخل حلقات الاستعلام.",
+  "textdomain": "habaq-wp-core",
+  "editorScript": "habaq-job-dates-editor",
+  "supports": {
+    "html": false
+  },
+  "usesContext": ["postId"]
+}
