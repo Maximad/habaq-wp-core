@@ -150,7 +150,7 @@ class Habaq_WP_Core_Job_Admin {
             'email' => __('البريد الإلكتروني', 'habaq-wp-core'),
             'phone' => __('رقم الهاتف', 'habaq-wp-core'),
             'city' => __('المدينة', 'habaq-wp-core'),
-            'availability' => __('التفرغ المتوقع', 'habaq-wp-core'),
+            'availability' => __('التفرغ المتوقع أسبوعياً', 'habaq-wp-core'),
             'portfolio' => __('الرابط/الملف الشخصي', 'habaq-wp-core'),
             'motivation' => __('الدافع', 'habaq-wp-core'),
             'consent' => __('الموافقة', 'habaq-wp-core'),
