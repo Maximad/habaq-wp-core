@@ -45,6 +45,21 @@ class Habaq_WP_Core_Shortcodes {
 
         $post_id = get_the_ID();
 
+        $tax_rows = array();
+        $tax_configs = array(
+            array('job_unit', 'الوحدة'),
+            array('job_type', 'نوع العمل'),
+            array('job_location', 'الموقع'),
+            array('job_level', 'المستوى'),
+        );
+
+        foreach ($tax_configs as $config) {
+            $row = self::build_tax_row($post_id, $config[0], $config[1]);
+            if ($row) {
+                $tax_rows[] = $row;
+            }
+        }
+
         $deadline = get_post_meta($post_id, 'habaq_deadline', true);
         $start    = get_post_meta($post_id, 'habaq_start_date', true);
         $commit   = get_post_meta($post_id, 'habaq_time_commitment', true);
@@ -52,6 +67,10 @@ class Habaq_WP_Core_Shortcodes {
         $status   = Habaq_WP_Core_Helpers::job_get_status($post_id);
 
         $rows = array();
+
+        foreach ($tax_rows as $row) {
+            $rows[] = $row;
+        }
 
         if ($deadline) {
             $rows[] = array('آخر موعد للتقديم', Habaq_WP_Core_Helpers::job_format_date($deadline));
@@ -80,9 +99,77 @@ class Habaq_WP_Core_Shortcodes {
             if (!isset($row[1]) || $row[1] === '' || $row[1] === null) {
                 continue;
             }
-            $output .= '<div class="habaq-job-fields__row"><span class="k">' . esc_html($row[0]) . '</span><span class="v">' . esc_html($row[1]) . '</span></div>';
+            $value = $row[1];
+            if (is_array($value)) {
+                $value = '';
+            }
+            $allowed = array(
+                'span' => array(
+                    'class' => true,
+                ),
+                'button' => array(
+                    'class' => true,
+                    'type' => true,
+                    'aria-label' => true,
+                ),
+                'br' => array(),
+            );
+            $output .= '<div class="habaq-job-fields__row"><span class="k">' . esc_html($row[0]) . '</span><span class="v">' . wp_kses($value, $allowed) . '</span></div>';
         }
         $output .= '</div>';
+
+        return $output;
+    }
+
+    /**
+     * Build taxonomy row HTML.
+     *
+     * @param int    $post_id Post ID.
+     * @param string $taxonomy Taxonomy.
+     * @param string $label Label.
+     * @return array|null
+     */
+    private static function build_tax_row($post_id, $taxonomy, $label) {
+        $terms = get_the_terms($post_id, $taxonomy);
+        if (is_wp_error($terms) || empty($terms)) {
+            return null;
+        }
+
+        $pieces = array();
+        foreach ($terms as $term) {
+            $pieces[] = self::render_term_with_tooltip($term);
+        }
+
+        if (empty($pieces)) {
+            return null;
+        }
+
+        $value = '<span class="habaq-term-wrap">' . implode('، ', $pieces) . '</span>';
+
+        return array($label, $value);
+    }
+
+    /**
+     * Render term name with tooltip icon when description exists.
+     *
+     * @param WP_Term $term Term.
+     * @return string
+     */
+    private static function render_term_with_tooltip($term) {
+        $name = esc_html($term->name);
+        $description = trim((string) $term->description);
+        if ($description === '') {
+            return '<span class="habaq-term">' . $name . '</span>';
+        }
+
+        $desc = wp_kses(nl2br($description), array('br' => array()));
+        $aria = sprintf('معلومات عن %s', $term->name);
+
+        $output = '<span class="habaq-term">';
+        $output .= $name;
+        $output .= '<button type="button" class="habaq-term__btn" aria-label="' . esc_attr($aria) . '">i</button>';
+        $output .= '<span class="habaq-term__tip">' . $desc . '</span>';
+        $output .= '</span>';
 
         return $output;
     }
@@ -274,6 +361,12 @@ class Habaq_WP_Core_Shortcodes {
 .habaq-job-fields__row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .habaq-job-fields .k{opacity:.7}
 .habaq-job-fields .v{font-weight:600}
+.habaq-term-wrap{display:inline-flex;flex-wrap:wrap;gap:6px}
+.habaq-term{display:inline-flex;align-items:center;gap:6px;position:relative}
+.habaq-term__btn{border:1px solid rgba(0,0,0,.2);border-radius:999px;padding:0 6px;line-height:1;cursor:pointer;background:transparent}
+.habaq-term__btn:focus{outline:2px solid currentColor;outline-offset:2px}
+.habaq-term__tip{position:absolute;inset-inline-start:0;top:100%;margin-top:6px;border:1px solid rgba(0,0,0,.2);border-radius:8px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10;opacity:0;pointer-events:none;max-width:260px}
+.habaq-term:hover .habaq-term__tip,.habaq-term:focus-within .habaq-term__tip{opacity:1;pointer-events:auto}
 .habaq-job-apply{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
 .habaq-job-apply__button{border:1px solid rgba(0,0,0,.2);padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;color:inherit}
 .habaq-job-apply__button:focus{outline:2px solid currentColor;outline-offset:2px}
