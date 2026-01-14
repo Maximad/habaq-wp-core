@@ -67,7 +67,7 @@ class Habaq_WP_Core {
         $this->loader->add_action('init', 'Habaq_WP_Core_Job_Applications', 'register_shortcodes');
         $this->loader->add_action('pre_get_posts', 'Habaq_WP_Core_Job_Filters', 'filter_job_archive', 9);
         $this->loader->add_filter('query_loop_block_query_vars', 'Habaq_WP_Core_Job_Filters', 'filter_query_loop');
-        $this->loader->add_action('template_redirect', 'Habaq_WP_Core_Job_Filters', 'maybe_redirect_bad_filters');
+        $this->loader->add_filter('redirect_canonical', 'Habaq_WP_Core_Job_Filters', 'maybe_disable_redirect_canonical', 10, 2);
         $this->loader->add_action('template_redirect', 'Habaq_WP_Core_Access', 'enforce_zones');
         $this->loader->add_action('template_redirect', 'Habaq_WP_Core_Job_Applications', 'handle_submission');
         $this->loader->add_filter('the_content', 'Habaq_WP_Core_Job_Applications', 'append_form');

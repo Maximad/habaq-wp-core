@@ -27,8 +27,9 @@ Troubleshooting:
 
 ## Manual test checklist
 
-- `/jobs/?job_unit[]=SOME_SLUG` يجب أن يعرض الفرص المطابقة لوحدة واحدة فقط.
-- `/jobs/?job_q=test` يجب أن يفلتر النتائج بالكلمة المفتاحية بدون مغادرة أرشيف `/jobs/`.
+- `/jobs/?job_unit[]=SOME_SLUG` يجب أن يعمل بدون إعادة توجيه ويعرض الفرص المطابقة لوحدة واحدة فقط.
+- `/jobs/?job_unit[]=SOME_SLUG&job_unit[]=OTHER_SLUG` يجب أن يعمل بدون إعادة توجيه ويعرض النتائج المطابقة للوحدات المحددة.
+- `/jobs/?job_q=test` يجب أن يعمل بدون إعادة توجيه ويفلتر النتائج بالكلمة المفتاحية داخل أرشيف `/jobs/`.
 - `/jobs/?job_unit[]=SOME_SLUG&job_type[]=SOME_TYPE` يجب أن يدمج الفلاتر ويعرض النتائج المشتركة فقط.
 
 ## Changelog

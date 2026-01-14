@@ -94,84 +94,29 @@ class Habaq_WP_Core_Job_Filters {
         return array_values(array_unique(array_filter($slugs)));
     }
     /**
-     * Filter for job requests with non-slug values and redirect.
+     * Disable canonical redirects for job filter URLs.
      *
-     * @return void
+     * @param string|false $redirect_url Redirect URL.
+     * @param string       $requested_url Requested URL.
+     * @return string|false
      */
-    public static function maybe_redirect_bad_filters() {
-        if (is_admin() || !is_post_type_archive('job')) {
-            return;
+    public static function maybe_disable_redirect_canonical($redirect_url, $requested_url) {
+        if (is_admin()) {
+            return $redirect_url;
         }
 
-        if (empty($_GET)) {
-            return;
-        }
-
-        $taxonomies = self::get_taxonomies();
-        $mapped = array();
-
-        foreach ($taxonomies as $taxonomy) {
-            if (!isset($_GET[$taxonomy])) {
-                continue;
+        $has_filters = isset($_GET['job_q']) || isset($_GET['job_unit']) || isset($_GET['job_type']) || isset($_GET['job_location']) || isset($_GET['job_level']);
+        if (is_post_type_archive('job') && $has_filters) {
+            if (self::debug_enabled()) {
+                self::log_debug('Habaq job filters: redirect_canonical disabled', array(
+                    'url' => self::get_current_url(),
+                    'get' => map_deep(wp_unslash($_GET), 'sanitize_text_field'),
+                ));
             }
-
-            $raw = wp_unslash($_GET[$taxonomy]);
-            $values = is_array($raw) ? $raw : array($raw);
-
-            if (empty($values)) {
-                continue;
-            }
-
-            $name_map = self::get_term_name_to_slug_map($taxonomy);
-            $updated = array();
-            $changed = false;
-            foreach ($values as $value) {
-                $parts = is_string($value) ? explode(',', $value) : array($value);
-                foreach ($parts as $part) {
-                    $sanitized = sanitize_text_field($part);
-                    if ($sanitized === '') {
-                        continue;
-                    }
-                    $slug = self::normalize_term_value($sanitized);
-                    if (isset($name_map[$sanitized])) {
-                        $slug = $name_map[$sanitized];
-                        $changed = true;
-                    } elseif ($slug !== $sanitized) {
-                        $changed = true;
-                    }
-                    $updated[] = $slug;
-                }
-            }
-
-            $updated = array_values(array_unique(array_filter($updated)));
-            if ($changed) {
-                $mapped[$taxonomy] = $updated;
-            }
+            return false;
         }
 
-        if (empty($mapped)) {
-            return;
-        }
-
-        $query = array();
-        foreach ($mapped as $taxonomy => $values) {
-            if (!empty($values)) {
-                $query[$taxonomy] = $values;
-            }
-        }
-
-        if (isset($_GET['job_q'])) {
-            $query['job_q'] = sanitize_text_field(wp_unslash($_GET['job_q']));
-        }
-
-        $action = get_post_type_archive_link('job');
-        if (!$action) {
-            $action = home_url('/jobs/');
-        }
-
-        $redirect = add_query_arg($query, $action);
-        wp_safe_redirect($redirect, 301);
-        exit;
+        return $redirect_url;
     }
     /**
      * Register shortcode.
