@@ -6,6 +6,94 @@ if (!defined('ABSPATH')) {
 
 class Habaq_WP_Core_Job_Filters {
     /**
+     * Check if debug logging is enabled.
+     *
+     * @return bool
+     */
+    private static function debug_enabled() {
+        return defined('WP_DEBUG') && WP_DEBUG && defined('HABAQ_DEBUG_FILTERS') && HABAQ_DEBUG_FILTERS;
+    }
+
+    /**
+     * Log debug data to error_log when enabled.
+     *
+     * @param string $message Message prefix.
+     * @param array  $context Context data.
+     * @return void
+     */
+    private static function log_debug($message, $context = array()) {
+        if (!self::debug_enabled()) {
+            return;
+        }
+
+        $entry = $message;
+        if (!empty($context)) {
+            $entry .= ' ' . wp_json_encode($context);
+        }
+
+        error_log($entry);
+    }
+
+    /**
+     * Get the current URL for debug logging.
+     *
+     * @return string
+     */
+    private static function get_current_url() {
+        $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+        if ($request_uri === '') {
+            return home_url('/');
+        }
+
+        return esc_url_raw(home_url($request_uri));
+    }
+
+    /**
+     * Normalize term value to a canonical slug.
+     *
+     * @param mixed $value Raw value.
+     * @return string
+     */
+    private static function normalize_term_value($value) {
+        if (!is_string($value)) {
+            $value = (string) $value;
+        }
+
+        $decoded = $value;
+        for ($i = 0; $i < 3; $i++) {
+            $next = rawurldecode($decoded);
+            if ($next === $decoded) {
+                break;
+            }
+            $decoded = $next;
+        }
+
+        return sanitize_title($decoded);
+    }
+
+    /**
+     * Normalize term inputs to slugs.
+     *
+     * @param mixed $raw Raw term input.
+     * @return string[]
+     */
+    private static function parse_term_inputs($raw) {
+        $values = is_array($raw) ? $raw : array($raw);
+        $slugs = array();
+
+        foreach ($values as $value) {
+            $parts = is_string($value) ? explode(',', $value) : array($value);
+            foreach ($parts as $part) {
+                $slug = self::normalize_term_value($part);
+                if ($slug !== '') {
+                    $slugs[] = $slug;
+                }
+            }
+        }
+
+        return array_values(array_unique(array_filter($slugs)));
+    }
+    /**
      * Filter for job requests with non-slug values and redirect.
      *
      * @return void
@@ -29,8 +117,6 @@ class Habaq_WP_Core_Job_Filters {
 
             $raw = wp_unslash($_GET[$taxonomy]);
             $values = is_array($raw) ? $raw : array($raw);
-            $values = array_map('sanitize_text_field', $values);
-            $values = array_values(array_filter($values));
 
             if (empty($values)) {
                 continue;
@@ -40,14 +126,21 @@ class Habaq_WP_Core_Job_Filters {
             $updated = array();
             $changed = false;
             foreach ($values as $value) {
-                $slug = sanitize_title($value);
-                if (isset($name_map[$value])) {
-                    $slug = $name_map[$value];
-                    $changed = true;
-                } elseif ($slug !== $value) {
-                    $changed = true;
+                $parts = is_string($value) ? explode(',', $value) : array($value);
+                foreach ($parts as $part) {
+                    $sanitized = sanitize_text_field($part);
+                    if ($sanitized === '') {
+                        continue;
+                    }
+                    $slug = self::normalize_term_value($sanitized);
+                    if (isset($name_map[$sanitized])) {
+                        $slug = $name_map[$sanitized];
+                        $changed = true;
+                    } elseif ($slug !== $sanitized) {
+                        $changed = true;
+                    }
+                    $updated[] = $slug;
                 }
-                $updated[] = $slug;
             }
 
             $updated = array_values(array_unique(array_filter($updated)));
@@ -102,9 +195,23 @@ class Habaq_WP_Core_Job_Filters {
             return;
         }
 
-        if (!self::is_job_archive_context($query)) {
+        if (!$query->is_post_type_archive('job')) {
             return;
         }
+
+        if (self::debug_enabled()) {
+            $debug_get = map_deep(wp_unslash($_GET), 'sanitize_text_field');
+            self::log_debug('Habaq job filters: pre_get_posts', array(
+                'url' => self::get_current_url(),
+                'get' => $debug_get,
+                'is_main_query' => $query->is_main_query(),
+                'is_post_type_archive_job' => $query->is_post_type_archive('job'),
+            ));
+        }
+
+        $query->set('post_type', 'job');
+        $query->set('orderby', 'date');
+        $query->set('order', 'DESC');
 
         $tax_query = self::build_tax_query();
         if (!empty($tax_query)) {
@@ -119,6 +226,14 @@ class Habaq_WP_Core_Job_Filters {
 
         $meta_query = self::build_active_job_meta_query();
         $query->set('meta_query', self::merge_meta_query($query->get('meta_query'), $meta_query));
+
+        if (self::debug_enabled()) {
+            self::log_debug('Habaq job filters: applied', array(
+                'tax_query' => $query->get('tax_query'),
+                'search' => $query->get('s'),
+                'meta_query' => $query->get('meta_query'),
+            ));
+        }
     }
 
     /**
@@ -132,7 +247,12 @@ class Habaq_WP_Core_Job_Filters {
             return $query_vars;
         }
 
+        if (!is_post_type_archive('job')) {
+            return $query_vars;
+        }
+
         $post_type = isset($query_vars['post_type']) ? $query_vars['post_type'] : 'post';
+        $inherit = isset($query_vars['inherit']) ? (bool) $query_vars['inherit'] : false;
         $is_job = false;
 
         if (is_array($post_type)) {
@@ -141,12 +261,36 @@ class Habaq_WP_Core_Job_Filters {
             $is_job = ($post_type === 'job');
         }
 
-        if (!$is_job) {
+        if (!$is_job && !$inherit) {
             return $query_vars;
+        }
+
+        $query_vars['post_type'] = 'job';
+        $query_vars['orderby'] = 'date';
+        $query_vars['order'] = 'DESC';
+
+        $tax_query = self::build_tax_query();
+        if (!empty($tax_query)) {
+            $query_vars['tax_query'] = self::merge_tax_query(isset($query_vars['tax_query']) ? $query_vars['tax_query'] : array(), $tax_query);
+        }
+
+        $keyword = self::get_keyword();
+        if ($keyword !== '') {
+            $query_vars['s'] = $keyword;
         }
 
         $meta_query = self::build_active_job_meta_query();
         $query_vars['meta_query'] = self::merge_meta_query(isset($query_vars['meta_query']) ? $query_vars['meta_query'] : array(), $meta_query);
+
+        if (self::debug_enabled()) {
+            $debug_get = map_deep(wp_unslash($_GET), 'sanitize_text_field');
+            self::log_debug('Habaq job filters: query loop', array(
+                'url' => self::get_current_url(),
+                'get' => $debug_get,
+                'tax_query' => isset($query_vars['tax_query']) ? $query_vars['tax_query'] : array(),
+                'search' => isset($query_vars['s']) ? $query_vars['s'] : '',
+            ));
+        }
 
         return $query_vars;
     }
@@ -218,7 +362,7 @@ class Habaq_WP_Core_Job_Filters {
             $checked = in_array($term->slug, $selected, true);
             $disabled = (!$checked && $count === 0) ? ' disabled' : '';
             $output .= '<label class="habaq-job-filters__option">';
-            $output .= '<input type="checkbox" name="' . esc_attr($taxonomy) . '[]" value="' . esc_attr($term->slug) . '"' . checked($checked, true, false) . $disabled . ' />';
+            $output .= '<input type="checkbox" name="' . esc_attr($taxonomy) . '[]" value="' . esc_attr(rawurldecode($term->slug)) . '"' . checked($checked, true, false) . $disabled . ' />';
             $output .= '<span>' . esc_html($term->name) . '</span>';
             $output .= '<em>' . esc_html((string) $count) . '</em>';
             $output .= '</label>';
@@ -242,10 +386,7 @@ class Habaq_WP_Core_Job_Filters {
         }
 
         $raw = wp_unslash($_GET[$taxonomy]);
-        $terms = is_array($raw) ? $raw : array($raw);
-        $terms = array_map('sanitize_text_field', $terms);
-        $terms = array_map('sanitize_title', $terms);
-        $terms = array_values(array_filter($terms));
+        $terms = self::parse_term_inputs($raw);
 
         if (empty($terms)) {
             return array();
@@ -310,6 +451,7 @@ class Habaq_WP_Core_Job_Filters {
                     'taxonomy' => $taxonomy,
                     'field' => 'slug',
                     'terms' => $terms,
+                    'operator' => 'IN',
                 );
             }
         }
