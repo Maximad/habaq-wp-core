@@ -136,6 +136,18 @@ class Habaq_WP_Core_Job_Filters {
      * @return void
      */
     public static function filter_job_archive($query) {
+        if (self::debug_enabled()) {
+            $debug_get = map_deep(wp_unslash($_GET), 'sanitize_text_field');
+            self::log_debug('Habaq job filters: pre_get_posts', array(
+                'url' => self::get_current_url(),
+                'get' => $debug_get,
+                'is_main_query' => $query->is_main_query(),
+                'is_post_type_archive_job' => $query->is_post_type_archive('job'),
+                'tax_query' => $query->get('tax_query'),
+                'search' => $query->get('s'),
+            ));
+        }
+
         if (is_admin() || !$query->is_main_query()) {
             return;
         }
