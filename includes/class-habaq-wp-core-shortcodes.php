@@ -365,7 +365,7 @@ class Habaq_WP_Core_Shortcodes {
 .habaq-term{display:inline-flex;align-items:center;gap:6px;position:relative}
 .habaq-term__btn{border:1px solid rgba(0,0,0,.2);border-radius:999px;padding:0 6px;line-height:1;cursor:pointer;background:transparent}
 .habaq-term__btn:focus{outline:2px solid currentColor;outline-offset:2px}
-.habaq-term__tip{position:absolute;inset-inline-start:0;top:100%;margin-top:6px;border:1px solid rgba(0,0,0,.2);border-radius:8px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10;opacity:0;pointer-events:none;max-width:260px}
+.habaq-term__tip{position:absolute;inset-inline-start:0;top:100%;margin-top:6px;border:1px solid rgba(0,0,0,.2);border-radius:8px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);z-index:10;opacity:0;pointer-events:none;max-width: 300px;background: white;width: 300px;}
 .habaq-term:hover .habaq-term__tip,.habaq-term:focus-within .habaq-term__tip{opacity:1;pointer-events:auto}
 .habaq-job-apply{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
 .habaq-job-apply__button{border:1px solid rgba(0,0,0,.2);padding:10px 16px;border-radius:10px;text-decoration:none;display:inline-flex;align-items:center;color:inherit}
