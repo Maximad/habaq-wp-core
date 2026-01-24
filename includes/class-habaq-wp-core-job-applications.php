@@ -89,7 +89,7 @@ class Habaq_WP_Core_Job_Applications {
         $prefill = self::get_prefill_data();
         $output = '';
         if ($message) {
-            $output .= '<div class="habaq-job-application__message">' . esc_html($message) . '</div>';
+            $output .= self::render_notice_toast($message);
             self::$notice_rendered = true;
         }
 
@@ -97,11 +97,11 @@ class Habaq_WP_Core_Job_Applications {
             $output .= '<div class="habaq-job-application__message habaq-job-application__message--warning">' . esc_html__('يرجى إعادة رفع السيرة الذاتية.', 'habaq-wp-core') . '</div>';
         }
 
-        $output .= '<form class="habaq-job-application" method="post" enctype="multipart/form-data" action="' . esc_url(get_permalink($job)) . '">';
+        $output .= '<form id="habaq-apply" class="habaq-job-application" method="post" enctype="multipart/form-data" action="' . esc_url(get_permalink($job)) . '">';
         $output .= wp_nonce_field('habaq_job_application', 'habaq_job_application_nonce', true, false);
         $output .= '<input type="hidden" name="habaq_job_application" value="1" />';
         $output .= '<input type="hidden" name="habaq_job_slug" value="' . esc_attr($job->post_name) . '" />';
-        $output .= '<div class="habaq-job-application__hp"><label>Website<input type="text" name="habaq_hp" value="" /></label></div>';
+        $output .= '<div class="habaq-job-application__hp" aria-hidden="true"><label>Website<input type="text" name="habaq_hp" value="" tabindex="-1" autocomplete="off" /></label></div>';
 
         $output .= self::render_field('full_name', __('الاسم الكامل', 'habaq-wp-core'), 'text', true, $prefill);
         $output .= self::render_field('email', __('البريد الإلكتروني', 'habaq-wp-core'), 'email', true, $prefill);
@@ -177,14 +177,7 @@ class Habaq_WP_Core_Job_Applications {
             self::redirect_with_notice($redirect_url, 'invalid_nonce');
         }
 
-        if (!empty($_POST['habaq_hp'])) {
-            self::redirect_with_notice($redirect_url, 'invalid_form');
-        }
-
-        $rate_key = self::get_rate_limit_key($job->ID);
-        if (get_transient($rate_key)) {
-            self::redirect_with_notice($redirect_url, 'rate_limited');
-        }
+        $spam_suspected = !empty($_POST['habaq_hp']);
 
         if (Habaq_WP_Core_Helpers::job_is_closed($job->ID)) {
             self::redirect_with_notice($redirect_url, 'closed');
@@ -196,6 +189,16 @@ class Habaq_WP_Core_Job_Applications {
             if (empty($fields[$key])) {
                 self::redirect_with_notice($redirect_url, 'missing_fields', $fields);
             }
+        }
+
+        if (!is_email($fields['email'])) {
+            // invalid_email
+            self::redirect_with_notice($redirect_url, 'invalid_email', $fields);
+        }
+
+        $rate_key = self::get_rate_limit_key($job->ID, $fields['email']);
+        if ($rate_key && get_transient($rate_key)) {
+            self::redirect_with_notice($redirect_url, 'rate_limited', $fields);
         }
 
         if (empty($_FILES['cv_file']['name'])) {
@@ -267,11 +270,16 @@ class Habaq_WP_Core_Job_Applications {
         update_post_meta($application_id, 'habaq_deadline', $deadline);
         update_post_meta($application_id, 'cv_attachment_id', $attachment_id);
         update_post_meta($application_id, 'cv_url', wp_get_attachment_url($attachment_id));
+        if ($spam_suspected) {
+            update_post_meta($application_id, 'spam_suspected', '1');
+        }
 
-        self::send_notifications($application_id, $fields['email'], $job->post_title, $attachment_id, $fields['full_name'], $job->ID);
-        set_transient($rate_key, time(), 60);
+        self::send_notifications($application_id, $fields['email'], $job->post_title, $attachment_id, $fields['full_name'], $job->ID, $spam_suspected);
+        if ($rate_key) {
+            set_transient($rate_key, time(), 60);
+        }
 
-        self::redirect_with_notice(home_url('/'), 'success');
+        self::redirect_with_notice($redirect_url . '#habaq-apply', 'success');
     }
 
     /**
@@ -286,7 +294,8 @@ class Habaq_WP_Core_Job_Applications {
 
         $message = self::get_notice_message(true);
         if ($message) {
-            echo '<div class="habaq-job-application__notice">' . esc_html($message) . '</div>';
+            echo self::render_notice_toast($message);
+            self::$notice_rendered = true;
         }
     }
 
@@ -363,20 +372,28 @@ class Habaq_WP_Core_Job_Applications {
      * @param string $full_name Applicant name.
      * @return void
      */
-    private static function send_notifications($application_id, $email, $job_title, $attachment_id, $full_name, $job_id) {
+    private static function send_notifications($application_id, $email, $job_title, $attachment_id, $full_name, $job_id, $spam_suspected) {
         $to = apply_filters('habaq_apply_to_email', self::get_recipient_email($job_id));
-        $cv_url = wp_get_attachment_url($attachment_id);
+        $attachment_path = $attachment_id ? get_attached_file($attachment_id) : '';
 
         $admin_subject = sprintf(__('طلب تقديم جديد رقم %d', 'habaq-wp-core'), $application_id);
+        if ($spam_suspected) {
+            $admin_subject = '[مشتبه] ' . $admin_subject;
+        }
         $admin_message = __('تم استلام طلب تقديم جديد.', 'habaq-wp-core') . "\n";
+        if ($spam_suspected) {
+            $admin_message .= __('تنبيه: تم تعبئة حقل مكافحة السبام (honeypot).', 'habaq-wp-core') . "\n";
+        }
         $admin_message .= sprintf("%s %d\n", __('رقم الطلب:', 'habaq-wp-core'), $application_id);
         $admin_message .= sprintf("%s %s\n", __('عنوان الفرصة:', 'habaq-wp-core'), $job_title);
         $admin_message .= sprintf("%s %s\n", __('اسم المتقدم:', 'habaq-wp-core'), $full_name);
-        if ($cv_url) {
-            $admin_message .= sprintf("%s %s\n", __('السيرة الذاتية:', 'habaq-wp-core'), $cv_url);
+
+        $attachments = array();
+        if ($attachment_path && file_exists($attachment_path)) {
+            $attachments[] = $attachment_path;
         }
 
-        wp_mail($to, $admin_subject, $admin_message);
+        wp_mail($to, $admin_subject, $admin_message, array(), $attachments);
 
         if ($email) {
             $user_subject = sprintf(__('تم استلام طلبك لفرصة %s', 'habaq-wp-core'), $job_title);
@@ -386,14 +403,20 @@ class Habaq_WP_Core_Job_Applications {
     }
 
     /**
-     * Build a rate limit key per IP and job.
+     * Build a rate limit key per email and job.
      *
      * @param int $job_id Job ID.
+     * @param string $email Applicant email.
      * @return string
      */
-    private static function get_rate_limit_key($job_id) {
-        $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : 'unknown';
-        return 'habaq_apply_rate_' . md5($job_id . '|' . $ip);
+    private static function get_rate_limit_key($job_id, $email) {
+        $email = trim(strtolower($email));
+        if ($email && is_email($email)) {
+            return 'habaq_apply_rate_' . md5($job_id . '|' . $email);
+        }
+
+        // Skip rate limiting if email is invalid to avoid false positives on shared IPs.
+        return '';
     }
 
     /**
@@ -453,6 +476,8 @@ class Habaq_WP_Core_Job_Applications {
             'invalid_form' => 'تعذر إرسال الطلب.',
             'rate_limited' => 'يرجى الانتظار قبل إعادة الإرسال.',
             'closed' => 'انتهى التقديم لهذه الفرصة.',
+            // invalid_email
+            'invalid_email' => 'يرجى إدخال بريد إلكتروني صحيح.',
         );
 
         return isset($messages[$message_key]) ? $messages[$message_key] : '';
@@ -559,6 +584,23 @@ class Habaq_WP_Core_Job_Applications {
     }
 
     /**
+     * Render a toast notice.
+     *
+     * @param string $message Notice message.
+     * @return string
+     */
+    private static function render_notice_toast($message) {
+        $message = esc_html($message);
+        $output = '<div class="habaq-job-application__notice" role="alert" aria-live="assertive">';
+        $output .= '<div class="habaq-job-application__notice-text">' . $message . '</div>';
+        $output .= '<button type="button" class="habaq-job-application__notice-close" aria-label="' . esc_attr__('إغلاق', 'habaq-wp-core') . '">×</button>';
+        $output .= '</div>';
+        $output .= '<script>(function(){var notice=document.querySelector(".habaq-job-application__notice");if(!notice){return;}var close=notice.querySelector(".habaq-job-application__notice-close");var hide=function(){notice.style.display="none";};if(close){close.addEventListener("click",hide);}setTimeout(hide,8000);})();</script>';
+
+        return $output;
+    }
+
+    /**
      * Enqueue frontend styles.
      *
      * @return void
@@ -577,9 +619,11 @@ class Habaq_WP_Core_Job_Applications {
 .habaq-job-application__actions button{border:1px solid rgba(0,0,0,.2);border-radius:10px;padding:10px 16px;cursor:pointer;background:transparent}
 .habaq-job-application__actions button:focus{outline:2px solid currentColor;outline-offset:2px}
 .habaq-job-application__message{padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,.12)}
-.habaq-job-application__notice{position:fixed;bottom:20px;left:20px;right:20px;max-width:520px;margin:auto;border:1px solid rgba(0,0,0,.2);padding:14px;border-radius:12px;z-index:9999;background:transparent}
+.habaq-job-application__notice{position:fixed;bottom:20px;left:20px;right:20px;max-width:520px;margin:auto;border:1px solid rgba(0,0,0,.2);padding:14px;border-radius:12px;z-index:9999;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:12px}
+.habaq-job-application__notice-text{flex:1}
+.habaq-job-application__notice-close{border:0;background:transparent;font-size:20px;line-height:1;cursor:pointer}
 .habaq-job-application__closed{padding:14px;border:1px solid rgba(0,0,0,.12);border-radius:12px}
-.habaq-job-application__hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.habaq-job-application__hp{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);clip-path:inset(50%);white-space:nowrap}
 @media (max-width:720px){.habaq-job-application{padding:14px}}';
 
         Habaq_WP_Core_Helpers::enqueue_inline_style($css);
