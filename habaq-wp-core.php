@@ -39,6 +39,7 @@ require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-job-meta.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-settings.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-roles.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core-shortcodes.php';
+require_once HABAQ_WP_CORE_DIR . '/includes/training/class-habaq-training-player.php';
 require_once HABAQ_WP_CORE_DIR . '/includes/class-habaq-wp-core.php';
 
 if (!function_exists('habaq_wp_core')) {
