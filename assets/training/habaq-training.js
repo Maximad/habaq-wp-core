@@ -17,22 +17,23 @@
     var icons = {
       play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>',
       pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"></path></svg>',
-      prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2v12H6zm3 6l9-6v12z"></path></svg>',
-      next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6h2v12h-2zM7 18V6l9 6z"></path></svg>',
+      prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 6.5 10 12l5.5 5.5-1.5 1.5L7 12l7-7z"></path></svg>',
+      next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8.5 6.5 1.5-1.5 7 7-7 7-1.5-1.5L14 12z"></path></svg>',
       mute: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9zm10.5 3 2.5 2.5-1.5 1.5-2.5-2.5-2.5 2.5-1.5-1.5 2.5-2.5-2.5-2.5 1.5-1.5 2.5 2.5 2.5-2.5 1.5 1.5z"></path></svg>',
       unmute: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9zm11.5 3a3.5 3.5 0 0 0-1.75-3.03v6.06A3.5 3.5 0 0 0 16.5 12zm0-7a10.5 10.5 0 0 1 0 14l-1.42-1.42a8.5 8.5 0 0 0 0-11.16z"></path></svg>',
       menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>',
-      restart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path></svg>'
+      restart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"></path></svg>',
+      fullscreen: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14H5v5h5v-2H7zm0-4h2V7h3V5H5v5zm10 7h-3v2h5v-5h-2zm0-12V5h-5v2h3v3h2z"></path></svg>',
+      minimize: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16h3v3h2v-5H8zm0-8h5V3h-2v3H8zm8 8h-5v5h2v-3h3zm-3-8h5V3h-2v3h-3z"></path></svg>'
     };
 
     return icons[name] || '';
   }
 
-  function setButtonContent(button, iconName, label) {
+  function setButton(button, iconName, label) {
     if (!button) {
       return;
     }
-
     button.innerHTML = '<span class="habaq-training__button-icon">' + icon(iconName) + '</span><span class="habaq-training__button-label">' + label + '</span>';
   }
 
@@ -46,12 +47,7 @@
     }
 
     var config = parseConfig(configNode);
-    if (!config) {
-      mountNode.innerHTML = '<p class="habaq-training__message">تعذر قراءة إعدادات التدريب.</p>';
-      return;
-    }
-
-    if (!Array.isArray(config.slides) || config.slides.length === 0) {
+    if (!config || !Array.isArray(config.slides) || config.slides.length === 0) {
       mountNode.innerHTML = '<p class="habaq-training__message">لا توجد شرائح متاحة حالياً.</p>';
       return;
     }
@@ -68,10 +64,9 @@
       previewSlides = 0;
     }
 
+    var bootstrap = window.habaqTraining || {};
     var isLoggedIn = !!viewer.is_logged_in;
     var canTrackServer = !!viewer.can_track_server;
-
-    var bootstrap = window.habaqTraining || {};
     var ajaxUrl = bootstrap.ajaxUrl || '';
     var nonce = bootstrap.nonce || '';
 
@@ -82,6 +77,32 @@
       }
     });
 
+    var storageKey = 'habaq_training_progress:' + (config.slug || 'default');
+    var uiStorageKey = 'habaq_training_ui:' + (config.slug || 'default');
+
+    var localSaved = null;
+    var uiState = { immersive: false, sidebarOpen: false };
+    try {
+      localSaved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+      var parsedUi = JSON.parse(window.localStorage.getItem(uiStorageKey) || 'null');
+      if (parsedUi && typeof parsedUi === 'object') {
+        uiState.immersive = !!parsedUi.immersive;
+        uiState.sidebarOpen = !!parsedUi.sidebarOpen;
+      }
+    } catch (e) {
+      localSaved = null;
+      state.sidebarOpen = false;
+    }
+
+    var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : introIndex;
+    var localSlide = (localSaved && typeof localSaved.current_slide !== 'undefined') ? parseInt(localSaved.current_slide, 10) : introIndex;
+    if (isNaN(serverSlide) || serverSlide < 0) {
+      serverSlide = introIndex;
+    }
+    if (isNaN(localSlide) || localSlide < 0) {
+      localSlide = introIndex;
+    }
+
     var state = {
       started: false,
       current: introIndex,
@@ -91,31 +112,14 @@
       completedAt: (config.resume && config.resume.completed_at) ? parseInt(config.resume.completed_at, 10) : 0,
       lastServerSaveAt: 0,
       promptVisible: false,
-      loading: false,
-      sidebarOpen: false,
-      preserveHero: false
+      sidebarOpen: !!uiState.sidebarOpen,
+      immersive: !!uiState.immersive,
+      isFullscreenNative: false,
+      pendingMedia: false,
+      pendingImage: false,
+      pendingAudio: false,
+      transitionTick: 0
     };
-
-    var storageKey = 'habaq_training_progress:' + (config.slug || 'default');
-    var sidebarStorageKey = 'habaq_training_sidebar:' + (config.slug || 'default');
-    var localSaved = null;
-    try {
-      localSaved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
-      state.sidebarOpen = window.localStorage.getItem(sidebarStorageKey) === '1';
-    } catch (e) {
-      localSaved = null;
-      state.sidebarOpen = false;
-    }
-
-    var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : introIndex;
-    if (isNaN(serverSlide) || serverSlide < 0) {
-      serverSlide = introIndex;
-    }
-
-    var localSlide = (localSaved && typeof localSaved.current_slide !== 'undefined') ? parseInt(localSaved.current_slide, 10) : introIndex;
-    if (isNaN(localSlide) || localSlide < 0) {
-      localSlide = introIndex;
-    }
 
     var suggestedResumeSlide = isLoggedIn ? serverSlide : localSlide;
     if (suggestedResumeSlide >= config.slides.length) {
@@ -123,65 +127,51 @@
     }
 
     mountNode.innerHTML = [
-      '<div class="habaq-training__shell">',
-      '  <aside class="habaq-training__sidebar" data-sidebar>',
-      '    <div class="habaq-training__sidebar-header">الفهرس</div>',
-      '    <ol class="habaq-training__toc" data-toc></ol>',
-      '  </aside>',
+      '<div class="habaq-training__shell" data-shell>',
+      '  <aside class="habaq-training__sidebar" data-sidebar><div class="habaq-training__sidebar-header">الفهرس</div><ol class="habaq-training__toc" data-toc></ol></aside>',
       '  <button type="button" class="habaq-training__sidebar-overlay" data-sidebar-overlay hidden aria-label="إغلاق الفهرس"></button>',
       '  <div class="habaq-training__main">',
-      '  <div class="habaq-training__start" data-start-screen="1">',
-      '    <h2 class="habaq-training__heading"></h2>',
-      '    <div class="habaq-training__image-wrap" data-start-image-wrap hidden><img class="habaq-training__image" data-start-image alt="" loading="eager" /><div class="habaq-training__image-placeholder" data-start-image-placeholder hidden></div></div>',
-      '    <p class="habaq-training__hint">اضغط للبدء ثم تنقّل بين الشرائح.</p>',
-      '    <div class="habaq-training__resume" data-resume hidden>',
-      '      <p class="habaq-training__hint">متابعة من حيث توقفت؟</p>',
-      '      <div class="habaq-training__resume-actions">',
-      '        <button type="button" class="habaq-training__button" data-action="resume-continue">متابعة</button>',
-      '        <button type="button" class="habaq-training__button" data-action="resume-restart">بدء من البداية</button>',
-      '      </div>',
-      '    </div>',
-      '    <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="start">ابدأ التدريب</button>',
-      '  </div>',
-      '  <div class="habaq-training__player" data-player="1" hidden>',
-      '    <div class="habaq-training__topbar">',
+      '    <header class="habaq-training__topbar">',
       '      <button type="button" class="habaq-training__button" data-action="toggle-sidebar" aria-label="الفهرس"></button>',
-      '      <div class="habaq-training__status">',
-      '        <span class="habaq-training__progress" data-progress></span>',
-      '        <span class="habaq-training__title" data-title></span>',
+      '      <div class="habaq-training__status"><span data-progress>1 / ' + config.slides.length + '</span><span data-title></span></div>',
+      '      <button type="button" class="habaq-training__button" data-action="toggle-fullscreen" aria-label="ملء الشاشة"></button>',
+      '    </header>',
+      '    <div class="habaq-training__content" data-content>',
+      '      <div class="habaq-training__start" data-start-screen="1">',
+      '        <h2 class="habaq-training__heading"></h2>',
+      '        <div class="habaq-training__image-wrap" data-start-image-wrap hidden><img class="habaq-training__image" data-start-image alt="" loading="eager" /><div class="habaq-training__image-placeholder" data-start-image-placeholder hidden></div></div>',
+      '        <p class="habaq-training__hint">اضغط للبدء ثم تنقّل بين الشرائح.</p>',
+      '        <div class="habaq-training__resume" data-resume hidden><p class="habaq-training__hint">متابعة من حيث توقفت؟</p><div class="habaq-training__resume-actions"><button type="button" class="habaq-training__button" data-action="resume-continue">متابعة</button><button type="button" class="habaq-training__button" data-action="resume-restart">بدء من البداية</button></div></div>',
+      '        <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="start">ابدأ التدريب</button>',
+      '      </div>',
+      '      <div class="habaq-training__player" data-player="1" hidden>',
+      '        <article class="habaq-training__slide" data-slide-panel tabindex="-1">',
+      '          <div class="habaq-training__loading" data-loading hidden><span class="habaq-training__skeleton habaq-training__skeleton--media"></span><span class="habaq-training__skeleton habaq-training__skeleton--line"></span></div>',
+      '          <div class="habaq-training__image-wrap" data-image-wrap hidden><img class="habaq-training__image" data-image alt="" loading="lazy" /><div class="habaq-training__image-placeholder" data-image-placeholder hidden></div></div>',
+      '          <div class="habaq-training__body" data-body></div>',
+      '          <div class="habaq-training__preview-gate" data-preview-gate hidden><p class="habaq-training__gate-message">هذا التدريب متاح لأعضاء الفريق فقط.</p><a class="habaq-training__button habaq-training__button--primary" data-login-link href="#">تسجيل الدخول</a></div>',
+      '        </article>',
       '      </div>',
       '    </div>',
-      '    <article class="habaq-training__slide" data-slide-panel tabindex="-1">',
-      '      <div class="habaq-training__loading" data-loading hidden><span class="habaq-training__skeleton habaq-training__skeleton--media"></span><span class="habaq-training__skeleton habaq-training__skeleton--line"></span></div>',
-      '      <div class="habaq-training__image-wrap" data-image-wrap hidden><img class="habaq-training__image" data-image alt="" loading="lazy" /><div class="habaq-training__image-placeholder" data-image-placeholder hidden></div></div>',
-      '      <div class="habaq-training__body" data-body></div>',
-      '      <div class="habaq-training__preview-gate" data-preview-gate hidden>',
-      '        <p class="habaq-training__gate-message">هذا التدريب متاح لأعضاء الفريق فقط.</p>',
-      '        <a class="habaq-training__button habaq-training__button--primary" data-login-link href="#">تسجيل الدخول</a>',
+      '    <footer class="habaq-training__footer">',
+      '      <div class="habaq-training__controls">',
+      '        <button type="button" class="habaq-training__button" data-action="prev" aria-label="السابق"></button>',
+      '        <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="play" aria-label="تشغيل أو إيقاف"></button>',
+      '        <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="next" aria-label="التالي"></button>',
+      '        <button type="button" class="habaq-training__button" data-action="mute" aria-label="كتم الصوت"></button>',
+      '        <button type="button" class="habaq-training__button" data-action="restart" aria-label="إعادة"></button>',
       '      </div>',
-      '    </article>',
-      '    <div class="habaq-training__controls">',
-      '      <button type="button" class="habaq-training__button" data-action="prev" aria-label="السابق"></button>',
-      '      <button type="button" class="habaq-training__button" data-action="play" aria-label="تشغيل أو إيقاف"></button>',
-      '      <button type="button" class="habaq-training__button" data-action="mute" aria-label="كتم الصوت"></button>',
-      '      <button type="button" class="habaq-training__button" data-action="restart" aria-label="إعادة البدء"></button>',
-      '      <button type="button" class="habaq-training__button" data-action="next" aria-label="التالي"></button>',
-      '    </div>',
-      '    <div class="habaq-training__timeline-wrap">',
-      '      <label class="habaq-training__timeline-label"><span class="habaq-training__sr-only">شريط التقدم</span><input data-seek type="range" min="0" max="100" value="0" step="1" /></label>',
-      '    </div>',
-      '    <div class="habaq-training__complete" data-complete-wrap hidden>',
-      '      <label class="habaq-training__ack"><input type="checkbox" data-ack /> أُقِرّ بأنني اطّلعت على هذا التدريب وأفهم التزاماتي.</label>',
-      '      <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="finish">إنهاء التدريب</button>',
-      '      <p class="habaq-training__badge" data-complete-badge hidden>مكتمل ✓</p>',
-      '    </div>',
-      '    <audio data-audio preload="metadata"></audio>',
-      '    <p class="habaq-training__message" data-message hidden></p>',
+      '      <div class="habaq-training__timeline-wrap"><label class="habaq-training__timeline-label"><span class="habaq-training__sr-only">شريط التقدم</span><input data-seek type="range" min="0" max="100" value="0" step="1" /></label><div class="habaq-training__thin-progress"><span data-thin-progress></span></div></div>',
+      '      <div class="habaq-training__complete" data-complete-wrap hidden><label class="habaq-training__ack"><input type="checkbox" data-ack /> أُقِرّ بأنني اطّلعت على هذا التدريب وأفهم التزاماتي.</label><button type="button" class="habaq-training__button habaq-training__button--primary" data-action="finish">إنهاء التدريب</button><p class="habaq-training__badge" data-complete-badge hidden>مكتمل ✓</p></div>',
+      '      <audio data-audio preload="metadata"></audio>',
+      '      <p class="habaq-training__message" data-message hidden></p>',
+      '    </footer>',
       '  </div>',
       '  </div>',
       '</div>'
     ].join('');
 
+    var shell = mountNode.querySelector('[data-shell]');
     var startScreen = mountNode.querySelector('[data-start-screen]');
     var player = mountNode.querySelector('[data-player]');
     var heading = mountNode.querySelector('.habaq-training__heading');
@@ -196,6 +186,7 @@
     var startImagePlaceholder = mountNode.querySelector('[data-start-image-placeholder]');
     var loadingEl = mountNode.querySelector('[data-loading]');
     var seek = mountNode.querySelector('[data-seek]');
+    var thinProgress = mountNode.querySelector('[data-thin-progress]');
     var audio = mountNode.querySelector('[data-audio]');
     var message = mountNode.querySelector('[data-message]');
     var slidePanel = mountNode.querySelector('[data-slide-panel]');
@@ -211,9 +202,16 @@
 
     var preloadLinks = {};
 
-    function setLoading(enabled) {
-      state.loading = enabled;
-      loadingEl.hidden = !enabled;
+    function saveUiState() {
+      window.localStorage.setItem(uiStorageKey, JSON.stringify({ immersive: state.immersive, sidebarOpen: state.sidebarOpen }));
+    }
+
+    function getAudioUrl(slide) {
+      if (!slide || !config.audioMap) {
+        return '';
+      }
+      var entry = config.audioMap[String(slide.audio_index)] || config.audioMap[slide.audio_index];
+      return entry && entry.url ? entry.url : '';
     }
 
     function preloadImage(url) {
@@ -236,12 +234,20 @@
       preloadLinks[url] = link;
     }
 
-    function getAudioUrl(slide) {
-      if (!slide || !config.audioMap) {
-        return '';
+    function preloadNeighbors(index) {
+      var currentSlide = config.slides[index];
+      var nextSlide = config.slides[index + 1];
+      var prevSlide = config.slides[index - 1];
+      if (currentSlide && currentSlide.image_url) {
+        preloadImage(currentSlide.image_url);
       }
-      var entry = config.audioMap[String(slide.audio_index)] || config.audioMap[slide.audio_index];
-      return entry && entry.url ? entry.url : '';
+      if (nextSlide) {
+        preloadImage(nextSlide.image_url || '');
+        preloadAudio(getAudioUrl(nextSlide));
+      }
+      if (prevSlide && prevSlide.image_url) {
+        preloadImage(prevSlide.image_url);
+      }
     }
 
     function preloadNeighbors(index) {
@@ -268,12 +274,11 @@
     }
 
     function saveLocalProgress() {
-      var payload = {
+      window.localStorage.setItem(storageKey, JSON.stringify({
         current_slide: state.current,
         updated_at: nowTs(),
         completed: !!state.completed
-      };
-      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+      }));
     }
 
     function saveServerProgress() {
@@ -302,6 +307,53 @@
       }).catch(function () {});
     }
 
+    function updateVh() {
+      var vh = window.innerHeight * 0.01;
+      container.style.setProperty('--habaq-vh', vh + 'px');
+    }
+
+    function setImmersive(enabled) {
+      state.immersive = !!enabled;
+      container.classList.toggle('habaq-training--immersive', state.immersive);
+      if (state.immersive) {
+        document.body.dataset.habaqTrainingOverflow = document.body.style.overflow || '';
+        document.body.style.overflow = 'hidden';
+      } else if (!document.fullscreenElement) {
+        document.body.style.overflow = document.body.dataset.habaqTrainingOverflow || '';
+      }
+      updateVh();
+      saveUiState();
+      updateButtons();
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement === container) {
+        document.exitFullscreen().catch(function () {
+          setImmersive(false);
+        });
+        return;
+      }
+
+      if (container.requestFullscreen) {
+        container.requestFullscreen().then(function () {
+          state.isFullscreenNative = true;
+          setImmersive(false);
+          updateButtons();
+        }).catch(function () {
+          setImmersive(!state.immersive);
+        });
+      } else {
+        setImmersive(!state.immersive);
+      }
+    }
+
+    function setSidebar(open) {
+      state.sidebarOpen = !!open;
+      sidebar.classList.toggle('is-open', state.sidebarOpen);
+      sidebarOverlay.hidden = !state.sidebarOpen;
+      saveUiState();
+    }
+
     function showMessage(text) {
       if (!text) {
         message.hidden = true;
@@ -323,7 +375,20 @@
       if (enabled) {
         audio.removeAttribute('src');
         audio.load();
-        showMessage('');
+      }
+    }
+
+    function setLoading(loading, imagePending, audioPending) {
+      state.pendingMedia = !!loading;
+      state.pendingImage = !!imagePending;
+      state.pendingAudio = !!audioPending;
+      loadingEl.hidden = !state.pendingMedia;
+      updateButtons();
+    }
+
+    function maybeStopLoading() {
+      if (!state.pendingImage && !state.pendingAudio) {
+        setLoading(false, false, false);
       }
     }
 
@@ -336,27 +401,18 @@
         ack.checked = true;
       }
       var finishButton = mountNode.querySelector('[data-action="finish"]');
-      if (!finishButton) {
-        return;
+      if (finishButton) {
+        finishButton.disabled = mustAck && !ack.checked;
       }
-      finishButton.disabled = mustAck && !ack.checked;
     }
 
     function renderToc() {
       toc.innerHTML = '';
       config.slides.forEach(function (slide, idx) {
         var number = (typeof slide.audio_index !== 'undefined' && slide.audio_index !== null) ? slide.audio_index : (idx + 1);
-        var label = slide.title || ('شريحة ' + (idx + 1));
         var active = idx === state.current ? ' is-active' : '';
-        toc.insertAdjacentHTML('beforeend', '<li><button type="button" class="habaq-training__toc-item' + active + '" data-slide-index="' + idx + '"><span class="habaq-training__toc-num">' + number + '</span><span class="habaq-training__toc-label">' + label + '</span></button></li>');
+        toc.insertAdjacentHTML('beforeend', '<li><button type="button" class="habaq-training__toc-item' + active + '" data-slide-index="' + idx + '"><span class="habaq-training__toc-num">' + number + '</span><span class="habaq-training__toc-label">' + (slide.title || ('شريحة ' + (idx + 1))) + '</span></button></li>');
       });
-    }
-
-    function setSidebar(open) {
-      state.sidebarOpen = !!open;
-      sidebar.classList.toggle('is-open', state.sidebarOpen);
-      sidebarOverlay.hidden = !state.sidebarOpen;
-      window.localStorage.setItem(sidebarStorageKey, state.sidebarOpen ? '1' : '0');
     }
 
     function renderSlide(focusPanel) {
@@ -369,9 +425,18 @@
       title.textContent = slide.title || '';
       renderToc();
 
+      shell.classList.remove('is-transitioning');
+      state.transitionTick += 1;
+      (function (tick) {
+        window.requestAnimationFrame(function () {
+          if (tick === state.transitionTick) {
+            shell.classList.add('is-transitioning');
+          }
+        });
+      })(state.transitionTick);
+
       if (inPreviewGate()) {
         setPreviewGateUI(true);
-        updateButtons();
         if (focusPanel) {
           slidePanel.focus();
         }
@@ -383,7 +448,12 @@
       body.innerHTML = slide.body_html || '';
       imageWrap.hidden = false;
 
-      if (slide.image_url) {
+      var hasImage = !!slide.image_url;
+      var audioUrl = getAudioUrl(slide);
+      var hasAudio = !!audioUrl;
+      setLoading(true, hasImage, hasAudio);
+
+      if (hasImage) {
         image.loading = state.current === introIndex ? 'eager' : 'lazy';
         image.src = slide.image_url;
         image.alt = slide.title || '';
@@ -394,13 +464,14 @@
         image.alt = '';
         image.hidden = true;
         imagePlaceholder.hidden = false;
+        state.pendingImage = false;
       }
 
-      var audioUrl = getAudioUrl(slide);
-      if (!audioUrl) {
+      if (!hasAudio) {
         showMessage('لا يوجد ملف صوتي للشريحة الحالية.');
         audio.removeAttribute('src');
         audio.load();
+        state.pendingAudio = false;
       } else {
         showMessage('');
         audio.src = audioUrl;
@@ -408,8 +479,12 @@
         audio.load();
       }
 
+      if (!hasImage && !hasAudio) {
+        setLoading(false, false, false);
+      }
+
       seek.value = 0;
-      updateButtons();
+      thinProgress.style.width = '0%';
       saveLocalProgress();
       saveServerProgress();
       preloadNeighbors(state.current);
@@ -426,30 +501,36 @@
       var nextBtn = mountNode.querySelector('[data-action="next"]');
       var menuBtn = mountNode.querySelector('[data-action="toggle-sidebar"]');
       var restartBtn = mountNode.querySelector('[data-action="restart"]');
+      var fullscreenBtn = mountNode.querySelector('[data-action="toggle-fullscreen"]');
+      var isFs = !!document.fullscreenElement || state.immersive;
+
+      setButton(prevBtn, 'prev', 'السابق');
+      setButton(playBtn, state.playing ? 'pause' : 'play', state.playing ? 'إيقاف' : 'تشغيل');
+      setButton(nextBtn, 'next', 'التالي');
+      setButton(muteBtn, state.muted ? 'mute' : 'unmute', state.muted ? 'إلغاء الكتم' : 'كتم');
+      setButton(menuBtn, 'menu', 'الفهرس');
+      setButton(restartBtn, 'restart', 'إعادة');
+      setButton(fullscreenBtn, isFs ? 'minimize' : 'fullscreen', isFs ? 'خروج' : 'ملء الشاشة');
 
       prevBtn.disabled = state.current === 0;
       nextBtn.disabled = state.current >= config.slides.length - 1;
-      setButtonContent(prevBtn, 'prev', 'السابق');
-      setButtonContent(nextBtn, 'next', 'التالي');
-      setButtonContent(playBtn, state.playing ? 'pause' : 'play', state.playing ? 'إيقاف' : 'تشغيل');
-      setButtonContent(muteBtn, state.muted ? 'mute' : 'unmute', state.muted ? 'إلغاء الكتم' : 'كتم');
-      setButtonContent(menuBtn, 'menu', 'الفهرس');
-      setButtonContent(restartBtn, 'restart', 'إعادة');
 
       if (inPreviewGate()) {
         playBtn.disabled = true;
         muteBtn.disabled = true;
       } else {
-        playBtn.disabled = false;
+        playBtn.disabled = state.pendingMedia;
         muteBtn.disabled = false;
       }
+      nextBtn.disabled = nextBtn.disabled || state.pendingMedia;
+      restartBtn.disabled = state.pendingMedia;
 
       completeWrap.hidden = state.current !== (config.slides.length - 1) || inPreviewGate();
       renderCompletionState();
     }
 
     function playCurrent() {
-      if (inPreviewGate() || !audio.src) {
+      if (inPreviewGate() || !audio.src || state.pendingMedia) {
         return;
       }
       audio.play().then(function () {
@@ -511,7 +592,6 @@
     if (loginLink) {
       loginLink.href = loginUrl;
     }
-
     heading.textContent = meta.title || 'التدريب التفاعلي';
 
     var introSlide = config.slides[introIndex] || config.slides[0];
@@ -536,14 +616,27 @@
 
     renderToc();
     setSidebar(state.sidebarOpen);
+    if (state.immersive) {
+      setImmersive(true);
+    }
+    updateVh();
 
     mountNode.addEventListener('click', function (event) {
       var button = event.target.closest('[data-action]');
       if (!button) {
         return;
       }
-
       var action = button.getAttribute('data-action');
+
+      if (action === 'toggle-fullscreen') {
+        toggleFullscreen();
+        return;
+      }
+
+      if (action === 'toggle-sidebar') {
+        setSidebar(!state.sidebarOpen);
+        return;
+      }
 
       if (action === 'resume-continue') {
         state.current = suggestedResumeSlide;
@@ -565,7 +658,6 @@
           state.promptVisible = false;
           resumeBox.hidden = true;
         }
-
         state.started = true;
         startScreen.hidden = true;
         player.hidden = false;
@@ -578,9 +670,7 @@
         return;
       }
 
-      if (action === 'toggle-sidebar') {
-        setSidebar(!state.sidebarOpen);
-      } else if (action === 'prev') {
+      if (action === 'prev') {
         changeSlide(state.current - 1, true, true);
       } else if (action === 'next') {
         changeSlide(state.current + 1, true, true);
@@ -626,9 +716,7 @@
       setSidebar(false);
     });
 
-    ack.addEventListener('change', function () {
-      renderCompletionState();
-    });
+    ack.addEventListener('change', renderCompletionState);
 
     mountNode.addEventListener('keydown', function (event) {
       if (!state.started) {
@@ -648,10 +736,25 @@
       updateButtons();
       setLoading(false);
     });
-
     audio.addEventListener('pause', function () {
       state.playing = false;
       updateButtons();
+    });
+    audio.addEventListener('loadeddata', function () {
+      state.pendingAudio = false;
+      maybeStopLoading();
+    });
+    audio.addEventListener('canplay', function () {
+      state.pendingAudio = false;
+      maybeStopLoading();
+    });
+    image.addEventListener('load', function () {
+      state.pendingImage = false;
+      maybeStopLoading();
+    });
+    image.addEventListener('error', function () {
+      state.pendingImage = false;
+      maybeStopLoading();
     });
 
     audio.addEventListener('loadeddata', function () {
@@ -669,9 +772,12 @@
     audio.addEventListener('timeupdate', function () {
       if (!audio.duration || !isFinite(audio.duration)) {
         seek.value = 0;
+        thinProgress.style.width = '0%';
         return;
       }
-      seek.value = String(Math.round((audio.currentTime / audio.duration) * 100));
+      var value = Math.round((audio.currentTime / audio.duration) * 100);
+      seek.value = String(value);
+      thinProgress.style.width = value + '%';
     });
 
     seek.addEventListener('input', function () {
@@ -688,6 +794,18 @@
         changeSlide(state.current + 1, true, true);
       }
     });
+
+    document.addEventListener('fullscreenchange', function () {
+      state.isFullscreenNative = document.fullscreenElement === container;
+      if (!document.fullscreenElement && !state.immersive) {
+        document.body.style.overflow = document.body.dataset.habaqTrainingOverflow || '';
+      }
+      updateButtons();
+      updateVh();
+    });
+
+    window.addEventListener('resize', updateVh, { passive: true });
+    window.addEventListener('orientationchange', updateVh, { passive: true });
 
     if (Array.isArray(config.messages) && config.messages.length > 0) {
       showMessage(config.messages.join(' | '));

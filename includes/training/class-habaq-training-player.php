@@ -98,6 +98,9 @@ class Habaq_Training_Player {
         $slides = self::build_slides($slug, $json_config, $audio_map, $image_map, $media_result['image_files']);
         $resume = self::get_resume_state($slug, $version);
 
+        $uploads = wp_get_upload_dir();
+        $base_url = (isset($uploads['baseurl']) && is_string($uploads['baseurl'])) ? esc_url_raw($uploads['baseurl']) : '';
+
         $config = array(
             'slug' => $slug,
             'meta' => array(
@@ -122,6 +125,9 @@ class Habaq_Training_Player {
                 'can_track_server' => is_user_logged_in(),
             ),
             'login_url' => esc_url_raw(wp_login_url(get_permalink())),
+            'media_base_urls' => array(
+                'uploads' => $base_url,
+            ),
         );
 
         $index_base = isset($meta['index_base']) ? (int) $meta['index_base'] : 1;
