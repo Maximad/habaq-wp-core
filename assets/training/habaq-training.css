@@ -1,11 +1,13 @@
 .habaq-training {
-  --habaq-training-bg: #ffffff;
-  --habaq-training-border: #e5e7eb;
-  --habaq-training-accent: #0d9488;
-  --habaq-training-text: #0f172a;
-  --habaq-training-muted: #475569;
-  font-family: inherit;
-  color: var(--habaq-training-text);
+  --habaq-accent: #0d9488;
+  --habaq-bg: #f8fafc;
+  --habaq-card: #ffffff;
+  --habaq-text: #0f172a;
+  --habaq-muted: #475569;
+  --habaq-radius: 12px;
+  --habaq-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Arial, sans-serif;
+  color: var(--habaq-text);
+  font-family: var(--habaq-font);
 }
 
 .habaq-training *,
@@ -14,91 +16,121 @@
   box-sizing: border-box;
 }
 
-.habaq-training__shell,
-.habaq-training__gate {
-  background: var(--habaq-training-bg);
-  border: 1px solid var(--habaq-training-border);
-  border-radius: 12px;
+.habaq-training__shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  background: var(--habaq-bg);
+  border: 1px solid var(--habaq-muted);
+  border-radius: var(--habaq-radius);
   padding: 1rem;
+  position: relative;
 }
 
+.habaq-training__main,
 .habaq-training__start,
 .habaq-training__player {
   display: grid;
   gap: 0.75rem;
 }
 
-.habaq-training__heading {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.habaq-training__hint,
-.habaq-training__fallback-note {
-  margin: 0;
-  color: var(--habaq-training-muted);
+.habaq-training__topbar,
+.habaq-training__status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .habaq-training__status {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+  width: 100%;
   font-weight: 600;
 }
 
-.habaq-training__slide {
-  border: 1px solid var(--habaq-training-border);
-  border-radius: 10px;
+.habaq-training__heading,
+.habaq-training__sidebar-header {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.habaq-training__hint,
+.habaq-training__fallback-note,
+.habaq-training__toc-label {
+  margin: 0;
+  color: var(--habaq-muted);
+}
+
+.habaq-training__slide,
+.habaq-training__sidebar {
+  border: 1px solid var(--habaq-muted);
+  border-radius: var(--habaq-radius);
   padding: 0.9rem;
+  background: var(--habaq-card);
+}
+
+.habaq-training__slide {
   min-height: 130px;
-  background: #f8fafc;
+  display: grid;
+  gap: 0.75rem;
+  position: relative;
   transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .habaq-training__slide:focus {
-  outline: 2px solid var(--habaq-training-accent);
+  outline: 2px solid var(--habaq-accent);
   outline-offset: 2px;
 }
 
 .habaq-training__image-wrap img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: calc(var(--habaq-radius) - 4px);
   display: block;
 }
 
 .habaq-training__image-placeholder {
   width: 100%;
   min-height: 160px;
-  border-radius: 8px;
-  background: #e2e8f0;
+  border-radius: calc(var(--habaq-radius) - 4px);
+  background: color-mix(in srgb, var(--habaq-muted) 18%, var(--habaq-card));
 }
 
-.habaq-training__body {
-  color: var(--habaq-training-text);
-}
-
-.habaq-training__controls {
+.habaq-training__controls,
+.habaq-training__resume-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
 .habaq-training__button {
-  border: 1px solid var(--habaq-training-border);
-  background: #fff;
-  border-radius: 8px;
+  border: 1px solid var(--habaq-muted);
+  background: var(--habaq-card);
+  color: var(--habaq-text);
+  border-radius: calc(var(--habaq-radius) - 4px);
   padding: 0.45rem 0.8rem;
   cursor: pointer;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.habaq-training__button-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+}
+
+.habaq-training__button-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 
 .habaq-training__button--primary {
-  background: var(--habaq-training-accent);
-  border-color: var(--habaq-training-accent);
-  color: #fff;
+  background: var(--habaq-accent);
+  border-color: var(--habaq-accent);
+  color: var(--habaq-card);
 }
 
 .habaq-training__button:disabled {
@@ -106,30 +138,122 @@
   cursor: not-allowed;
 }
 
-.habaq-training__timeline-label {
-  display: block;
+.habaq-training__message,
+.habaq-training__gate-message {
+  margin: 0;
+  color: var(--habaq-accent);
+}
+
+.habaq-training__resume,
+.habaq-training__complete {
+  border: 1px dashed var(--habaq-muted);
+  border-radius: var(--habaq-radius);
+  padding: 0.75rem;
 }
 
 .habaq-training__timeline-wrap input[type='range'] {
   width: 100%;
+  accent-color: var(--habaq-accent);
 }
 
-.habaq-training__message,
-.habaq-training__gate-message {
+.habaq-training__ack {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.habaq-training__badge {
   margin: 0;
-  color: #991b1b;
+  color: var(--habaq-accent);
+  font-weight: 700;
 }
 
-.habaq-training__fallback-list {
+.habaq-training__sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(300px, 82vw);
+  z-index: 20;
+  transform: translateX(-105%);
+  transition: transform 180ms ease;
+  overflow: auto;
+}
+
+.habaq-training[dir='rtl'] .habaq-training__sidebar {
+  left: auto;
+  right: 0;
+  transform: translateX(105%);
+}
+
+.habaq-training__sidebar.is-open {
+  transform: translateX(0);
+}
+
+.habaq-training__sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, var(--habaq-text) 30%, transparent);
+  z-index: 10;
+}
+
+.habaq-training__toc {
+  list-style: none;
   margin: 0.75rem 0 0;
-  padding-inline-start: 1.25rem;
+  padding: 0;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.35rem;
 }
 
-.habaq-training__fallback-title {
-  margin: 0 0 0.35rem;
-  font-size: 1rem;
+.habaq-training__toc-item {
+  width: 100%;
+  border: 1px solid var(--habaq-muted);
+  border-radius: calc(var(--habaq-radius) - 6px);
+  background: var(--habaq-card);
+  color: var(--habaq-text);
+  text-align: start;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  cursor: pointer;
+}
+
+.habaq-training__toc-item.is-active {
+  border-color: var(--habaq-accent);
+  color: var(--habaq-accent);
+}
+
+.habaq-training__toc-num {
+  min-width: 2ch;
+  font-weight: 700;
+}
+
+.habaq-training__loading {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.habaq-training__skeleton {
+  display: block;
+  border-radius: calc(var(--habaq-radius) - 6px);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--habaq-muted) 18%, var(--habaq-card)) 25%, color-mix(in srgb, var(--habaq-muted) 32%, var(--habaq-card)) 37%, color-mix(in srgb, var(--habaq-muted) 18%, var(--habaq-card)) 63%);
+  background-size: 400% 100%;
+  animation: habaqShimmer 1.2s ease infinite;
+}
+
+.habaq-training__skeleton--media {
+  min-height: 160px;
+}
+
+.habaq-training__skeleton--line {
+  min-height: 12px;
+  width: 60%;
+}
+
+@keyframes habaqShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 .habaq-training__sr-only {
@@ -143,55 +267,39 @@
   border: 0;
 }
 
-.habaq-training__resume {
-  border: 1px dashed var(--habaq-training-border);
-  border-radius: 10px;
-  padding: 0.75rem;
+.habaq-training[dir='rtl'] .habaq-training__button {
+  flex-direction: row-reverse;
 }
 
-.habaq-training__resume-actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+@media (min-width: 921px) {
+  .habaq-training__shell {
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  }
 
-.habaq-training__preview-gate {
-  display: grid;
-  gap: 0.75rem;
-}
+  .habaq-training__sidebar {
+    position: sticky;
+    top: 0;
+    max-height: calc(100vh - 2rem);
+    transform: none;
+    width: 100%;
+  }
 
-.habaq-training__complete {
-  display: grid;
-  gap: 0.5rem;
-  border-top: 1px solid var(--habaq-training-border);
-  padding-top: 0.75rem;
-}
-
-.habaq-training__ack {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.habaq-training__badge {
-  margin: 0;
-  color: #166534;
-  font-weight: 700;
-}
-
-.habaq-training[dir='rtl'] .habaq-training__controls {
-  direction: rtl;
+  .habaq-training__sidebar-overlay {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .habaq-training__slide {
+  .habaq-training__slide,
+  .habaq-training__sidebar,
+  .habaq-training__skeleton {
     transition: none;
+    animation: none;
   }
 }
 
 @media (max-width: 640px) {
-  .habaq-training__shell,
-  .habaq-training__gate {
+  .habaq-training__shell {
     padding: 0.75rem;
   }
 }
