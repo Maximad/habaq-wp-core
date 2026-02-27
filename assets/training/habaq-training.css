@@ -148,6 +148,10 @@
   transition: transform 120ms ease;
 }
 
+.habaq-training__button:hover { transform: scale(1.02); }
+.habaq-training__button:active { transform: scale(0.98); }
+.habaq-training__button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
 .habaq-training__button--primary {
   background: var(--habaq-accent);
   color: #07201a;

@@ -9,6 +9,18 @@
     }
   }
 
+  function normalizeDigits(value) {
+    return String(value || '')
+      .replace(/[٠-٩]/g, function (ch) { return String(ch.charCodeAt(0) - 1632); })
+      .replace(/[۰-۹]/g, function (ch) { return String(ch.charCodeAt(0) - 1776); });
+  }
+
+  function leadingNumeric(value) {
+    var normalized = normalizeDigits(value).trim();
+    var match = normalized.match(/^(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
   function nowTs() {
     return Math.floor(Date.now() / 1000);
   }
@@ -111,6 +123,7 @@
       }
     } catch (e) {
       localSaved = null;
+      state.sidebarOpen = false;
     }
 
     var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : introIndex;
@@ -134,6 +147,24 @@
       pendingAudio: false,
       videoEnabled: !!uiState.videoEnabled,
       videoMuted: true
+    };
+
+    var state = {
+      started: false,
+      current: introIndex,
+      playing: false,
+      muted: false,
+      completed: !!(config.resume && config.resume.completed),
+      completedAt: (config.resume && config.resume.completed_at) ? parseInt(config.resume.completed_at, 10) : 0,
+      lastServerSaveAt: 0,
+      promptVisible: false,
+      sidebarOpen: !!uiState.sidebarOpen,
+      immersive: !!uiState.immersive,
+      isFullscreenNative: false,
+      pendingMedia: false,
+      pendingImage: false,
+      pendingAudio: false,
+      transitionTick: 0
     };
 
     var suggestedResumeSlide = isLoggedIn ? serverSlide : localSlide;
@@ -405,7 +436,6 @@
       if (!isLoggedIn || !canTrackServer || !ajaxUrl || !nonce) {
         return;
       }
-
       var now = Date.now();
       if ((now - state.lastServerSaveAt) < 3000) {
         return;
@@ -470,6 +500,43 @@
         videoUrl: videoUrl,
         audioUrl: audioUrl
       };
+    }
+
+    function setLoading(loading, imagePending, audioPending) {
+      state.pendingMedia = !!loading;
+      state.pendingImage = !!imagePending;
+      state.pendingAudio = !!audioPending;
+      loadingEl.hidden = !state.pendingMedia;
+      updateButtons();
+    }
+
+    function maybeStopLoading() {
+      if (!state.pendingImage && !state.pendingAudio) {
+        setLoading(false, false, false);
+      }
+    }
+
+    function renderCompletionState() {
+      if (state.completed) {
+        completeBadge.hidden = false;
+      }
+      var mustAck = !!meta.require_ack;
+      if (!mustAck) {
+        ack.checked = true;
+      }
+      var finishButton = mountNode.querySelector('[data-action="finish"]');
+      if (finishButton) {
+        finishButton.disabled = mustAck && !ack.checked;
+      }
+    }
+
+    function renderToc() {
+      toc.innerHTML = '';
+      config.slides.forEach(function (slide, idx) {
+        var number = (typeof slide.audio_index !== 'undefined' && slide.audio_index !== null) ? slide.audio_index : (idx + 1);
+        var active = idx === state.current ? ' is-active' : '';
+        toc.insertAdjacentHTML('beforeend', '<li><button type="button" class="habaq-training__toc-item' + active + '" data-slide-index="' + idx + '"><span class="habaq-training__toc-num">' + number + '</span><span class="habaq-training__toc-label">' + (slide.title || ('شريحة ' + (idx + 1))) + '</span></button></li>');
+      });
     }
 
     function renderSlide(focusPanel) {
@@ -553,6 +620,8 @@
         videoBtn.hidden = !hasAnyVideo;
         setIconButton(videoBtn, 'video', state.videoEnabled ? 'الفيديو: تشغيل' : 'الفيديو: إيقاف');
       }
+      nextBtn.disabled = nextBtn.disabled || state.pendingMedia;
+      restartBtn.disabled = state.pendingMedia;
 
       prevBtn.disabled = state.current === 0;
       nextBtn.disabled = state.current >= config.slides.length - 1 || state.pendingMedia;
@@ -656,7 +725,6 @@
       if (!button) {
         return;
       }
-
       var action = button.getAttribute('data-action');
 
       if (action === 'toggle-fullscreen') {
@@ -705,7 +773,6 @@
           state.promptVisible = false;
           resumeBox.hidden = true;
         }
-
         state.started = true;
         startScreen.hidden = true;
         slidePanel.hidden = false;
@@ -766,6 +833,8 @@
       renderCompletionState();
     });
 
+    ack.addEventListener('change', renderCompletionState);
+
     mountNode.addEventListener('keydown', function (event) {
       if (!state.started) {
         return;
@@ -789,11 +858,27 @@
     audio.addEventListener('play', function () {
       state.playing = true;
       updateButtons();
+      setLoading(false);
     });
-
     audio.addEventListener('pause', function () {
       state.playing = false;
       updateButtons();
+    });
+    audio.addEventListener('loadeddata', function () {
+      state.pendingAudio = false;
+      maybeStopLoading();
+    });
+    audio.addEventListener('canplay', function () {
+      state.pendingAudio = false;
+      maybeStopLoading();
+    });
+    image.addEventListener('load', function () {
+      state.pendingImage = false;
+      maybeStopLoading();
+    });
+    image.addEventListener('error', function () {
+      state.pendingImage = false;
+      maybeStopLoading();
     });
 
     audio.addEventListener('loadeddata', function () {
@@ -828,10 +913,16 @@
     audio.addEventListener('ended', function () {
       state.playing = false;
       updateButtons();
+      if (!!meta.autoadvance && state.current < config.slides.length - 1) {
+        changeSlide(state.current + 1, true, true);
+      }
+    });
 
       if (!!meta.autoadvance && state.current < config.slides.length - 1) {
         changeSlide(state.current + 1, true, true);
       }
+      updateButtons();
+      updateVh();
     });
 
     document.addEventListener('fullscreenchange', function () {
