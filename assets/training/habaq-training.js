@@ -106,7 +106,7 @@
       '      <span class="habaq-training__title" data-title></span>',
       '    </div>',
       '    <article class="habaq-training__slide" data-slide-panel tabindex="-1">',
-      '      <div class="habaq-training__image-wrap" data-image-wrap hidden><img data-image alt="" /></div>',
+      '      <div class="habaq-training__image-wrap" data-image-wrap hidden><img class="habaq-training__image" data-image alt="" /><div class="habaq-training__image-placeholder" data-image-placeholder hidden></div></div>',
       '      <div class="habaq-training__body" data-body></div>',
       '      <div class="habaq-training__preview-gate" data-preview-gate hidden>',
       '        <p class="habaq-training__gate-message">هذا التدريب متاح لأعضاء الفريق فقط.</p>',
@@ -142,6 +142,7 @@
     var body = mountNode.querySelector('[data-body]');
     var imageWrap = mountNode.querySelector('[data-image-wrap]');
     var image = mountNode.querySelector('[data-image]');
+    var imagePlaceholder = mountNode.querySelector('[data-image-placeholder]');
     var seek = mountNode.querySelector('[data-seek]');
     var audio = mountNode.querySelector('[data-audio]');
     var message = mountNode.querySelector('[data-message]');
@@ -246,6 +247,8 @@
       previewGate.hidden = !enabled;
       body.hidden = enabled;
       imageWrap.hidden = true;
+      image.hidden = true;
+      imagePlaceholder.hidden = false;
       seek.disabled = enabled;
       audio.pause();
       if (enabled) {
@@ -276,14 +279,17 @@
       setPreviewGateUI(false);
       body.innerHTML = slide.body_html || '';
 
+      imageWrap.hidden = false;
       if (slide.image_url) {
         image.src = slide.image_url;
         image.alt = slide.title || '';
-        imageWrap.hidden = false;
+        image.hidden = false;
+        imagePlaceholder.hidden = true;
       } else {
         image.removeAttribute('src');
         image.alt = '';
-        imageWrap.hidden = true;
+        image.hidden = true;
+        imagePlaceholder.hidden = false;
       }
 
       var audioUrl = getAudioUrl(slide);

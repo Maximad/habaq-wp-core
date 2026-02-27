@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 class Habaq_Training_Files {
+    private static $media_cache = array();
 
     public static function get_registry() {
         $registry = get_option('habaq_training_registry', array());
@@ -131,91 +132,14 @@ class Habaq_Training_Files {
     }
 
     public static function discover_audio($slug) {
-        $paths = self::get_training_paths($slug);
-        $uploads = wp_upload_dir();
-        $sources = array(
-            array('dir' => $paths['audio_dir'], 'url' => $paths['audio_url'], 'source' => 'training-audio-dir'),
-            array('dir' => $paths['root_dir'], 'url' => $paths['root_url'], 'source' => 'training-root-dir'),
-            array('dir' => trailingslashit($uploads['basedir']) . 'audio', 'url' => trailingslashit($uploads['baseurl']) . 'audio', 'source' => 'legacy-audio-dir'),
-        );
-
-        $indexed = array();
-        $duplicates = array();
-
-        foreach ($sources as $source) {
-            if (!is_dir($source['dir'])) {
-                continue;
-            }
-
-            $entries = scandir($source['dir']);
-            if (!is_array($entries)) {
-                continue;
-            }
-
-            sort($entries, SORT_NATURAL | SORT_FLAG_CASE);
-
-            foreach ($entries as $entry) {
-                if ($entry === '.' || $entry === '..') {
-                    continue;
-                }
-
-                $path = trailingslashit($source['dir']) . $entry;
-                if (!is_file($path)) {
-                    continue;
-                }
-
-                if (!self::is_allowed_audio_file($path, $entry)) {
-                    continue;
-                }
-
-                $normalized_name = self::normalize_digits(pathinfo($entry, PATHINFO_FILENAME));
-                if (!preg_match('/^(\d+)/', $normalized_name, $matches)) {
-                    continue;
-                }
-
-                $index = (int) $matches[1];
-                if ($index < 1) {
-                    continue;
-                }
-
-                $item = array(
-                    'audio_index' => $index,
-                    'url' => trailingslashit($source['url']) . rawurlencode($entry),
-                    'filename' => $entry,
-                    'source' => $source['source'],
-                );
-
-                if (!isset($indexed[$index])) {
-                    $indexed[$index] = $item;
-                    continue;
-                }
-
-                $existing = $indexed[$index];
-                $winner = (strcmp($item['filename'], $existing['filename']) < 0) ? $item : $existing;
-                $loser = ($winner === $item) ? $existing : $item;
-                $indexed[$index] = $winner;
-                $duplicates[] = array(
-                    'audio_index' => $index,
-                    'kept' => $winner['filename'],
-                    'ignored' => $loser['filename'],
-                );
-            }
-        }
-
-        ksort($indexed, SORT_NUMERIC);
-
-        $audio_map = array();
-        foreach ($indexed as $index => $item) {
-            $audio_map[(int) $index] = array(
-                'url' => esc_url_raw($item['url']),
-                'filename' => sanitize_file_name($item['filename']),
-            );
-        }
+        $media = self::discover_media($slug);
 
         return array(
-            'audio_map' => $audio_map,
-            'duplicates' => $duplicates,
-            'source_paths' => $sources,
+            'audio_map' => $media['audio_map'],
+            'duplicates' => $media['audio_duplicates'],
+            'source_paths' => array(
+                array('dir' => $media['paths']['audio_dir'], 'url' => $media['paths']['audio_url'], 'source' => 'training-audio-dir'),
+            ),
         );
     }
 
@@ -229,7 +153,8 @@ class Habaq_Training_Files {
             return esc_url_raw($image_url);
         }
 
-        $paths = self::get_training_paths($slug);
+        $media = self::discover_media($slug);
+        $paths = $media['paths'];
         $filename = sanitize_file_name(basename($image_url));
         $candidate = trailingslashit($paths['images_dir']) . $filename;
         if (is_file($candidate) && self::is_allowed_image_file($candidate, $filename)) {
@@ -240,27 +165,151 @@ class Habaq_Training_Files {
     }
 
     public static function discover_images_count($slug) {
-        $paths = self::get_training_paths($slug);
-        if (!is_dir($paths['images_dir'])) {
-            return 0;
+        $media = self::discover_media($slug);
+
+        return count($media['image_files']);
+    }
+
+    public static function discover_media($slug) {
+        $safe_slug = sanitize_title($slug);
+        if (isset(self::$media_cache[$safe_slug])) {
+            return self::$media_cache[$safe_slug];
         }
 
-        $entries = scandir($paths['images_dir']);
+        $paths = self::get_training_paths($safe_slug);
+        $audio_scan = self::scan_indexed_media_dir($paths['audio_dir'], $paths['audio_url'], 'audio');
+        $image_scan = self::scan_indexed_media_dir($paths['images_dir'], $paths['images_url'], 'image');
+
+        $payload = array(
+            'paths' => $paths,
+            'audio_map' => $audio_scan['map'],
+            'image_map' => $image_scan['map'],
+            'audio_duplicates' => $audio_scan['duplicates'],
+            'image_duplicates' => $image_scan['duplicates'],
+            'image_files' => $image_scan['files'],
+        );
+
+        self::$media_cache[$safe_slug] = $payload;
+
+        return $payload;
+    }
+
+    private static function scan_indexed_media_dir($dir, $url, $kind) {
+        $map = array();
+        $duplicates = array();
+        $files = array();
+
+        if (!is_dir($dir)) {
+            return array('map' => $map, 'duplicates' => $duplicates, 'files' => $files);
+        }
+
+        $entries = scandir($dir);
         if (!is_array($entries)) {
-            return 0;
+            return array('map' => $map, 'duplicates' => $duplicates, 'files' => $files);
         }
 
-        $count = 0;
+        sort($entries, SORT_NATURAL | SORT_FLAG_CASE);
+
         foreach ($entries as $entry) {
             if ($entry === '.' || $entry === '..') {
                 continue;
             }
-            $path = trailingslashit($paths['images_dir']) . $entry;
-            if (is_file($path) && self::is_allowed_image_file($path, $entry)) {
-                $count++;
+
+            $path = trailingslashit($dir) . $entry;
+            if (!is_file($path)) {
+                continue;
             }
+
+            $check = wp_check_filetype_and_ext($path, $entry);
+            $mime = isset($check['type']) ? (string) $check['type'] : '';
+            if ($kind === 'audio' && strpos($mime, 'audio/') !== 0) {
+                continue;
+            }
+            if ($kind === 'image' && strpos($mime, 'image/') !== 0) {
+                continue;
+            }
+
+            $filename = sanitize_file_name($entry);
+            $files[$filename] = esc_url_raw(trailingslashit($url) . rawurlencode($entry));
+
+            $normalized_name = self::normalize_digits(pathinfo($entry, PATHINFO_FILENAME));
+            if (!preg_match('/^(\d+)/', $normalized_name, $matches)) {
+                continue;
+            }
+
+            $index = (int) $matches[1];
+            if ($index < 0) {
+                continue;
+            }
+
+            $candidate = array(
+                'index' => $index,
+                'url' => esc_url_raw(trailingslashit($url) . rawurlencode($entry)),
+                'filename' => $filename,
+                'priority' => self::media_extension_priority($filename, $kind),
+            );
+
+            if (!isset($map[$index])) {
+                $map[$index] = $candidate;
+                continue;
+            }
+
+            $winner = self::pick_better_media_candidate($map[$index], $candidate);
+            $loser = ($winner === $candidate) ? $map[$index] : $candidate;
+            $map[$index] = $winner;
+            $duplicates[] = array(
+                $kind . '_index' => $index,
+                'kept' => $winner['filename'],
+                'ignored' => $loser['filename'],
+            );
         }
 
-        return $count;
+        ksort($map, SORT_NUMERIC);
+
+        $sanitized_map = array();
+        foreach ($map as $index => $item) {
+            $sanitized_map[(int) $index] = array(
+                'url' => $item['url'],
+                'filename' => $item['filename'],
+            );
+        }
+
+        return array(
+            'map' => $sanitized_map,
+            'duplicates' => $duplicates,
+            'files' => $files,
+        );
+    }
+
+    private static function pick_better_media_candidate($current, $incoming) {
+        if ((int) $incoming['priority'] < (int) $current['priority']) {
+            return $incoming;
+        }
+
+        if ((int) $incoming['priority'] > (int) $current['priority']) {
+            return $current;
+        }
+
+        if (strcmp((string) $incoming['filename'], (string) $current['filename']) < 0) {
+            return $incoming;
+        }
+
+        return $current;
+    }
+
+    private static function media_extension_priority($filename, $kind) {
+        $ext = strtolower((string) pathinfo((string) $filename, PATHINFO_EXTENSION));
+        $rankings = array(
+            'image' => array('avif', 'webp', 'png', 'jpg', 'jpeg', 'gif'),
+            'audio' => array('mp3', 'm4a', 'aac', 'ogg', 'wav'),
+        );
+
+        if (!isset($rankings[$kind])) {
+            return 999;
+        }
+
+        $priority = array_search($ext, $rankings[$kind], true);
+
+        return ($priority === false) ? 900 : (int) $priority;
     }
 }

@@ -68,6 +68,13 @@
   display: block;
 }
 
+.habaq-training__image-placeholder {
+  width: 100%;
+  min-height: 160px;
+  border-radius: 8px;
+  background: #e2e8f0;
+}
+
 .habaq-training__body {
   color: var(--habaq-training-text);
 }

@@ -83,9 +83,10 @@ class Habaq_Training_Player {
             return self::render_login_gate();
         }
 
-        $audio_result = Habaq_Training_Files::discover_audio($slug);
-        $audio_map = $audio_result['audio_map'];
-        $slides = self::build_slides($slug, $json_config, $audio_map);
+        $media_result = Habaq_Training_Files::discover_media($slug);
+        $audio_map = $media_result['audio_map'];
+        $image_map = $media_result['image_map'];
+        $slides = self::build_slides($slug, $json_config, $audio_map, $image_map, $media_result['image_files']);
         $resume = self::get_resume_state($slug, $version);
 
         $config = array(
@@ -113,11 +114,15 @@ class Habaq_Training_Player {
             'login_url' => esc_url_raw(wp_login_url(get_permalink())),
         );
 
-        if (!isset($audio_map[1])) {
-            $config['messages'][] = __('لم يتم العثور على الملف الصوتي رقم 1 (المقدمة).', 'habaq-wp-core');
+        $index_base = isset($meta['index_base']) ? (int) $meta['index_base'] : 1;
+        if (!isset($audio_map[$index_base])) {
+            $config['messages'][] = sprintf(
+                __('لم يتم العثور على الملف الصوتي رقم %d (المقدمة).', 'habaq-wp-core'),
+                (int) $index_base
+            );
         }
 
-        foreach ($audio_result['duplicates'] as $duplicate) {
+        foreach ($media_result['audio_duplicates'] as $duplicate) {
             $config['messages'][] = sprintf(
                 __('تكرار في الملف الصوتي رقم %d: تم اعتماد %s وتجاهل %s', 'habaq-wp-core'),
                 (int) $duplicate['audio_index'],
@@ -278,23 +283,26 @@ class Habaq_Training_Player {
         return is_array($decoded) ? $decoded : array();
     }
 
-    private static function build_slides($slug, $json_config, $audio_map) {
+    private static function build_slides($slug, $json_config, $audio_map, $image_map, $image_files) {
         $slides = array();
+        $meta = (isset($json_config['meta']) && is_array($json_config['meta'])) ? $json_config['meta'] : array();
+        $index_base = isset($meta['index_base']) ? (int) $meta['index_base'] : 1;
 
         if (isset($json_config['slides']) && is_array($json_config['slides']) && !empty($json_config['slides'])) {
             foreach ($json_config['slides'] as $index => $slide) {
                 if (!is_array($slide)) {
                     continue;
                 }
-                $audio_index = isset($slide['audio_index']) ? (int) $slide['audio_index'] : ($index + 1);
-                $image_url = isset($slide['image_url']) ? (string) $slide['image_url'] : '';
-                $image_url = Habaq_Training_Files::resolve_image_url($slug, $image_url);
+                $fallback_index = (int) $index + $index_base;
+                $audio_index = isset($slide['audio_index']) ? (int) $slide['audio_index'] : $fallback_index;
+                $image_index = self::resolve_image_index($slide, $audio_index, $fallback_index);
+                $image_url = self::resolve_slide_image_url($slide, $image_index, $image_map, $image_files);
 
                 $slides[] = array(
                     'id' => isset($slide['id']) ? sanitize_key((string) $slide['id']) : 'slide-' . ($index + 1),
                     'title' => isset($slide['title']) ? sanitize_text_field((string) $slide['title']) : self::default_slide_title($index),
                     'body_html' => isset($slide['body_html']) ? wp_kses_post((string) $slide['body_html']) : '',
-                    'audio_index' => max(1, $audio_index),
+                    'audio_index' => max(0, $audio_index),
                     'image_url' => $image_url,
                 );
             }
@@ -309,17 +317,18 @@ class Habaq_Training_Player {
         }
 
         $max = (int) max(array_keys($audio_map));
-        for ($i = 1; $i <= $max; $i++) {
+        for ($i = 0; $i <= $max; $i++) {
             if (!isset($audio_map[$i])) {
                 continue;
             }
-            $pos = $i - 1;
+            $pos = $i - $index_base;
+            $image_url = isset($image_map[$i]['url']) ? (string) $image_map[$i]['url'] : '';
             $slides[] = array(
                 'id' => $pos === 0 ? 'intro' : 'slide-' . $pos,
                 'title' => $pos === 0 ? 'مقدّمة' : 'الشريحة ' . self::to_arabic_digits((string) $pos),
                 'body_html' => '',
                 'audio_index' => $i,
-                'image_url' => '',
+                'image_url' => $image_url,
             );
         }
 
@@ -363,6 +372,47 @@ class Habaq_Training_Player {
         }
 
         return 'الشريحة ' . self::to_arabic_digits((string) $index);
+    }
+
+    private static function resolve_image_index($slide, $audio_index, $fallback_index) {
+        if (isset($slide['image_index']) && is_numeric($slide['image_index'])) {
+            return (int) $slide['image_index'];
+        }
+
+        if (isset($slide['image_url'])) {
+            $image_url = trim((string) $slide['image_url']);
+            if ($image_url !== '' && preg_match('/^\d+$/', Habaq_Training_Files::normalize_digits($image_url))) {
+                return (int) Habaq_Training_Files::normalize_digits($image_url);
+            }
+        }
+
+        if (is_numeric($audio_index)) {
+            return (int) $audio_index;
+        }
+
+        return (int) $fallback_index;
+    }
+
+    private static function resolve_slide_image_url($slide, $image_index, $image_map, $image_files) {
+        if (isset($image_map[$image_index]['url'])) {
+            return (string) $image_map[$image_index]['url'];
+        }
+
+        if (!isset($slide['image_url'])) {
+            return '';
+        }
+
+        $image_url = trim((string) $slide['image_url']);
+        if ($image_url === '' || preg_match('/^\d+$/', Habaq_Training_Files::normalize_digits($image_url))) {
+            return '';
+        }
+
+        $legacy_filename = sanitize_file_name(basename($image_url));
+        if ($legacy_filename === '') {
+            return '';
+        }
+
+        return isset($image_files[$legacy_filename]) ? (string) $image_files[$legacy_filename] : '';
     }
 
     private static function render_fallback($config) {
