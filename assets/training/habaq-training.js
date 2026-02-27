@@ -91,6 +91,7 @@
       }
     } catch (e) {
       localSaved = null;
+      state.sidebarOpen = false;
     }
 
     var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : introIndex;
@@ -165,6 +166,7 @@
       '      <audio data-audio preload="metadata"></audio>',
       '      <p class="habaq-training__message" data-message hidden></p>',
       '    </footer>',
+      '  </div>',
       '  </div>',
       '</div>'
     ].join('');
@@ -241,6 +243,25 @@
       }
       if (nextSlide) {
         preloadImage(nextSlide.image_url || '');
+        preloadAudio(getAudioUrl(nextSlide));
+      }
+      if (prevSlide && prevSlide.image_url) {
+        preloadImage(prevSlide.image_url);
+      }
+    }
+
+    function preloadNeighbors(index) {
+      var currentSlide = config.slides[index];
+      var nextSlide = config.slides[index + 1];
+      var prevSlide = config.slides[index - 1];
+
+      if (currentSlide && currentSlide.image_url) {
+        preloadImage(currentSlide.image_url);
+      }
+      if (nextSlide && nextSlide.image_url) {
+        preloadImage(nextSlide.image_url);
+      }
+      if (nextSlide) {
         preloadAudio(getAudioUrl(nextSlide));
       }
       if (prevSlide && prevSlide.image_url) {
@@ -423,6 +444,7 @@
       }
 
       setPreviewGateUI(false);
+      setLoading(true);
       body.innerHTML = slide.body_html || '';
       imageWrap.hidden = false;
 
@@ -712,6 +734,7 @@
     audio.addEventListener('play', function () {
       state.playing = true;
       updateButtons();
+      setLoading(false);
     });
     audio.addEventListener('pause', function () {
       state.playing = false;
@@ -732,6 +755,18 @@
     image.addEventListener('error', function () {
       state.pendingImage = false;
       maybeStopLoading();
+    });
+
+    audio.addEventListener('loadeddata', function () {
+      setLoading(false);
+    });
+
+    image.addEventListener('load', function () {
+      setLoading(false);
+    });
+
+    image.addEventListener('error', function () {
+      setLoading(false);
     });
 
     audio.addEventListener('timeupdate', function () {
