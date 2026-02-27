@@ -29,11 +29,22 @@ Troubleshooting:
 
 ## Training Player (HTML5)
 
-- الشورتكود الجديد: `[habaq_training slug="default" folder="audio" rtl="auto" autoadvance="0"]`.
+- الشورتكود الجديد: `[habaq_training slug="default" folder="audio" rtl="auto" autoadvance="0" access="public" roles="" cap="" preview_slides="0" version="1" require_ack=""]`.
 - أولوية البيانات:
   1. ملف إعدادات JSON من المسار: `wp-content/uploads/habaq-training/<slug>/training.json`.
   2. عند غياب JSON يتم توليد الشرائح تلقائيًا من الملفات الصوتية داخل `wp-content/uploads/<folder>/`.
 - يدعم اكتشاف الملفات الصوتية ذات الامتدادات: `mp3`, `m4a` (وأيضًا `wav`, `ogg`) مع ترقيم Western أو Arabic-Indic.
+- التحكم بالوصول: `access` يدعم `public | logged_in | roles | cap`، مع `roles` و`cap` عند الحاجة.
+- تتبّع التقدم: للزوار في `localStorage` (المفتاح `habaq_training_progress:<slug>`)، وللمستخدمين المسجلين في `user_meta` تحت المفتاح `habaq_training_progress`.
+
+- هيكل الملفات المعتمد لكل تدريب:
+  - `wp-content/uploads/habaq-training/<slug>/training.json`
+  - `wp-content/uploads/habaq-training/<slug>/audio/`
+  - `wp-content/uploads/habaq-training/<slug>/images/`
+  - `wp-content/uploads/habaq-training/<slug>/captions/` (اختياري)
+- لوحة الإدارة: من wp-admin > **Trainings** يمكنك إنشاء/تعديل/حذف تدريب، رفع `training.json`، رفع ملفات صوت/صور متعددة، أو استيراد ZIP.
+- استيراد ZIP يدعم: `training.json` + `audio/*` + `images/*` + `captions/*` مع منع zip-slip ورفض الأنواع غير الآمنة.
+- أنواع الملفات المدعومة للصوت والصور تعتمد ديناميكيًا على أنواع MIME المسموح بها في ووردبريس بالموقع (`get_allowed_mime_types` + `wp_check_filetype_and_ext`).
 
 مثال لهيكل `training.json`:
 
@@ -42,7 +53,13 @@ Troubleshooting:
   "meta": {
     "title": "مدوّنة السلوك والسياسات الأساسية في حَبَقْ",
     "rtl": true,
-    "autoadvance": false
+    "autoadvance": false,
+    "access": "logged_in",
+    "roles": ["editor", "administrator"],
+    "cap": "edit_posts",
+    "preview_slides": 0,
+    "version": "2026-02-27",
+    "require_ack": true
   },
   "slides": [
     { "id": "intro", "title": "مقدّمة", "body_html": "...", "audio_index": 1, "image_url": "" },

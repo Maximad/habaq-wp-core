@@ -1,6 +1,18 @@
 (function () {
   'use strict';
 
+  function parseConfig(node) {
+    try {
+      return JSON.parse(node.textContent || '{}');
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function nowTs() {
+    return Math.floor(Date.now() / 1000);
+  }
+
   function initTrainingPlayer(container) {
     var configNode = container.querySelector('.habaq-training-config');
     var mountNode = container.querySelector('.habaq-training__app');
@@ -10,10 +22,8 @@
       return;
     }
 
-    var config = {};
-    try {
-      config = JSON.parse(configNode.textContent || '{}');
-    } catch (error) {
+    var config = parseConfig(configNode);
+    if (!config) {
       mountNode.innerHTML = '<p class="habaq-training__message">تعذر قراءة إعدادات التدريب.</p>';
       return;
     }
@@ -27,18 +37,53 @@
       fallbackNode.hidden = true;
     }
 
+    var meta = config.meta || {};
+    var viewer = config.viewer || {};
+    var loginUrl = config.login_url || '/wp-login.php';
+    var previewSlides = parseInt(meta.preview_slides || 0, 10);
+    if (isNaN(previewSlides) || previewSlides < 0) {
+      previewSlides = 0;
+    }
+
+    var isLoggedIn = !!viewer.is_logged_in;
+    var canTrackServer = !!viewer.can_track_server;
+
+    var bootstrap = window.habaqTraining || {};
+    var ajaxUrl = bootstrap.ajaxUrl || '';
+    var nonce = bootstrap.nonce || '';
+
     var state = {
       started: false,
       current: 0,
       playing: false,
       muted: false,
-      startAttempted: false
+      completed: !!(config.resume && config.resume.completed),
+      completedAt: (config.resume && config.resume.completed_at) ? parseInt(config.resume.completed_at, 10) : 0,
+      lastServerSaveAt: 0,
+      promptVisible: false
     };
 
-    var storageKey = 'habaqTraining:' + (config.slug || 'default');
-    var savedIndex = parseInt(window.localStorage.getItem(storageKey), 10);
-    if (!isNaN(savedIndex) && savedIndex >= 0 && savedIndex < config.slides.length) {
-      state.current = savedIndex;
+    var storageKey = 'habaq_training_progress:' + (config.slug || 'default');
+    var localSaved = null;
+    try {
+      localSaved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+    } catch (e) {
+      localSaved = null;
+    }
+
+    var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : 0;
+    if (isNaN(serverSlide) || serverSlide < 0) {
+      serverSlide = 0;
+    }
+
+    var localSlide = (localSaved && typeof localSaved.current_slide !== 'undefined') ? parseInt(localSaved.current_slide, 10) : 0;
+    if (isNaN(localSlide) || localSlide < 0) {
+      localSlide = 0;
+    }
+
+    var suggestedResumeSlide = isLoggedIn ? serverSlide : localSlide;
+    if (suggestedResumeSlide >= config.slides.length) {
+      suggestedResumeSlide = config.slides.length - 1;
     }
 
     mountNode.innerHTML = [
@@ -46,6 +91,13 @@
       '  <div class="habaq-training__start" data-start-screen="1">',
       '    <h2 class="habaq-training__heading"></h2>',
       '    <p class="habaq-training__hint">اضغط للبدء ثم تنقّل بين الشرائح.</p>',
+      '    <div class="habaq-training__resume" data-resume hidden>',
+      '      <p class="habaq-training__hint">متابعة من حيث توقفت؟</p>',
+      '      <div class="habaq-training__resume-actions">',
+      '        <button type="button" class="habaq-training__button" data-action="resume-continue">متابعة</button>',
+      '        <button type="button" class="habaq-training__button" data-action="resume-restart">بدء من البداية</button>',
+      '      </div>',
+      '    </div>',
       '    <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="start">ابدأ التدريب</button>',
       '  </div>',
       '  <div class="habaq-training__player" data-player="1" hidden>',
@@ -56,6 +108,10 @@
       '    <article class="habaq-training__slide" data-slide-panel tabindex="-1">',
       '      <div class="habaq-training__image-wrap" data-image-wrap hidden><img data-image alt="" /></div>',
       '      <div class="habaq-training__body" data-body></div>',
+      '      <div class="habaq-training__preview-gate" data-preview-gate hidden>',
+      '        <p class="habaq-training__gate-message">هذا التدريب متاح لأعضاء الفريق فقط.</p>',
+      '        <a class="habaq-training__button habaq-training__button--primary" data-login-link href="#">تسجيل الدخول</a>',
+      '      </div>',
       '    </article>',
       '    <div class="habaq-training__controls">',
       '      <button type="button" class="habaq-training__button" data-action="prev" aria-label="السابق">السابق</button>',
@@ -66,6 +122,11 @@
       '    </div>',
       '    <div class="habaq-training__timeline-wrap">',
       '      <label class="habaq-training__timeline-label"><span class="habaq-training__sr-only">شريط التقدم</span><input data-seek type="range" min="0" max="100" value="0" step="1" /></label>',
+      '    </div>',
+      '    <div class="habaq-training__complete" data-complete-wrap hidden>',
+      '      <label class="habaq-training__ack"><input type="checkbox" data-ack /> أُقِرّ بأنني اطّلعت على هذا التدريب وأفهم التزاماتي.</label>',
+      '      <button type="button" class="habaq-training__button habaq-training__button--primary" data-action="finish">إنهاء التدريب</button>',
+      '      <p class="habaq-training__badge" data-complete-badge hidden>مكتمل ✓</p>',
       '    </div>',
       '    <audio data-audio preload="metadata"></audio>',
       '    <p class="habaq-training__message" data-message hidden></p>',
@@ -85,8 +146,23 @@
     var audio = mountNode.querySelector('[data-audio]');
     var message = mountNode.querySelector('[data-message]');
     var slidePanel = mountNode.querySelector('[data-slide-panel]');
+    var previewGate = mountNode.querySelector('[data-preview-gate]');
+    var loginLink = mountNode.querySelector('[data-login-link]');
+    var completeWrap = mountNode.querySelector('[data-complete-wrap]');
+    var ack = mountNode.querySelector('[data-ack]');
+    var completeBadge = mountNode.querySelector('[data-complete-badge]');
+    var resumeBox = mountNode.querySelector('[data-resume]');
 
-    heading.textContent = (config.meta && config.meta.title) ? config.meta.title : 'التدريب التفاعلي';
+    if (loginLink) {
+      loginLink.href = loginUrl;
+    }
+
+    heading.textContent = meta.title || 'التدريب التفاعلي';
+
+    if (suggestedResumeSlide > 0) {
+      state.promptVisible = true;
+      resumeBox.hidden = false;
+    }
 
     function showMessage(text) {
       if (!text) {
@@ -106,6 +182,79 @@
       return entry && entry.url ? entry.url : '';
     }
 
+    function inPreviewGate() {
+      return !isLoggedIn && previewSlides > 0 && state.current >= previewSlides;
+    }
+
+    function saveLocalProgress() {
+      var payload = {
+        current_slide: state.current,
+        updated_at: nowTs(),
+        completed: !!state.completed
+      };
+      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+    }
+
+    function saveServerProgress() {
+      if (!isLoggedIn || !canTrackServer || !ajaxUrl || !nonce) {
+        return;
+      }
+
+      var now = Date.now();
+      if ((now - state.lastServerSaveAt) < 3000) {
+        return;
+      }
+      state.lastServerSaveAt = now;
+
+      var bodyData = new URLSearchParams();
+      bodyData.set('action', 'habaq_training_save_progress');
+      bodyData.set('nonce', nonce);
+      bodyData.set('slug', config.slug || 'default');
+      bodyData.set('version', meta.version || '1');
+      bodyData.set('current_slide', String(state.current));
+      bodyData.set('completed', state.completed ? '1' : '0');
+
+      fetch(ajaxUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: bodyData.toString(),
+        credentials: 'same-origin'
+      }).catch(function () {
+        // no-op
+      });
+    }
+
+    function renderCompletionState() {
+      if (state.completed) {
+        completeBadge.hidden = false;
+      }
+
+      var mustAck = !!meta.require_ack;
+      if (!mustAck) {
+        ack.checked = true;
+      }
+
+      var finishButton = mountNode.querySelector('[data-action="finish"]');
+      if (!finishButton) {
+        return;
+      }
+
+      finishButton.disabled = mustAck && !ack.checked;
+    }
+
+    function setPreviewGateUI(enabled) {
+      previewGate.hidden = !enabled;
+      body.hidden = enabled;
+      imageWrap.hidden = true;
+      seek.disabled = enabled;
+      audio.pause();
+      if (enabled) {
+        audio.removeAttribute('src');
+        audio.load();
+        showMessage('');
+      }
+    }
+
     function renderSlide(focusPanel) {
       var slide = config.slides[state.current];
       if (!slide) {
@@ -114,6 +263,17 @@
 
       progress.textContent = (state.current + 1) + ' / ' + config.slides.length;
       title.textContent = slide.title || '';
+
+      if (inPreviewGate()) {
+        setPreviewGateUI(true);
+        updateButtons();
+        if (focusPanel) {
+          slidePanel.focus();
+        }
+        return;
+      }
+
+      setPreviewGateUI(false);
       body.innerHTML = slide.body_html || '';
 
       if (slide.image_url) {
@@ -139,9 +299,10 @@
         audio.load();
       }
 
-      updateButtons();
       seek.value = 0;
-      window.localStorage.setItem(storageKey, String(state.current));
+      updateButtons();
+      saveLocalProgress();
+      saveServerProgress();
 
       if (focusPanel) {
         slidePanel.focus();
@@ -158,10 +319,21 @@
       nextBtn.disabled = state.current >= config.slides.length - 1;
       playBtn.textContent = state.playing ? 'إيقاف' : 'تشغيل';
       muteBtn.textContent = state.muted ? 'إلغاء الكتم' : 'كتم';
+
+      if (inPreviewGate()) {
+        playBtn.disabled = true;
+        muteBtn.disabled = true;
+      } else {
+        playBtn.disabled = false;
+        muteBtn.disabled = false;
+      }
+
+      completeWrap.hidden = state.current !== (config.slides.length - 1) || inPreviewGate();
+      renderCompletionState();
     }
 
     function playCurrent() {
-      if (!audio.src) {
+      if (inPreviewGate() || !audio.src) {
         return;
       }
 
@@ -192,6 +364,35 @@
       }
     }
 
+    function markCompleted() {
+      state.completed = true;
+      state.completedAt = nowTs();
+      saveLocalProgress();
+
+      if (!isLoggedIn || !canTrackServer || !ajaxUrl || !nonce) {
+        renderCompletionState();
+        return;
+      }
+
+      var bodyData = new URLSearchParams();
+      bodyData.set('action', 'habaq_training_mark_complete');
+      bodyData.set('nonce', nonce);
+      bodyData.set('slug', config.slug || 'default');
+      bodyData.set('version', meta.version || '1');
+      bodyData.set('current_slide', String(state.current));
+
+      fetch(ajaxUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: bodyData.toString(),
+        credentials: 'same-origin'
+      }).then(function () {
+        renderCompletionState();
+      }).catch(function () {
+        renderCompletionState();
+      });
+    }
+
     mountNode.addEventListener('click', function (event) {
       var button = event.target.closest('[data-action]');
       if (!button) {
@@ -200,9 +401,28 @@
 
       var action = button.getAttribute('data-action');
 
+      if (action === 'resume-continue') {
+        state.current = suggestedResumeSlide;
+        state.promptVisible = false;
+        resumeBox.hidden = true;
+        return;
+      }
+
+      if (action === 'resume-restart') {
+        state.current = 0;
+        state.promptVisible = false;
+        resumeBox.hidden = true;
+        return;
+      }
+
       if (action === 'start') {
+        if (state.promptVisible) {
+          state.current = suggestedResumeSlide;
+          state.promptVisible = false;
+          resumeBox.hidden = true;
+        }
+
         state.started = true;
-        state.startAttempted = true;
         startScreen.hidden = true;
         player.hidden = false;
         renderSlide(true);
@@ -230,7 +450,19 @@
         updateButtons();
       } else if (action === 'restart') {
         changeSlide(0, true);
+      } else if (action === 'finish') {
+        var mustAck = !!meta.require_ack;
+        if (mustAck && !ack.checked) {
+          showMessage('يرجى الإقرار قبل إنهاء التدريب.');
+          return;
+        }
+        showMessage('');
+        markCompleted();
       }
+    });
+
+    ack.addEventListener('change', function () {
+      renderCompletionState();
     });
 
     mountNode.addEventListener('keydown', function (event) {
@@ -276,7 +508,7 @@
       state.playing = false;
       updateButtons();
 
-      var autoAdvance = !!(config.meta && config.meta.autoadvance);
+      var autoAdvance = !!meta.autoadvance;
       if (autoAdvance && state.current < config.slides.length - 1) {
         changeSlide(state.current + 1, true);
       }

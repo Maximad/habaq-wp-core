@@ -1,0 +1,12 @@
+.habaq-training-admin .habaq-training-admin__card {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.habaq-training-admin code {
+  display: inline-block;
+  padding: 6px;
+  background: #f6f7f7;
+}

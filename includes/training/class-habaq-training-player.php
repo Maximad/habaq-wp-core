@@ -4,82 +4,131 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Habaq_Training_Player {
+require_once __DIR__ . '/lib/class-habaq-training-files.php';
+require_once __DIR__ . '/admin/class-habaq-training-admin.php';
 
-    /**
-     * Register shortcode.
-     *
-     * @return void
-     */
+class Habaq_Training_Player {
+    private static $registered = false;
+
     public static function register() {
+        if (self::$registered) {
+            return;
+        }
+
         if (!shortcode_exists('habaq_training')) {
             add_shortcode('habaq_training', array(__CLASS__, 'render_shortcode'));
         }
+
+        add_action('wp_ajax_habaq_training_save_progress', array(__CLASS__, 'ajax_save_progress'));
+        add_action('wp_ajax_habaq_training_mark_complete', array(__CLASS__, 'ajax_mark_complete'));
+
+        if (is_admin()) {
+            Habaq_Training_Admin::register();
+        }
+
+        self::$registered = true;
     }
 
-    /**
-     * Render training shortcode.
-     *
-     * @param array $atts Shortcode attributes.
-     * @return string
-     */
     public static function render_shortcode($atts) {
-        $defaults = array(
-            'slug' => 'default',
-            'folder' => 'audio',
-            'rtl' => 'auto',
-            'autoadvance' => '0',
+        $raw_atts = is_array($atts) ? $atts : array();
+        $attrs = shortcode_atts(
+            array(
+                'slug' => 'default',
+                'rtl' => 'auto',
+                'autoadvance' => '0',
+                'access' => 'public',
+                'roles' => '',
+                'cap' => '',
+                'preview_slides' => '0',
+                'version' => '',
+                'require_ack' => '',
+                'lang' => '',
+                'folder' => '',
+            ),
+            $raw_atts,
+            'habaq_training'
         );
-
-        $attrs = shortcode_atts($defaults, $atts, 'habaq_training');
 
         $slug = sanitize_title($attrs['slug']);
         if ($slug === '') {
             $slug = 'default';
         }
 
-        $folder = sanitize_text_field((string) $attrs['folder']);
-        $folder = trim(str_replace('..', '', $folder), '/\\');
-        if ($folder === '') {
-            $folder = 'audio';
+        $registry_item = Habaq_Training_Files::get_registry_item($slug);
+        $json_config = self::load_training_json($slug);
+        $meta = (isset($json_config['meta']) && is_array($json_config['meta'])) ? $json_config['meta'] : array();
+
+        $lang_default = self::resolve_default_language();
+        $lang = sanitize_key((string) self::resolve_source_value($raw_atts, 'lang', $meta, 'lang', isset($registry_item['lang']) ? $registry_item['lang'] : $lang_default));
+
+        $access = self::normalize_access_mode(self::resolve_source_value($raw_atts, 'access', $meta, 'access', isset($registry_item['access']) ? $registry_item['access'] : 'public'));
+        $roles = self::normalize_roles(self::resolve_source_value($raw_atts, 'roles', $meta, 'roles', isset($registry_item['roles']) ? $registry_item['roles'] : ''));
+        $cap = sanitize_text_field((string) self::resolve_source_value($raw_atts, 'cap', $meta, 'cap', isset($registry_item['cap']) ? $registry_item['cap'] : ''));
+        $version = sanitize_text_field((string) self::resolve_source_value($raw_atts, 'version', $meta, 'version', isset($registry_item['version']) ? $registry_item['version'] : '1'));
+        if ($version === '') {
+            $version = '1';
         }
 
-        $rtl = self::resolve_rtl($attrs['rtl']);
-        $autoadvance = self::to_bool($attrs['autoadvance']);
+        $preview_slides = max(0, (int) self::resolve_source_value($raw_atts, 'preview_slides', $meta, 'preview_slides', isset($registry_item['preview_slides']) ? $registry_item['preview_slides'] : '0'));
+        $rtl = self::resolve_rtl(self::resolve_source_value($raw_atts, 'rtl', $meta, 'rtl', isset($registry_item['rtl']) ? ($registry_item['rtl'] ? '1' : '0') : 'auto'), $lang);
+        $autoadvance = self::to_bool(self::resolve_source_value($raw_atts, 'autoadvance', $meta, 'autoadvance', isset($registry_item['autoadvance']) ? ($registry_item['autoadvance'] ? '1' : '0') : '0'));
 
-        $audio_map = self::discover_audio($folder);
-        $json_config = self::load_training_json($slug);
-        $slides = self::build_slides($json_config, $audio_map);
+        $default_require_ack = ($access === 'public') ? '0' : '1';
+        if (isset($registry_item['require_ack'])) {
+            $default_require_ack = $registry_item['require_ack'] ? '1' : '0';
+        }
+        $require_ack = self::to_bool(self::resolve_source_value($raw_atts, 'require_ack', $meta, 'require_ack', $default_require_ack));
+
+        if (!self::evaluate_access($access, $roles, $cap)) {
+            return self::render_login_gate();
+        }
+
+        $audio_result = Habaq_Training_Files::discover_audio($slug);
+        $audio_map = $audio_result['audio_map'];
+        $slides = self::build_slides($slug, $json_config, $audio_map);
+        $resume = self::get_resume_state($slug, $version);
 
         $config = array(
             'slug' => $slug,
             'meta' => array(
-                'title' => isset($json_config['meta']['title']) ? sanitize_text_field((string) $json_config['meta']['title']) : __('التدريب التفاعلي', 'habaq-wp-core'),
-                'rtl' => isset($json_config['meta']['rtl']) ? (bool) $json_config['meta']['rtl'] : $rtl,
-                'autoadvance' => isset($json_config['meta']['autoadvance']) ? (bool) $json_config['meta']['autoadvance'] : $autoadvance,
+                'title' => isset($meta['title']) ? sanitize_text_field((string) $meta['title']) : (isset($registry_item['title']) ? sanitize_text_field((string) $registry_item['title']) : __('التدريب التفاعلي', 'habaq-wp-core')),
+                'rtl' => $rtl,
+                'autoadvance' => $autoadvance,
+                'access' => $access,
+                'roles' => $roles,
+                'cap' => $cap,
+                'preview_slides' => $preview_slides,
+                'require_ack' => $require_ack,
+                'version' => $version,
+                'lang' => $lang,
             ),
             'slides' => $slides,
             'audioMap' => $audio_map,
             'messages' => array(),
+            'resume' => $resume,
+            'viewer' => array(
+                'is_logged_in' => is_user_logged_in(),
+                'can_track_server' => is_user_logged_in(),
+            ),
+            'login_url' => esc_url_raw(wp_login_url(get_permalink())),
         );
 
-        $missing_indices = self::find_missing_audio_indices($audio_map);
-        if (!empty($missing_indices)) {
-            $display_missing = array_map(array(__CLASS__, 'to_arabic_digits'), array_map('strval', $missing_indices));
+        if (!isset($audio_map[1])) {
+            $config['messages'][] = __('لم يتم العثور على الملف الصوتي رقم 1 (المقدمة).', 'habaq-wp-core');
+        }
+
+        foreach ($audio_result['duplicates'] as $duplicate) {
             $config['messages'][] = sprintf(
-                __('هناك ملفات صوتية مفقودة للأرقام: %s', 'habaq-wp-core'),
-                implode('، ', $display_missing)
+                __('تكرار في الملف الصوتي رقم %d: تم اعتماد %s وتجاهل %s', 'habaq-wp-core'),
+                (int) $duplicate['audio_index'],
+                sanitize_file_name($duplicate['kept']),
+                sanitize_file_name($duplicate['ignored'])
             );
         }
 
-        self::enqueue_assets();
+        self::enqueue_assets($slug, $version);
 
-        $container_attrs = sprintf(
-            'class="habaq-training" dir="%s" data-habaq-training="1"',
-            $config['meta']['rtl'] ? 'rtl' : 'ltr'
-        );
-
-        $output  = '<section ' . $container_attrs . '>';
+        $output  = '<section class="habaq-training" dir="' . ($rtl ? 'rtl' : 'ltr') . '" data-habaq-training="1">';
         $output .= '<div class="habaq-training__app" aria-live="polite"></div>';
         $output .= self::render_fallback($config);
         $output .= '<script type="application/json" class="habaq-training-config">' . wp_json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
@@ -88,75 +137,138 @@ class Habaq_Training_Player {
         return $output;
     }
 
-    /**
-     * Resolve RTL preference.
-     *
-     * @param string $rtl_value Raw value.
-     * @return bool
-     */
-    private static function resolve_rtl($rtl_value) {
-        $normalized = strtolower(trim((string) $rtl_value));
+    private static function resolve_default_language() {
+        if (function_exists('pll_current_language')) {
+            $lang = pll_current_language();
+            if (is_string($lang) && $lang !== '') {
+                return $lang;
+            }
+        }
 
-        if ($normalized === '1' || $normalized === 'true') {
+        $locale = determine_locale();
+
+        return sanitize_key(substr((string) $locale, 0, 2));
+    }
+
+    private static function resolve_source_value($raw_atts, $att_key, $meta, $meta_key, $fallback) {
+        if (array_key_exists($att_key, $raw_atts) && $raw_atts[$att_key] !== '') {
+            return $raw_atts[$att_key];
+        }
+
+        if (isset($meta[$meta_key]) && $meta[$meta_key] !== '') {
+            return $meta[$meta_key];
+        }
+
+        return $fallback;
+    }
+
+    private static function normalize_access_mode($mode) {
+        $mode = strtolower(trim((string) $mode));
+
+        return in_array($mode, array('public', 'logged_in', 'roles', 'cap'), true) ? $mode : 'public';
+    }
+
+    private static function normalize_roles($roles) {
+        $list = is_array($roles) ? $roles : explode(',', (string) $roles);
+        $clean = array();
+
+        foreach ($list as $role) {
+            $key = sanitize_key((string) $role);
+            if ($key !== '') {
+                $clean[] = $key;
+            }
+        }
+
+        return array_values(array_unique($clean));
+    }
+
+    private static function evaluate_access($access, $roles, $cap) {
+        if ($access === 'public') {
             return true;
         }
 
+        if (!is_user_logged_in()) {
+            return false;
+        }
+
+        if ($access === 'logged_in') {
+            return true;
+        }
+
+        if ($access === 'cap') {
+            return $cap !== '' && current_user_can($cap);
+        }
+
+        if ($access === 'roles') {
+            $user = wp_get_current_user();
+            $user_roles = is_array($user->roles) ? $user->roles : array();
+
+            foreach ($user_roles as $role) {
+                if (in_array($role, $roles, true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return false;
+    }
+
+    private static function render_login_gate() {
+        $login_url = wp_login_url(get_permalink());
+
+        return '<section class="habaq-training habaq-training--gate"><div class="habaq-training__gate"><p class="habaq-training__gate-message">' .
+            esc_html__('هذا التدريب متاح لأعضاء الفريق فقط.', 'habaq-wp-core') .
+            '</p><a class="habaq-training__button habaq-training__button--primary" href="' . esc_url($login_url) . '">' .
+            esc_html__('تسجيل الدخول', 'habaq-wp-core') .
+            '</a></div></section>';
+    }
+
+    private static function resolve_rtl($rtl_value, $lang) {
+        $normalized = strtolower(trim((string) $rtl_value));
+        if ($normalized === '1' || $normalized === 'true') {
+            return true;
+        }
         if ($normalized === '0' || $normalized === 'false') {
             return false;
         }
 
-        return is_rtl();
+        return $lang === 'ar' ? true : is_rtl();
     }
 
-    /**
-     * Cast mixed value to bool.
-     *
-     * @param mixed $value Value.
-     * @return bool
-     */
     private static function to_bool($value) {
-        $normalized = strtolower(trim((string) $value));
+        if (is_bool($value)) {
+            return $value;
+        }
 
-        return in_array($normalized, array('1', 'true', 'yes', 'on'), true);
+        return in_array(strtolower(trim((string) $value)), array('1', 'true', 'yes', 'on'), true);
     }
 
-    /**
-     * Enqueue training assets.
-     *
-     * @return void
-     */
-    private static function enqueue_assets() {
-        wp_enqueue_style(
-            'habaq-training-player',
-            HABAQ_WP_CORE_URL . 'assets/training/habaq-training.css',
-            array(),
-            HABAQ_WP_CORE_VERSION
-        );
+    private static function enqueue_assets($slug, $version) {
+        wp_enqueue_style('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.css', array(), HABAQ_WP_CORE_VERSION);
+        wp_enqueue_script('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.js', array(), HABAQ_WP_CORE_VERSION, true);
 
-        wp_enqueue_script(
-            'habaq-training-player',
-            HABAQ_WP_CORE_URL . 'assets/training/habaq-training.js',
-            array(),
-            HABAQ_WP_CORE_VERSION,
-            true
-        );
+        if (is_user_logged_in()) {
+            $bootstrap = array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('habaq_training_progress'),
+                'slug' => $slug,
+                'version' => $version,
+                'isLoggedIn' => true,
+                'canTrackServer' => true,
+            );
+            wp_add_inline_script('habaq-training-player', 'window.habaqTraining = ' . wp_json_encode($bootstrap, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';', 'before');
+        }
     }
 
-    /**
-     * Load JSON config from uploads.
-     *
-     * @param string $slug Training slug.
-     * @return array
-     */
     private static function load_training_json($slug) {
-        $uploads = wp_upload_dir();
-        $path = trailingslashit($uploads['basedir']) . 'habaq-training/' . $slug . '/training.json';
-
-        if (!is_readable($path)) {
+        $paths = Habaq_Training_Files::get_training_paths($slug);
+        if (!is_readable($paths['json_path'])) {
             return array();
         }
 
-        $raw = file_get_contents($path);
+        $raw = file_get_contents($paths['json_path']);
         if ($raw === false || trim($raw) === '') {
             return array();
         }
@@ -166,137 +278,7 @@ class Habaq_Training_Player {
         return is_array($decoded) ? $decoded : array();
     }
 
-    /**
-     * Discover audio files and map by numeric index.
-     *
-     * @param string $folder Folder under uploads.
-     * @return array
-     */
-    private static function discover_audio($folder) {
-        $uploads = wp_upload_dir();
-        $base_dir = trailingslashit($uploads['basedir']) . $folder;
-        $base_url = trailingslashit($uploads['baseurl']) . str_replace('\\', '/', $folder);
-
-        if (!is_dir($base_dir)) {
-            return array();
-        }
-
-        $entries = scandir($base_dir);
-        if (!is_array($entries)) {
-            return array();
-        }
-
-        $files = array();
-
-        foreach ($entries as $entry) {
-            if ($entry === '.' || $entry === '..') {
-                continue;
-            }
-
-            $file_path = trailingslashit($base_dir) . $entry;
-            if (!is_file($file_path)) {
-                continue;
-            }
-
-            $extension = strtolower((string) pathinfo($entry, PATHINFO_EXTENSION));
-            if (!in_array($extension, array('mp3', 'm4a', 'wav', 'ogg'), true)) {
-                continue;
-            }
-
-            $normalized_name = self::normalize_digits((string) pathinfo($entry, PATHINFO_FILENAME));
-            if (!preg_match('/^(\d+)/', $normalized_name, $matches)) {
-                continue;
-            }
-
-            $audio_index = (int) $matches[1];
-            if ($audio_index < 1) {
-                continue;
-            }
-
-            $files[] = array(
-                'audio_index' => $audio_index,
-                'url' => trailingslashit($base_url) . rawurlencode($entry),
-                'filename' => $entry,
-                'ext' => $extension,
-            );
-        }
-
-        usort($files, array(__CLASS__, 'sort_audio_by_index'));
-
-        $audio_map = array();
-        foreach ($files as $file) {
-            $audio_map[(int) $file['audio_index']] = array(
-                'url' => esc_url_raw($file['url']),
-                'filename' => sanitize_file_name($file['filename']),
-                'ext' => sanitize_text_field($file['ext']),
-            );
-        }
-
-        return $audio_map;
-    }
-
-    /**
-     * Sort callback for audio files.
-     *
-     * @param array $left Left item.
-     * @param array $right Right item.
-     * @return int
-     */
-    private static function sort_audio_by_index($left, $right) {
-        return (int) $left['audio_index'] <=> (int) $right['audio_index'];
-    }
-
-    /**
-     * Convert Arabic digit variants to western digits.
-     *
-     * @param string $value Input string.
-     * @return string
-     */
-    private static function normalize_digits($value) {
-        $western = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        $arabic_indic = array('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩');
-        $eastern_arabic_indic = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
-
-        $value = str_replace($arabic_indic, $western, $value);
-
-        return str_replace($eastern_arabic_indic, $western, $value);
-    }
-
-
-    /**
-     * Find missing audio indices in sorted range.
-     *
-     * @param array $audio_map Audio map.
-     * @return array
-     */
-    private static function find_missing_audio_indices($audio_map) {
-        if (empty($audio_map)) {
-            return array(1);
-        }
-
-        $indices = array_map('intval', array_keys($audio_map));
-        sort($indices);
-
-        $missing = array();
-        $max_index = (int) max($indices);
-
-        for ($i = 1; $i <= $max_index; $i++) {
-            if (!isset($audio_map[$i])) {
-                $missing[] = $i;
-            }
-        }
-
-        return $missing;
-    }
-
-    /**
-     * Build slides from JSON config or from discovered audio.
-     *
-     * @param array $json_config Parsed config.
-     * @param array $audio_map Audio map.
-     * @return array
-     */
-    private static function build_slides($json_config, $audio_map) {
+    private static function build_slides($slug, $json_config, $audio_map) {
         $slides = array();
 
         if (isset($json_config['slides']) && is_array($json_config['slides']) && !empty($json_config['slides'])) {
@@ -304,14 +286,16 @@ class Habaq_Training_Player {
                 if (!is_array($slide)) {
                     continue;
                 }
-
                 $audio_index = isset($slide['audio_index']) ? (int) $slide['audio_index'] : ($index + 1);
+                $image_url = isset($slide['image_url']) ? (string) $slide['image_url'] : '';
+                $image_url = Habaq_Training_Files::resolve_image_url($slug, $image_url);
+
                 $slides[] = array(
                     'id' => isset($slide['id']) ? sanitize_key((string) $slide['id']) : 'slide-' . ($index + 1),
                     'title' => isset($slide['title']) ? sanitize_text_field((string) $slide['title']) : self::default_slide_title($index),
                     'body_html' => isset($slide['body_html']) ? wp_kses_post((string) $slide['body_html']) : '',
                     'audio_index' => max(1, $audio_index),
-                    'image_url' => isset($slide['image_url']) ? esc_url_raw((string) $slide['image_url']) : '',
+                    'image_url' => $image_url,
                 );
             }
 
@@ -324,19 +308,17 @@ class Habaq_Training_Player {
             return array();
         }
 
-        $max_index = (int) max(array_keys($audio_map));
-
-        for ($audio_index = 1; $audio_index <= $max_index; $audio_index++) {
-            if (!isset($audio_map[$audio_index])) {
+        $max = (int) max(array_keys($audio_map));
+        for ($i = 1; $i <= $max; $i++) {
+            if (!isset($audio_map[$i])) {
                 continue;
             }
-
-            $slide_position = $audio_index - 1;
+            $pos = $i - 1;
             $slides[] = array(
-                'id' => $slide_position === 0 ? 'intro' : 'slide-' . $slide_position,
-                'title' => $slide_position === 0 ? 'مقدّمة' : 'الشريحة ' . self::to_arabic_digits((string) $slide_position),
+                'id' => $pos === 0 ? 'intro' : 'slide-' . $pos,
+                'title' => $pos === 0 ? 'مقدّمة' : 'الشريحة ' . self::to_arabic_digits((string) $pos),
                 'body_html' => '',
-                'audio_index' => $audio_index,
+                'audio_index' => $i,
                 'image_url' => '',
             );
         }
@@ -344,12 +326,37 @@ class Habaq_Training_Player {
         return $slides;
     }
 
-    /**
-     * Default title from index.
-     *
-     * @param int $index Slide index.
-     * @return string
-     */
+    private static function get_resume_state($slug, $version) {
+        $resume = array('current_slide' => 0, 'completed' => false, 'completed_at' => 0, 'updated_at' => 0);
+
+        if (!is_user_logged_in()) {
+            return $resume;
+        }
+
+        $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
+        if (!is_array($map) || !isset($map[$slug]) || !is_array($map[$slug])) {
+            return $resume;
+        }
+
+        $item = $map[$slug];
+        if (isset($item['version']) && sanitize_text_field((string) $item['version']) !== $version) {
+            $item['current_slide'] = 0;
+            $item['completed_at'] = 0;
+            $item['completed'] = false;
+            $item['version'] = $version;
+            $item['updated_at'] = time();
+            $map[$slug] = $item;
+            update_user_meta(get_current_user_id(), 'habaq_training_progress', $map);
+        }
+
+        $resume['current_slide'] = isset($item['current_slide']) ? max(0, (int) $item['current_slide']) : 0;
+        $resume['updated_at'] = isset($item['updated_at']) ? (int) $item['updated_at'] : 0;
+        $resume['completed_at'] = isset($item['completed_at']) ? (int) $item['completed_at'] : 0;
+        $resume['completed'] = $resume['completed_at'] > 0 || !empty($item['completed']);
+
+        return $resume;
+    }
+
     private static function default_slide_title($index) {
         if ((int) $index === 0) {
             return 'مقدّمة';
@@ -358,54 +365,87 @@ class Habaq_Training_Player {
         return 'الشريحة ' . self::to_arabic_digits((string) $index);
     }
 
-    /**
-     * Render no-JS fallback list.
-     *
-     * @param array $config Training config.
-     * @return string
-     */
     private static function render_fallback($config) {
-        $output = '<div class="habaq-training__fallback">';
-        $output .= '<p class="habaq-training__fallback-note">' . esc_html__('نسخة أساسية تعمل بدون جافاسكربت:', 'habaq-wp-core') . '</p>';
-
-        if (!empty($config['messages'])) {
-            foreach ($config['messages'] as $message) {
-                $output .= '<p class="habaq-training__message">' . esc_html($message) . '</p>';
-            }
-        }
-
-        $output .= '<ol class="habaq-training__fallback-list">';
-
+        $output = '<div class="habaq-training__fallback"><p class="habaq-training__fallback-note">' . esc_html__('نسخة أساسية تعمل بدون جافاسكربت:', 'habaq-wp-core') . '</p><ol class="habaq-training__fallback-list">';
         foreach ($config['slides'] as $slide) {
             $audio_index = isset($slide['audio_index']) ? (int) $slide['audio_index'] : 0;
             $audio_url = isset($config['audioMap'][$audio_index]['url']) ? $config['audioMap'][$audio_index]['url'] : '';
-
-            $output .= '<li class="habaq-training__fallback-item">';
-            $output .= '<h3 class="habaq-training__fallback-title">' . esc_html($slide['title']) . '</h3>';
+            $output .= '<li class="habaq-training__fallback-item"><h3 class="habaq-training__fallback-title">' . esc_html($slide['title']) . '</h3>';
             if ($audio_url) {
                 $output .= '<audio controls preload="none" src="' . esc_url($audio_url) . '"></audio>';
-            } else {
-                $output .= '<p class="habaq-training__message">' . esc_html__('لا يوجد ملف صوتي لهذه الشريحة.', 'habaq-wp-core') . '</p>';
             }
             $output .= '</li>';
         }
-
-        $output .= '</ol>';
-        $output .= '</div>';
+        $output .= '</ol></div>';
 
         return $output;
     }
 
-    /**
-     * Convert western digits to Arabic-Indic.
-     *
-     * @param string $value Number.
-     * @return string
-     */
+    public static function ajax_save_progress() {
+        if (!is_user_logged_in()) {
+            wp_send_json_error(array('message' => 'forbidden'), 403);
+        }
+        check_ajax_referer('habaq_training_progress', 'nonce');
+
+        $slug = isset($_POST['slug']) ? sanitize_title(wp_unslash($_POST['slug'])) : '';
+        if ($slug === '') {
+            wp_send_json_error(array('message' => 'invalid_slug'), 400);
+        }
+
+        $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
+        if (!is_array($map)) {
+            $map = array();
+        }
+
+        $previous = isset($map[$slug]) && is_array($map[$slug]) ? $map[$slug] : array();
+        $completed_at = isset($previous['completed_at']) ? (int) $previous['completed_at'] : 0;
+
+        $map[$slug] = array(
+            'current_slide' => isset($_POST['current_slide']) ? max(0, (int) $_POST['current_slide']) : 0,
+            'updated_at' => time(),
+            'completed_at' => $completed_at,
+            'completed' => $completed_at > 0,
+            'version' => isset($_POST['version']) ? sanitize_text_field(wp_unslash($_POST['version'])) : '1',
+            'score' => null,
+        );
+
+        update_user_meta(get_current_user_id(), 'habaq_training_progress', $map);
+        wp_send_json_success(array('saved' => true));
+    }
+
+    public static function ajax_mark_complete() {
+        if (!is_user_logged_in()) {
+            wp_send_json_error(array('message' => 'forbidden'), 403);
+        }
+        check_ajax_referer('habaq_training_progress', 'nonce');
+
+        $slug = isset($_POST['slug']) ? sanitize_title(wp_unslash($_POST['slug'])) : '';
+        if ($slug === '') {
+            wp_send_json_error(array('message' => 'invalid_slug'), 400);
+        }
+
+        $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
+        if (!is_array($map)) {
+            $map = array();
+        }
+
+        $map[$slug] = array(
+            'current_slide' => isset($_POST['current_slide']) ? max(0, (int) $_POST['current_slide']) : 0,
+            'updated_at' => time(),
+            'completed_at' => time(),
+            'completed' => true,
+            'version' => isset($_POST['version']) ? sanitize_text_field(wp_unslash($_POST['version'])) : '1',
+            'score' => null,
+        );
+
+        update_user_meta(get_current_user_id(), 'habaq_training_progress', $map);
+        wp_send_json_success(array('completed' => true));
+    }
+
     private static function to_arabic_digits($value) {
         $western = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-        $arabic_indic = array('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩');
+        $arabic = array('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩');
 
-        return str_replace($western, $arabic_indic, $value);
+        return str_replace($western, $arabic, (string) $value);
     }
 }
