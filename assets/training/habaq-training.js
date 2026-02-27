@@ -9,6 +9,18 @@
     }
   }
 
+  function normalizeDigits(value) {
+    return String(value || '')
+      .replace(/[٠-٩]/g, function (ch) { return String(ch.charCodeAt(0) - 1632); })
+      .replace(/[۰-۹]/g, function (ch) { return String(ch.charCodeAt(0) - 1776); });
+  }
+
+  function leadingNumeric(value) {
+    var normalized = normalizeDigits(value).trim();
+    var match = normalized.match(/^(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+  }
+
   function nowTs() {
     return Math.floor(Date.now() / 1000);
   }
@@ -167,7 +179,6 @@
       '      <p class="habaq-training__message" data-message hidden></p>',
       '    </footer>',
       '  </div>',
-      '  </div>',
       '</div>'
     ].join('');
 
@@ -206,12 +217,38 @@
       window.localStorage.setItem(uiStorageKey, JSON.stringify({ immersive: state.immersive, sidebarOpen: state.sidebarOpen }));
     }
 
-    function getAudioUrl(slide) {
-      if (!slide || !config.audioMap) {
+    function getMapUrl(map, index) {
+      if (!map || index === null || typeof index === 'undefined') {
         return '';
       }
-      var entry = config.audioMap[String(slide.audio_index)] || config.audioMap[slide.audio_index];
-      return entry && entry.url ? entry.url : '';
+      var entry = map[String(index)] || map[index];
+      if (!entry) {
+        return '';
+      }
+      if (typeof entry === 'string') {
+        return entry;
+      }
+      return entry.url || '';
+    }
+
+    function resolveIndexes(slide, computedIndex) {
+      var audioIndex = leadingNumeric(slide && slide.audio_index);
+      if (audioIndex === null) {
+        audioIndex = computedIndex;
+      }
+
+      var imageIndex = leadingNumeric(slide && slide.image_index);
+      if (imageIndex === null) {
+        imageIndex = leadingNumeric(slide && slide.image_url);
+      }
+      if (imageIndex === null) {
+        imageIndex = audioIndex;
+      }
+      if (imageIndex === null) {
+        imageIndex = computedIndex;
+      }
+
+      return { audioIndex: audioIndex, imageIndex: imageIndex };
     }
 
     function preloadImage(url) {
@@ -235,37 +272,23 @@
     }
 
     function preloadNeighbors(index) {
-      var currentSlide = config.slides[index];
-      var nextSlide = config.slides[index + 1];
-      var prevSlide = config.slides[index - 1];
-      if (currentSlide && currentSlide.image_url) {
-        preloadImage(currentSlide.image_url);
-      }
-      if (nextSlide) {
-        preloadImage(nextSlide.image_url || '');
-        preloadAudio(getAudioUrl(nextSlide));
-      }
-      if (prevSlide && prevSlide.image_url) {
-        preloadImage(prevSlide.image_url);
-      }
-    }
-
-    function preloadNeighbors(index) {
+      var baseIndex = parseInt(meta.index_base || 1, 10);
       var currentSlide = config.slides[index];
       var nextSlide = config.slides[index + 1];
       var prevSlide = config.slides[index - 1];
 
-      if (currentSlide && currentSlide.image_url) {
-        preloadImage(currentSlide.image_url);
-      }
-      if (nextSlide && nextSlide.image_url) {
-        preloadImage(nextSlide.image_url);
+      if (currentSlide) {
+        var currentIndexes = resolveIndexes(currentSlide, baseIndex + index);
+        preloadImage(getMapUrl(config.imageMap, currentIndexes.imageIndex));
       }
       if (nextSlide) {
-        preloadAudio(getAudioUrl(nextSlide));
+        var nextIndexes = resolveIndexes(nextSlide, baseIndex + index + 1);
+        preloadImage(getMapUrl(config.imageMap, nextIndexes.imageIndex));
+        preloadAudio(getMapUrl(config.audioMap, nextIndexes.audioIndex));
       }
-      if (prevSlide && prevSlide.image_url) {
-        preloadImage(prevSlide.image_url);
+      if (prevSlide) {
+        var prevIndexes = resolveIndexes(prevSlide, baseIndex + index - 1);
+        preloadImage(getMapUrl(config.imageMap, prevIndexes.imageIndex));
       }
     }
 
@@ -448,14 +471,17 @@
       body.innerHTML = slide.body_html || '';
       imageWrap.hidden = false;
 
-      var hasImage = !!slide.image_url;
-      var audioUrl = getAudioUrl(slide);
+      var computedIndex = parseInt(meta.index_base || 1, 10) + state.current;
+      var indexes = resolveIndexes(slide, computedIndex);
+      var imageUrl = getMapUrl(config.imageMap, indexes.imageIndex);
+      var audioUrl = getMapUrl(config.audioMap, indexes.audioIndex);
+      var hasImage = !!imageUrl;
       var hasAudio = !!audioUrl;
       setLoading(true, hasImage, hasAudio);
 
       if (hasImage) {
         image.loading = state.current === introIndex ? 'eager' : 'lazy';
-        image.src = slide.image_url;
+        image.src = imageUrl;
         image.alt = slide.title || '';
         image.hidden = false;
         imagePlaceholder.hidden = true;
@@ -595,19 +621,29 @@
     heading.textContent = meta.title || 'التدريب التفاعلي';
 
     var introSlide = config.slides[introIndex] || config.slides[0];
-    if (introSlide && introSlide.image_url) {
+    var introImageUrl = getMapUrl(config.imageMap, 1);
+    if (!introImageUrl && introSlide) {
+      var introIndexes = resolveIndexes(introSlide, parseInt(meta.index_base || 1, 10) + introIndex);
+      introImageUrl = getMapUrl(config.imageMap, introIndexes.imageIndex);
+    }
+
+    if (introImageUrl) {
       startImageWrap.hidden = false;
-      startImage.src = introSlide.image_url;
-      startImage.alt = introSlide.title || '';
+      startImage.src = introImageUrl;
+      startImage.alt = introSlide ? (introSlide.title || '') : '';
       startImage.hidden = false;
       startImagePlaceholder.hidden = true;
-      preloadImage(introSlide.image_url);
+      preloadImage(introImageUrl);
     } else {
       startImageWrap.hidden = false;
       startImage.hidden = true;
       startImagePlaceholder.hidden = false;
     }
-    preloadAudio(getAudioUrl(introSlide));
+
+    if (introSlide) {
+      var introAudioIndexes = resolveIndexes(introSlide, parseInt(meta.index_base || 1, 10) + introIndex);
+      preloadAudio(getMapUrl(config.audioMap, introAudioIndexes.audioIndex));
+    }
 
     if (suggestedResumeSlide > 0) {
       state.promptVisible = true;
@@ -755,18 +791,6 @@
     image.addEventListener('error', function () {
       state.pendingImage = false;
       maybeStopLoading();
-    });
-
-    audio.addEventListener('loadeddata', function () {
-      setLoading(false);
-    });
-
-    image.addEventListener('load', function () {
-      setLoading(false);
-    });
-
-    image.addEventListener('error', function () {
-      setLoading(false);
     });
 
     audio.addEventListener('timeupdate', function () {

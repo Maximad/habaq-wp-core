@@ -115,9 +115,11 @@ class Habaq_Training_Player {
                 'version' => $version,
                 'lang' => $lang,
                 'theme' => $theme,
+                'index_base' => isset($meta['index_base']) ? (int) $meta['index_base'] : 1,
             ),
             'slides' => $slides,
             'audioMap' => $audio_map,
+            'imageMap' => $image_map,
             'messages' => array(),
             'resume' => $resume,
             'viewer' => array(
@@ -359,8 +361,17 @@ class Habaq_Training_Player {
     }
 
     private static function enqueue_assets($slug, $version) {
-        wp_enqueue_style('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.css', array(), HABAQ_WP_CORE_VERSION);
-        wp_enqueue_script('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.js', array(), HABAQ_WP_CORE_VERSION, true);
+        $style_rel = 'assets/training/habaq-training.css';
+        $script_rel = 'assets/training/habaq-training.js';
+
+        $style_path = trailingslashit(HABAQ_WP_CORE_DIR) . $style_rel;
+        $script_path = trailingslashit(HABAQ_WP_CORE_DIR) . $script_rel;
+
+        $style_ver = file_exists($style_path) ? (string) filemtime($style_path) : HABAQ_WP_CORE_VERSION;
+        $script_ver = file_exists($script_path) ? (string) filemtime($script_path) : HABAQ_WP_CORE_VERSION;
+
+        wp_enqueue_style('habaq-training-player', HABAQ_WP_CORE_URL . $style_rel, array(), $style_ver);
+        wp_enqueue_script('habaq-training-player', HABAQ_WP_CORE_URL . $script_rel, array(), $script_ver, true);
 
         if (is_user_logged_in()) {
             $bootstrap = array(
