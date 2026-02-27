@@ -44,6 +44,15 @@ class Habaq_Training_Player {
                 'require_ack' => '',
                 'lang' => '',
                 'folder' => '',
+                'theme' => '',
+                'accent' => '',
+                'bg' => '',
+                'card' => '',
+                'text' => '',
+                'muted' => '',
+                'radius' => '',
+                'font' => '',
+                'ui' => '',
             ),
             $raw_atts,
             'habaq_training'
@@ -72,12 +81,17 @@ class Habaq_Training_Player {
         $preview_slides = max(0, (int) self::resolve_source_value($raw_atts, 'preview_slides', $meta, 'preview_slides', isset($registry_item['preview_slides']) ? $registry_item['preview_slides'] : '0'));
         $rtl = self::resolve_rtl(self::resolve_source_value($raw_atts, 'rtl', $meta, 'rtl', isset($registry_item['rtl']) ? ($registry_item['rtl'] ? '1' : '0') : 'auto'), $lang);
         $autoadvance = self::to_bool(self::resolve_source_value($raw_atts, 'autoadvance', $meta, 'autoadvance', isset($registry_item['autoadvance']) ? ($registry_item['autoadvance'] ? '1' : '0') : '0'));
+        $ui = sanitize_key((string) self::resolve_source_value($raw_atts, 'ui', $meta, 'ui', 'default'));
+        if ($ui !== 'cinematic') {
+            $ui = 'default';
+        }
 
         $default_require_ack = ($access === 'public') ? '0' : '1';
         if (isset($registry_item['require_ack'])) {
             $default_require_ack = $registry_item['require_ack'] ? '1' : '0';
         }
         $require_ack = self::to_bool(self::resolve_source_value($raw_atts, 'require_ack', $meta, 'require_ack', $default_require_ack));
+        $theme = self::resolve_theme($raw_atts, $meta, $ui);
 
         if (!self::evaluate_access($access, $roles, $cap)) {
             return self::render_login_gate();
@@ -88,6 +102,9 @@ class Habaq_Training_Player {
         $image_map = $media_result['image_map'];
         $slides = self::build_slides($slug, $json_config, $audio_map, $image_map, $media_result['image_files']);
         $resume = self::get_resume_state($slug, $version);
+
+        $uploads = wp_get_upload_dir();
+        $base_url = (isset($uploads['baseurl']) && is_string($uploads['baseurl'])) ? esc_url_raw($uploads['baseurl']) : '';
 
         $config = array(
             'slug' => $slug,
@@ -102,9 +119,15 @@ class Habaq_Training_Player {
                 'require_ack' => $require_ack,
                 'version' => $version,
                 'lang' => $lang,
+                'theme' => $theme,
+                'ui' => $ui,
+                'video_loop' => !isset($meta['video_loop']) || self::to_bool($meta['video_loop']),
+                'index_base' => isset($meta['index_base']) ? (int) $meta['index_base'] : 1,
             ),
             'slides' => $slides,
             'audioMap' => $audio_map,
+            'imageMap' => $image_map,
+            'videoMap' => isset($media_result['video_map']) && is_array($media_result['video_map']) ? $media_result['video_map'] : array(),
             'messages' => array(),
             'resume' => $resume,
             'viewer' => array(
@@ -112,6 +135,9 @@ class Habaq_Training_Player {
                 'can_track_server' => is_user_logged_in(),
             ),
             'login_url' => esc_url_raw(wp_login_url(get_permalink())),
+            'media_base_urls' => array(
+                'uploads' => $base_url,
+            ),
         );
 
         $index_base = isset($meta['index_base']) ? (int) $meta['index_base'] : 1;
@@ -133,7 +159,7 @@ class Habaq_Training_Player {
 
         self::enqueue_assets($slug, $version);
 
-        $output  = '<section class="habaq-training" dir="' . ($rtl ? 'rtl' : 'ltr') . '" data-habaq-training="1">';
+        $output  = '<section class="habaq-training" dir="' . ($rtl ? 'rtl' : 'ltr') . '" data-habaq-training="1" style="' . esc_attr(self::build_theme_style($theme)) . '">';
         $output .= '<div class="habaq-training__app" aria-live="polite"></div>';
         $output .= self::render_fallback($config);
         $output .= '<script type="application/json" class="habaq-training-config">' . wp_json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
@@ -250,9 +276,122 @@ class Habaq_Training_Player {
         return in_array(strtolower(trim((string) $value)), array('1', 'true', 'yes', 'on'), true);
     }
 
+    private static function resolve_theme($raw_atts, $meta, $ui) {
+        $defaults = self::default_theme($ui);
+        $source_theme = array();
+
+        if (isset($meta['theme']) && is_array($meta['theme']) && !empty($meta['theme'])) {
+            $source_theme = $meta['theme'];
+        } else {
+            $theme_name = sanitize_key(isset($raw_atts['theme']) ? (string) $raw_atts['theme'] : '');
+            $source_theme = self::preset_theme($theme_name);
+
+            foreach (array('accent', 'bg', 'card', 'text', 'muted', 'radius', 'font') as $key) {
+                if (isset($raw_atts[$key]) && $raw_atts[$key] !== '') {
+                    $source_theme[$key] = $raw_atts[$key];
+                }
+            }
+        }
+
+        return self::sanitize_theme($source_theme, $defaults);
+    }
+
+    private static function default_theme($ui = 'default') {
+        if ($ui === 'cinematic') {
+            return array(
+                'accent' => '#3bbf9a',
+                'bg' => '#0f1115',
+                'card' => '#141821',
+                'text' => '#e8eef7',
+                'muted' => '#98a2b3',
+                'radius' => '14px',
+                'font' => 'system',
+            );
+        }
+
+        return array(
+            'accent' => '#0d9488',
+            'bg' => '#f8fafc',
+            'card' => '#ffffff',
+            'text' => '#0f172a',
+            'muted' => '#475569',
+            'radius' => '12px',
+            'font' => 'system',
+        );
+    }
+
+    private static function preset_theme($name) {
+        if ($name === 'dark') {
+            return array(
+                'accent' => '#3bbf9a',
+                'bg' => '#0b0f14',
+                'card' => '#121826',
+                'text' => '#e8eef7',
+                'muted' => '#98a2b3',
+                'radius' => '16px',
+                'font' => 'system',
+            );
+        }
+
+        return array();
+    }
+
+    private static function sanitize_theme($source, $defaults) {
+        $theme = $defaults;
+
+        foreach (array('accent', 'bg', 'card', 'text', 'muted') as $key) {
+            if (isset($source[$key])) {
+                $color = sanitize_hex_color((string) $source[$key]);
+                if (is_string($color) && $color !== '') {
+                    $theme[$key] = $color;
+                }
+            }
+        }
+
+        if (isset($source['radius'])) {
+            $radius = trim(sanitize_text_field((string) $source['radius']));
+            if (preg_match('/^[0-9]+(?:\.[0-9]+)?(?:px|em|rem|%)$/', $radius)) {
+                $theme['radius'] = $radius;
+            }
+        }
+
+        if (isset($source['font'])) {
+            $font = trim(sanitize_text_field((string) $source['font']));
+            if ($font === 'system') {
+                $theme['font'] = 'system';
+            }
+        }
+
+        return $theme;
+    }
+
+    private static function build_theme_style($theme) {
+        $font_stack = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Arial, sans-serif";
+
+        return sprintf(
+            '--habaq-accent:%1$s;--habaq-bg:%2$s;--habaq-card:%3$s;--habaq-text:%4$s;--habaq-muted:%5$s;--habaq-line:rgba(255,255,255,.10);--habaq-radius:%6$s;--habaq-font:%7$s;',
+            isset($theme['accent']) ? $theme['accent'] : '#0d9488',
+            isset($theme['bg']) ? $theme['bg'] : '#f8fafc',
+            isset($theme['card']) ? $theme['card'] : '#ffffff',
+            isset($theme['text']) ? $theme['text'] : '#0f172a',
+            isset($theme['muted']) ? $theme['muted'] : '#475569',
+            isset($theme['radius']) ? $theme['radius'] : '12px',
+            $font_stack
+        );
+    }
+
     private static function enqueue_assets($slug, $version) {
-        wp_enqueue_style('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.css', array(), HABAQ_WP_CORE_VERSION);
-        wp_enqueue_script('habaq-training-player', HABAQ_WP_CORE_URL . 'assets/training/habaq-training.js', array(), HABAQ_WP_CORE_VERSION, true);
+        $style_rel = 'assets/training/habaq-training.css';
+        $script_rel = 'assets/training/habaq-training.js';
+
+        $style_path = trailingslashit(HABAQ_WP_CORE_DIR) . $style_rel;
+        $script_path = trailingslashit(HABAQ_WP_CORE_DIR) . $script_rel;
+
+        $style_ver = file_exists($style_path) ? (string) filemtime($style_path) : HABAQ_WP_CORE_VERSION;
+        $script_ver = file_exists($script_path) ? (string) filemtime($script_path) : HABAQ_WP_CORE_VERSION;
+
+        wp_enqueue_style('habaq-training-player', HABAQ_WP_CORE_URL . $style_rel, array(), $style_ver);
+        wp_enqueue_script('habaq-training-player', HABAQ_WP_CORE_URL . $script_rel, array(), $script_ver, true);
 
         if (is_user_logged_in()) {
             $bootstrap = array(

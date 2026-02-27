@@ -47,6 +47,8 @@ class Habaq_Training_Files {
             'audio_url' => trailingslashit($root_url) . 'audio',
             'images_dir' => trailingslashit($root_dir) . 'images',
             'images_url' => trailingslashit($root_url) . 'images',
+            'videos_dir' => trailingslashit($root_dir) . 'videos',
+            'videos_url' => trailingslashit($root_url) . 'videos',
             'captions_dir' => trailingslashit($root_dir) . 'captions',
             'captions_url' => trailingslashit($root_url) . 'captions',
             'attachments_dir' => trailingslashit($root_dir) . 'attachments',
@@ -60,6 +62,7 @@ class Habaq_Training_Files {
             $paths['root_dir'],
             $paths['audio_dir'],
             $paths['images_dir'],
+            $paths['videos_dir'],
             $paths['captions_dir'],
             $paths['attachments_dir'],
         );
@@ -179,6 +182,7 @@ class Habaq_Training_Files {
         $paths = self::get_training_paths($safe_slug);
         $audio_scan = self::scan_indexed_media_dir($paths['audio_dir'], $paths['audio_url'], 'audio');
         $image_scan = self::scan_indexed_media_dir($paths['images_dir'], $paths['images_url'], 'image');
+        $video_scan = self::scan_indexed_media_dir($paths['videos_dir'], $paths['videos_url'], 'video');
 
         $payload = array(
             'paths' => $paths,
@@ -186,6 +190,8 @@ class Habaq_Training_Files {
             'image_map' => $image_scan['map'],
             'audio_duplicates' => $audio_scan['duplicates'],
             'image_duplicates' => $image_scan['duplicates'],
+            'video_map' => $video_scan['map'],
+            'video_duplicates' => $video_scan['duplicates'],
             'image_files' => $image_scan['files'],
         );
 
@@ -226,6 +232,9 @@ class Habaq_Training_Files {
                 continue;
             }
             if ($kind === 'image' && strpos($mime, 'image/') !== 0) {
+                continue;
+            }
+            if ($kind === 'video' && strpos($mime, 'video/') !== 0) {
                 continue;
             }
 
@@ -302,6 +311,7 @@ class Habaq_Training_Files {
         $rankings = array(
             'image' => array('avif', 'webp', 'png', 'jpg', 'jpeg', 'gif'),
             'audio' => array('mp3', 'm4a', 'aac', 'ogg', 'wav'),
+            'video' => array('mp4', 'webm', 'ogv', 'mov'),
         );
 
         if (!isset($rankings[$kind])) {
