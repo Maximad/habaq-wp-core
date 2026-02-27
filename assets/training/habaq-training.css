@@ -231,6 +231,8 @@
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+  background: color-mix(in srgb, var(--habaq-text) 30%, transparent);
+  z-index: 10;
 }
 
 .habaq-training[dir='rtl'] .habaq-training__button { flex-direction: row-reverse; }

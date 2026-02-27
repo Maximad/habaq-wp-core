@@ -103,6 +103,7 @@
       }
     } catch (e) {
       localSaved = null;
+      state.sidebarOpen = false;
     }
 
     var serverSlide = (config.resume && typeof config.resume.current_slide !== 'undefined') ? parseInt(config.resume.current_slide, 10) : introIndex;
@@ -466,6 +467,7 @@
       }
 
       setPreviewGateUI(false);
+      setLoading(true);
       body.innerHTML = slide.body_html || '';
       imageWrap.hidden = false;
 
@@ -768,6 +770,7 @@
     audio.addEventListener('play', function () {
       state.playing = true;
       updateButtons();
+      setLoading(false);
     });
     audio.addEventListener('pause', function () {
       state.playing = false;
