@@ -52,6 +52,7 @@ class Habaq_Training_Player {
                 'muted' => '',
                 'radius' => '',
                 'font' => '',
+                'ui' => '',
             ),
             $raw_atts,
             'habaq_training'
@@ -80,13 +81,17 @@ class Habaq_Training_Player {
         $preview_slides = max(0, (int) self::resolve_source_value($raw_atts, 'preview_slides', $meta, 'preview_slides', isset($registry_item['preview_slides']) ? $registry_item['preview_slides'] : '0'));
         $rtl = self::resolve_rtl(self::resolve_source_value($raw_atts, 'rtl', $meta, 'rtl', isset($registry_item['rtl']) ? ($registry_item['rtl'] ? '1' : '0') : 'auto'), $lang);
         $autoadvance = self::to_bool(self::resolve_source_value($raw_atts, 'autoadvance', $meta, 'autoadvance', isset($registry_item['autoadvance']) ? ($registry_item['autoadvance'] ? '1' : '0') : '0'));
+        $ui = sanitize_key((string) self::resolve_source_value($raw_atts, 'ui', $meta, 'ui', 'default'));
+        if ($ui !== 'cinematic') {
+            $ui = 'default';
+        }
 
         $default_require_ack = ($access === 'public') ? '0' : '1';
         if (isset($registry_item['require_ack'])) {
             $default_require_ack = $registry_item['require_ack'] ? '1' : '0';
         }
         $require_ack = self::to_bool(self::resolve_source_value($raw_atts, 'require_ack', $meta, 'require_ack', $default_require_ack));
-        $theme = self::resolve_theme($raw_atts, $meta);
+        $theme = self::resolve_theme($raw_atts, $meta, $ui);
 
         if (!self::evaluate_access($access, $roles, $cap)) {
             return self::render_login_gate();
@@ -115,11 +120,14 @@ class Habaq_Training_Player {
                 'version' => $version,
                 'lang' => $lang,
                 'theme' => $theme,
+                'ui' => $ui,
+                'video_loop' => !isset($meta['video_loop']) || self::to_bool($meta['video_loop']),
                 'index_base' => isset($meta['index_base']) ? (int) $meta['index_base'] : 1,
             ),
             'slides' => $slides,
             'audioMap' => $audio_map,
             'imageMap' => $image_map,
+            'videoMap' => isset($media_result['video_map']) && is_array($media_result['video_map']) ? $media_result['video_map'] : array(),
             'messages' => array(),
             'resume' => $resume,
             'viewer' => array(
@@ -268,8 +276,8 @@ class Habaq_Training_Player {
         return in_array(strtolower(trim((string) $value)), array('1', 'true', 'yes', 'on'), true);
     }
 
-    private static function resolve_theme($raw_atts, $meta) {
-        $defaults = self::default_theme();
+    private static function resolve_theme($raw_atts, $meta, $ui) {
+        $defaults = self::default_theme($ui);
         $source_theme = array();
 
         if (isset($meta['theme']) && is_array($meta['theme']) && !empty($meta['theme'])) {
@@ -288,7 +296,19 @@ class Habaq_Training_Player {
         return self::sanitize_theme($source_theme, $defaults);
     }
 
-    private static function default_theme() {
+    private static function default_theme($ui = 'default') {
+        if ($ui === 'cinematic') {
+            return array(
+                'accent' => '#3bbf9a',
+                'bg' => '#0f1115',
+                'card' => '#141821',
+                'text' => '#e8eef7',
+                'muted' => '#98a2b3',
+                'radius' => '14px',
+                'font' => 'system',
+            );
+        }
+
         return array(
             'accent' => '#0d9488',
             'bg' => '#f8fafc',
@@ -349,7 +369,7 @@ class Habaq_Training_Player {
         $font_stack = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Arial, sans-serif";
 
         return sprintf(
-            '--habaq-accent:%1$s;--habaq-bg:%2$s;--habaq-card:%3$s;--habaq-text:%4$s;--habaq-muted:%5$s;--habaq-radius:%6$s;--habaq-font:%7$s;',
+            '--habaq-accent:%1$s;--habaq-bg:%2$s;--habaq-card:%3$s;--habaq-text:%4$s;--habaq-muted:%5$s;--habaq-line:rgba(255,255,255,.10);--habaq-radius:%6$s;--habaq-font:%7$s;',
             isset($theme['accent']) ? $theme['accent'] : '#0d9488',
             isset($theme['bg']) ? $theme['bg'] : '#f8fafc',
             isset($theme['card']) ? $theme['card'] : '#ffffff',
