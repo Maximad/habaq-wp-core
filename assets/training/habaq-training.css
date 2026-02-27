@@ -1,0 +1,149 @@
+.habaq-training {
+  --habaq-training-bg: #ffffff;
+  --habaq-training-border: #e5e7eb;
+  --habaq-training-accent: #0d9488;
+  --habaq-training-text: #0f172a;
+  --habaq-training-muted: #475569;
+  font-family: inherit;
+  color: var(--habaq-training-text);
+}
+
+.habaq-training *,
+.habaq-training *::before,
+.habaq-training *::after {
+  box-sizing: border-box;
+}
+
+.habaq-training__shell {
+  background: var(--habaq-training-bg);
+  border: 1px solid var(--habaq-training-border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.habaq-training__start,
+.habaq-training__player {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.habaq-training__heading {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.habaq-training__hint,
+.habaq-training__fallback-note {
+  margin: 0;
+  color: var(--habaq-training-muted);
+}
+
+.habaq-training__status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.habaq-training__slide {
+  border: 1px solid var(--habaq-training-border);
+  border-radius: 10px;
+  padding: 0.9rem;
+  min-height: 130px;
+  background: #f8fafc;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.habaq-training__slide:focus {
+  outline: 2px solid var(--habaq-training-accent);
+  outline-offset: 2px;
+}
+
+.habaq-training__image-wrap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.habaq-training__body {
+  color: var(--habaq-training-text);
+}
+
+.habaq-training__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.habaq-training__button {
+  border: 1px solid var(--habaq-training-border);
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+.habaq-training__button--primary {
+  background: var(--habaq-training-accent);
+  border-color: var(--habaq-training-accent);
+  color: #fff;
+}
+
+.habaq-training__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.habaq-training__timeline-label {
+  display: block;
+}
+.habaq-training__timeline-wrap input[type='range'] {
+  width: 100%;
+}
+
+.habaq-training__message {
+  margin: 0;
+  color: #991b1b;
+}
+
+.habaq-training__fallback-list {
+  margin: 0.75rem 0 0;
+  padding-inline-start: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.habaq-training__fallback-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.habaq-training__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.habaq-training[dir='rtl'] .habaq-training__controls {
+  direction: rtl;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .habaq-training__slide {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .habaq-training__shell {
+    padding: 0.75rem;
+  }
+}
