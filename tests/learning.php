@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.3.0');
+define('HABAQ_WP_CORE_VERSION', '0.4.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -16,7 +16,10 @@ function get_user_meta($id, $key, $single=true) { return $GLOBALS['meta'][$id][$
 function update_user_meta($id,$key,$value) { $GLOBALS['meta'][$id][$key]=$value; }
 function delete_user_meta($id,$key) { $exists=isset($GLOBALS['meta'][$id][$key]); unset($GLOBALS['meta'][$id][$key]); return $exists; }
 function get_user_by($field,$value) { return $value === 'member@example.test' ? (object)array('ID'=>1) : false; }
-function get_userdata($id) { return $id > 0 ? (object)array('ID'=>$id) : false; }
+function get_userdata($id) { return $id > 0 ? (object)array('ID'=>$id,'display_name'=>'Member '.$id) : false; }
+function user_can($id,$cap) { return $id===1 ? $cap==='habaq_insider_access' : ($id===2 && $cap==='manage_options'); }
+function update_option($key,$value,$autoload=false) { $GLOBALS['options'][$key]=$value; return true; }
+class WP_User_Query { public function __construct($args) {} public function get_results() { return array(get_userdata(1)); } public function get_total() { return 1; } }
 function sanitize_key($s) { return is_string($s) ? preg_replace('/[^a-z0-9_-]/', '', strtolower($s)) : ''; }
 function sanitize_title($s) { return sanitize_key($s); }
 function sanitize_text_field($s) { return is_scalar($s) ? strip_tags((string)$s) : ''; }
@@ -50,10 +53,12 @@ function wp_upload_dir() { return array('basedir'=>$GLOBALS['upload'],'baseurl'=
 function trailingslashit($s) { return rtrim($s,'/').'/'; }
 function __($s,$domain='') { return $s; }
 require __DIR__.'/../includes/learning/class-habaq-learning.php';
+require __DIR__.'/../includes/learning/class-habaq-learning-journey.php';
 require __DIR__.'/../includes/training/class-habaq-training-player.php';
 $count=0;
 function expect($ok,$label) { global $count; if (!$ok) { throw new Exception('FAIL: '.$label); } $count++; }
 function submit($data) { $_POST=array_merge(array('_wpnonce'=>'ok','return'=>home_url('/learning/')),$data); try { Habaq_Learning::submit(); } catch(Result $r) { return $r->value; } }
+function review($decision,$extra=array()) { $m=Habaq_Learning::module('media-task'); $record=Habaq_Learning::record(1,$m); return submit(array_merge(array('op'=>'review','member'=>'1','lesson'=>'media-task','decision'=>$decision,'feedback'=>'Specific review feedback','version'=>$m['version'],'revision'=>(string)($record['revision']??0),'criteria'=>array_keys(Habaq_Learning_Journey::criteria())),$extra)); }
 function ajax($method,$data) { $_POST=array_merge(array('nonce'=>'ok','slug'=>'check','version'=>'2','current_slide'=>'1'),$data); try { Habaq_Training_Player::$method(); } catch(Result $r) { return $r->value; } }
 $c=Habaq_Learning::catalog();
 expect(count($c['modules'])===11,'catalog size');
@@ -77,9 +82,9 @@ expect(str_contains(submit($task),'review'),'practical review pending');
 $m=Habaq_Learning::module('media-task'); expect(Habaq_Learning::record(1,$m)['status']==='pending','not auto approved');
 expect(str_contains(submit(array('op'=>'review','member'=>'1','lesson'=>'media-task','decision'=>'complete','feedback'=>'Looks complete')),'invalid'),'learner cannot approve');
 $GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');
-expect(str_contains(submit(array('op'=>'review','member'=>'1','lesson'=>'media-task','decision'=>'revise','feedback'=>'Add verification steps')),'saved'),'revision request');
+expect(str_contains(review('revise'),'saved'),'revision request');
 $GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');submit($task);
-$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');submit(array('op'=>'review','member'=>'1','lesson'=>'media-task','decision'=>'complete','feedback'=>'Verification steps reviewed'));
+$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');review('complete');
 expect(Habaq_Learning::record(1,$m)['status']==='complete','admin approval');
 expect(Habaq_Learning::record(2,$m)['status']==='new','cross-user isolation');
 $GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
@@ -90,9 +95,85 @@ expect(isset($GLOBALS['meta'][1]['habaq_learning_welcome_history']['old']),'prev
 $_GET=array('lesson'=>'welcome'); $html=Habaq_Learning::render(); expect(!str_contains($html,'"correct"'),'answer keys absent');
 expect(!str_contains(submit(array('op'=>'track','track'=>'media','return'=>'https://attacker.test/')),'attacker.test'),'redirect remains local');
 expect(submit(array('op'=>'track','track'=>'media','_wpnonce'=>'bad'))==='nonce_denied','CSRF denied');
+// Onboarding operations and proportional authority.
+expect(Habaq_Learning_Journey::valid_date('2026-10-07'),'start date valid');
+expect(!Habaq_Learning_Journey::valid_date('2026-02-30'),'invalid calendar day denied');
+expect(!Habaq_Learning_Journey::valid_date(array()),'array date denied');
+expect(Habaq_Learning_Journey::due('2026-10-07',42)==='2026-11-18','followup date');
+expect(str_contains(submit(array('op'=>'plan','member'=>'1','revision'=>'0','role'=>'Reporter')),'invalid'),'learner cannot create plan');
+$GLOBALS['meta'][1]['habaq_learning_media-task']['status']='pending';
+expect(str_contains(submit(array('op'=>'reflection','applied'=>'test','obstacle'=>'test','next_goal'=>'test')),'invalid'),'followup requires reviewed practical task');
+$GLOBALS['meta'][1]['habaq_learning_media-task']['status']='complete';
+// Restore the stale foundation record through the actual learner endpoint.
+$m=Habaq_Learning::module('welcome');submit(array('op'=>'lesson','lesson'=>'welcome','version'=>$m['version'],'ack'=>'1','answer'=>(string)$m['quiz']['correct']));
+$plan=array('op'=>'plan','member'=>'1','revision'=>'0','role'=>'Reporter','mentor'=>'Learning companion','first_task'=>'A small safe proposal with a reviewer and deadline','start_date'=>'2026-10-07','weekly_minutes'=>'60','kickoff'=>'1');
+$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');
+expect(str_contains(submit($plan),'saved'),'admin creates plan');
+expect(str_contains(submit($plan),'stale'),'stale plan cannot overwrite');
+expect(str_contains(submit(array_merge($plan,array('member'=>'3'))),'invalid'),'ordinary user cannot receive member plan');
+expect(str_contains(submit(array_merge($plan,array('revision'=>'1','start_date'=>'2026-02-30'))),'invalid'),'bad start date denied at endpoint');
+expect(str_contains(submit(array_merge($plan,array('revision'=>'1','weekly_minutes'=>'9999'))),'invalid'),'unrealistic workload denied');
+expect(str_contains(submit(array_merge($plan,array('revision'=>array('1')))),'stale'),'malformed revision denied');
+expect(str_contains(submit(array('op'=>'learning_settings','support_contact'=>'Team channel','report_contact'=>'Safety contact','alternate_contact'=>'Alternative contact')),'saved'),'save contact settings');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
+expect(str_contains(submit(array('op'=>'support','category'=>'tools','note'=>'Need access to the work folder')),'saved'),'member support request');
+expect(str_contains(submit(array('op'=>'support','category'=>'unknown','note'=>'test')),'invalid'),'invalid blocker rejected');
+expect(str_contains(submit(array('op'=>'support','category'=>'tools','note'=>str_repeat('م',601))),'invalid'),'Arabic character limit enforced');
+expect(str_contains(submit(array('op'=>'support','category'=>'tools','note'=>array('test'))),'invalid'),'malformed note rejected');
+expect(str_contains(submit(array('op'=>'support_reply','member'=>'1','revision'=>'1','feedback'=>'test')),'invalid'),'learner cannot close support');
+$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');
+expect(str_contains(submit(array('op'=>'support_reply','member'=>'1','revision'=>'0','feedback'=>'Access requested')),'stale'),'stale support response blocked');
+expect(str_contains(submit(array('op'=>'support_reply','member'=>'1','revision'=>'1','feedback'=>'Folder access arranged with the owner')),'saved'),'admin support reply');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
+$reflection=array('op'=>'reflection','applied'=>'Used the task card for a safe hypothetical proposal','obstacle'=>'Need a source verification example','next_goal'=>'Practice one claim/source matrix');
+expect(str_contains(submit($reflection),'review'),'submit application reflection');
+expect(str_contains(submit($reflection),'invalid'),'pending reflection immutable');
+$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');
+expect(str_contains(submit(array('op'=>'reflection_review','member'=>'1','revision'=>'0','decision'=>'complete','feedback'=>'test')),'stale'),'stale reflection review rejected');
+expect(str_contains(submit(array('op'=>'reflection_review','member'=>'1','revision'=>'1','decision'=>'revise','feedback'=>'Clarify the next small step')),'saved'),'request reflection clarification');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
+expect(str_contains(submit($reflection),'review'),'resubmit reflection');
+$GLOBALS['caps']=array('manage_options');
+expect(str_contains(submit(array('op'=>'reflection_review','member'=>'1','revision'=>'3','decision'=>'complete','feedback'=>'test')),'invalid'),'no self approval of reflection');
+$GLOBALS['uid']=2;
+expect(str_contains(submit(array('op'=>'reflection_review','member'=>'1','revision'=>'3','decision'=>'complete','feedback'=>'Discussed application and next goal')),'saved'),'complete reflection review');
+expect(Habaq_Learning_Journey::completed(1),'journey complete only with all milestones');
+// Practical approval enforces published criteria, current version and exact submission revision.
+$GLOBALS['meta'][1]['habaq_learning_media-task']['status']='pending';
+expect(str_contains(review('complete',array('criteria'=>array('purpose','quality','handover'))),'invalid'),'safety criterion cannot be omitted');
+expect(str_contains(review('complete',array('criteria'=>array('purpose','purpose','purpose','purpose'))),'invalid'),'duplicate criteria not accepted');
+expect(str_contains(review('complete',array('version'=>'old')),'invalid'),'stale catalog review rejected');
+expect(str_contains(review('complete',array('revision'=>'0')),'invalid'),'stale submission review rejected');
+$GLOBALS['uid']=1;
+expect(str_contains(review('complete'),'invalid'),'no self approval of task');
+$GLOBALS['uid']=2;
+expect(str_contains(review('complete'),'saved'),'current submission with four criteria approved');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
+expect(str_contains(submit(array('op'=>'track','track'=>'people')),'saved'),'switch unit');
+expect(!Habaq_Learning_Journey::completed(1),'track change does not carry whole journey completion');
+expect(!empty(Habaq_Learning_Journey::meta(1,'reflection_history')),'track reflection archived');
+expect(Habaq_Learning_Journey::foundation_done(1),'track switch preserves foundation');
+$_GET=array('lesson'=>'people-task');$html=Habaq_Learning::render();
+expect(str_contains($html,'خطة جلسة تجريبية'),'locked lesson readable');
+expect(!str_contains($html,'name="op" value="lesson"'),'locked completion form absent');
+$_GET=array();$html=Habaq_Learning::render();
+expect(str_contains($html,'ناس: لقاء ثقافي يتيح المشاركة'),'next incomplete lesson opens automatically');
+expect(!str_contains($html,'"correct"'),'expanded dashboard still hides keys');
+expect(str_contains($html,'اتفاق البداية الخاص بي'),'member can see plan');
+expect(str_contains($html,'Folder access arranged'),'member can see support reply');
+$GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');$_GET=array('member'=>'1');ob_start();Habaq_Learning::admin();$admin_html=ob_get_clean();
+expect(str_contains($admin_html,'حفظ اتفاق البداية'),'admin plan form renders');
+expect(str_contains($admin_html,'name="revision"'),'admin form includes concurrency guard');
+$_GET=array('member'=>'3');ob_start();Habaq_Learning::admin();$admin_html=ob_get_clean();
+expect(str_contains($admin_html,'لا يملك وصول عضو حبق'),'unverified-user plan blocked in UI');
+$_GET=array();ob_start();Habaq_Learning::admin();$admin_html=ob_get_clean();
+expect(str_contains($admin_html,'فتح الخطة والمراجعات'),'manager member queue renders');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');ob_start();Habaq_Learning::admin();$admin_html=ob_get_clean();
+expect($admin_html==='','learner sees no admin page');
 expect(!empty(Habaq_Learning::export_data('member@example.test')['data']),'privacy export');
 expect(Habaq_Learning::erase_data('member@example.test')['items_removed'],'privacy erase');
 expect(get_user_meta(1,'habaq_learning_welcome_history',true)==='','history erased');
+foreach(Habaq_Learning_Journey::META_KEYS as $key) { expect(get_user_meta(1,$key,true)==='', 'journey data erased '.$key); }
 // Existing player endpoints use canonical metadata, access, version and confirmation.
 $root=$GLOBALS['upload'].'/habaq-training/check';mkdir($root,0777,true);
 file_put_contents($root.'/training.json',json_encode(array('meta'=>array('access'=>'cap','cap'=>'habaq_core_access','version'=>'2','require_ack'=>true),'slides'=>array(array('id'=>'one'),array('id'=>'two')))));

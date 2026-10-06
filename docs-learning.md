@@ -1,12 +1,14 @@
-# Habaq member learning pilot (0.3.0)
+# Habaq member learning and onboarding (0.4.0)
 
-New shortcode: `[habaq_learning]`. Arabic, RTL, text-first, works without JavaScript. Five shared modules plus two per Media, People or Production path. Checks are graded on the server. First assignments require a written admin review; learning completion never authorizes publication or employment. Source policies remain labeled as drafts.
+Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md).
+
+Shortcode: `[habaq_learning]`. Arabic, RTL, text-first, works without JavaScript. Five shared modules plus two per Media, People or Production path. Checks are graded on the server. First assignments require a written admin review; learning completion never authorizes publication or employment. Source policies remain labeled as drafts.
 
 ## Source basis
 
 The bundled catalog is an educational adaptation of current LIFE strategy notes (2026-10-06), draft ten principles, privacy and sensitive imagery policies, volunteering policy, the journalism training quality guide, and the historical People × Óros proposal. Canva strategy presentation was read as a secondary working document. The introductory Slides presentation is linked as a resource; its full contents were not used to derive claims. Targets conflict across strategy drafts, so numeric targets were intentionally excluded from mandatory learning.
 
-Discovery used ChatGPT personal-context retrieval, Library search, Drive, Gmail and Canva. This does not establish exhaustive access to all ChatGPT projects. Gmail search results included private correspondence; private disputes and personal/financial details were excluded. No Figma file key was identified, and no design file was invented. Hostinger management tools were configured but absent from this session's callable tools. Mail API operations were discovered; no messages were sent or republished. The public-site fetch timed out. Production state is unverified.
+Discovery used ChatGPT personal-context retrieval, Library search, Drive, Gmail and Canva. This does not establish exhaustive access to all ChatGPT projects. Gmail search results included private correspondence; private disputes and personal/financial details were excluded. No Figma file key was identified, and no design file was invented. Hostinger management tools were configured but absent from this session's callable tools. Mail API operations were discovered; no messages were sent or republished. The first public-site fetch timed out. The browser deployment subsequently verified the 0.3.0 live page and navigation. The 0.4.0 upgrade extends that page without replacing it.
 
 ## Deployment
 
@@ -30,6 +32,18 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 71 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure and existing player progress authorization. These use WordPress function stubs, not a real WordPress installation. Live staging, theme, cache and deployment verification remain pending.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 124 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure and existing player progress authorization. These use WordPress function stubs, not a real WordPress installation. The 0.3.0 live page, incorrect answer, navigation, job page and registry were verified. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
+
+## 0.4.0 operations and compatibility
+
+Four flexible milestones, administrator-created per-member onboarding plans, optional printable job cards for all lessons, readable reference lessons regardless of completion order, one current learning-support request per member, and a reviewed application reflection. Contacts are configured through the learning admin screen and remain unset until the organization supplies approved contacts. Next incomplete lesson opens automatically. Existing lesson IDs and version `2026-10-07.1` are retained because required content, outcomes tested and answer keys have not changed. Optional learning aids and operational tools do not reset existing completion.
+
+Only existing `manage_options` administrators can record plans and reviews. Naming a learning companion grants no permissions. Do not make supervisors administrators merely to review a task; the coordinator records their review in this first version. No mail or background notifications are sent. The coordinator checks the queue twice weekly and uses the team's approved contact for urgent issues.
+
+Task approval requires four checked criteria, written feedback, a current content version and a matching submission revision; self-approval is blocked. Pending tasks cannot be silently replaced before review. Plans and support/reflection responses also check stale form revisions. These are stale-form guards, not atomic multi-writer transactions; the expected scale is one coordinator and small cohorts.
+
+New metadata keys are `habaq_learning_plan`, `habaq_learning_support`, `habaq_learning_reflection` and `habaq_learning_reflection_history`. All participate in native privacy export/erase. A unit change archives the previous application reflection and retains shared/other lesson records. No database tables or schema migrations. Last support request replaces the prior request, as stated in the UI. The course is not a complaint or HR case-management system.
+
+Before the 0.4.0 release preserve `rollback/learning-0.3.0` at `21e24ecdafdb65d7b455a1351639845d1310a48d`; use Deployer for Git to select that branch and deploy if rollback is needed. Records remain intact and can be exported. A code rollback branch is not a database backup. Obtain hosting backups before inviting a larger cohort.
