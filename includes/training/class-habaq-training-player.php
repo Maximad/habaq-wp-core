@@ -162,7 +162,7 @@ class Habaq_Training_Player {
         $output  = '<section class="habaq-training" dir="' . ($rtl ? 'rtl' : 'ltr') . '" data-habaq-training="1" style="' . esc_attr(self::build_theme_style($theme)) . '">';
         $output .= '<div class="habaq-training__app" aria-live="polite"></div>';
         $output .= self::render_fallback($config);
-        $output .= '<script type="application/json" class="habaq-training-config">' . wp_json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+        $output .= '<script type="application/json" class="habaq-training-config">' . wp_json_encode($config, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . '</script>';
         $output .= '</section>';
 
         return $output;
@@ -402,7 +402,7 @@ class Habaq_Training_Player {
                 'isLoggedIn' => true,
                 'canTrackServer' => true,
             );
-            wp_add_inline_script('habaq-training-player', 'window.habaqTraining = ' . wp_json_encode($bootstrap, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';', 'before');
+            wp_add_inline_script('habaq-training-player', 'window.habaqTraining = ' . wp_json_encode($bootstrap, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';', 'before');
         }
     }
 
@@ -570,63 +570,68 @@ class Habaq_Training_Player {
         return $output;
     }
 
-    public static function ajax_save_progress() {
+    /** Resolve canonical training metadata before accepting client progress. */
+    private static function progress_context() {
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => 'forbidden'), 403);
         }
         check_ajax_referer('habaq_training_progress', 'nonce');
-
-        $slug = isset($_POST['slug']) ? sanitize_title(wp_unslash($_POST['slug'])) : '';
-        if ($slug === '') {
+        $slug = isset($_POST['slug']) && is_string($_POST['slug']) ? sanitize_title(wp_unslash($_POST['slug'])) : '';
+        $registry = Habaq_Training_Files::get_registry_item($slug);
+        $json = self::load_training_json($slug);
+        if ($slug === '' || (empty($registry) && empty($json))) {
             wp_send_json_error(array('message' => 'invalid_slug'), 400);
         }
-
-        $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
-        if (!is_array($map)) {
-            $map = array();
+        $meta = isset($json['meta']) && is_array($json['meta']) ? $json['meta'] : array();
+        $access = self::normalize_access_mode(isset($meta['access']) ? $meta['access'] : (isset($registry['access']) ? $registry['access'] : 'public'));
+        $roles = self::normalize_roles(isset($meta['roles']) ? $meta['roles'] : (isset($registry['roles']) ? $registry['roles'] : array()));
+        $cap = isset($meta['cap']) ? $meta['cap'] : (isset($registry['cap']) ? $registry['cap'] : '');
+        if (!self::evaluate_access($access, $roles, $cap)) {
+            wp_send_json_error(array('message' => 'forbidden'), 403);
         }
+        $version = (string) (isset($meta['version']) ? $meta['version'] : (isset($registry['version']) ? $registry['version'] : '1'));
+        $posted_version = isset($_POST['version']) && is_string($_POST['version']) ? sanitize_text_field(wp_unslash($_POST['version'])) : '';
+        if ($version !== $posted_version) {
+            wp_send_json_error(array('message' => 'stale_version'), 409);
+        }
+        $media = Habaq_Training_Files::discover_media($slug);
+        $slides = self::build_slides($slug, $json, $media['audio_map'], $media['image_map'], $media['image_files']);
+        if (empty($slides)) {
+            wp_send_json_error(array('message' => 'empty_training'), 400);
+        }
+        $slide = isset($_POST['current_slide']) && is_scalar($_POST['current_slide']) ? max(0, (int) $_POST['current_slide']) : 0;
+        $ack = isset($meta['require_ack']) ? self::to_bool($meta['require_ack']) : (isset($registry['require_ack']) ? self::to_bool($registry['require_ack']) : $access !== 'public');
+        return array('slug' => $slug, 'version' => $version, 'slide' => min(count($slides) - 1, $slide), 'last' => count($slides) - 1, 'require_ack' => $ack);
+    }
 
-        $previous = isset($map[$slug]) && is_array($map[$slug]) ? $map[$slug] : array();
-        $completed_at = isset($previous['completed_at']) ? (int) $previous['completed_at'] : 0;
-
-        $map[$slug] = array(
-            'current_slide' => isset($_POST['current_slide']) ? max(0, (int) $_POST['current_slide']) : 0,
-            'updated_at' => time(),
-            'completed_at' => $completed_at,
-            'completed' => $completed_at > 0,
-            'version' => isset($_POST['version']) ? sanitize_text_field(wp_unslash($_POST['version'])) : '1',
-            'score' => null,
+    public static function ajax_save_progress() {
+        $context = self::progress_context();
+        $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
+        if (!is_array($map)) { $map = array(); }
+        $previous = isset($map[$context['slug']]) && is_array($map[$context['slug']]) ? $map[$context['slug']] : array();
+        $same_version = isset($previous['version']) && $previous['version'] === $context['version'];
+        $completed_at = $same_version && isset($previous['completed_at']) ? (int) $previous['completed_at'] : 0;
+        $map[$context['slug']] = array(
+            'current_slide' => $context['slide'], 'updated_at' => time(),
+            'completed_at' => $completed_at, 'completed' => $completed_at > 0,
+            'version' => $context['version'], 'score' => null,
         );
-
         update_user_meta(get_current_user_id(), 'habaq_training_progress', $map);
         wp_send_json_success(array('saved' => true));
     }
 
     public static function ajax_mark_complete() {
-        if (!is_user_logged_in()) {
-            wp_send_json_error(array('message' => 'forbidden'), 403);
+        $context = self::progress_context();
+        if ($context['slide'] !== $context['last'] || ($context['require_ack'] && (!isset($_POST['ack']) || $_POST['ack'] !== '1'))) {
+            wp_send_json_error(array('message' => 'incomplete'), 400);
         }
-        check_ajax_referer('habaq_training_progress', 'nonce');
-
-        $slug = isset($_POST['slug']) ? sanitize_title(wp_unslash($_POST['slug'])) : '';
-        if ($slug === '') {
-            wp_send_json_error(array('message' => 'invalid_slug'), 400);
-        }
-
         $map = get_user_meta(get_current_user_id(), 'habaq_training_progress', true);
-        if (!is_array($map)) {
-            $map = array();
-        }
-
-        $map[$slug] = array(
-            'current_slide' => isset($_POST['current_slide']) ? max(0, (int) $_POST['current_slide']) : 0,
-            'updated_at' => time(),
-            'completed_at' => time(),
-            'completed' => true,
-            'version' => isset($_POST['version']) ? sanitize_text_field(wp_unslash($_POST['version'])) : '1',
-            'score' => null,
+        if (!is_array($map)) { $map = array(); }
+        $map[$context['slug']] = array(
+            'current_slide' => $context['slide'], 'updated_at' => time(),
+            'completed_at' => time(), 'completed' => true,
+            'version' => $context['version'], 'score' => null,
         );
-
         update_user_meta(get_current_user_id(), 'habaq_training_progress', $map);
         wp_send_json_success(array('completed' => true));
     }
