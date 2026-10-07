@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.15.0
+# Habaq learning curriculum 0.16.0
+
+## Path checkpoint 0.16.0 — People Operations
+
+`people-ops-basics` is now “بداية العمل في دعم الأشخاص”. A fictional newcomer from Suwayda and an unclear-versus-clear comparison teach a light start agreement: the real relationship without assumption, time, one small output, companion and reviewer by responsibility, minimum access, support and a low-connectivity fallback. The learner can complete the seven-line exercise on paper or in a light text file. Learning support stays separate from urgent risk, complaints, testimony, contracts, pay, health information and disciplinary decisions.
+
+`people-ops-task` is now “مهمتك الأولى: خطة انضمام”. Its assignment remains a fictional onboarding plan with role, time, companion, small task, criteria, support, review and orderly exit. The completed example uses two hours per week for two weeks, a 45–60 minute fictional indexing task, a midpoint check, observable criteria, minimum access, offline work and handover. The learner submits only a deidentified seven-line summary. Reviewer guidance checks boundaries, feasibility, support and separation from HR casework before one actionable revision or educational completion.
+
+The strategic working draft, draft HR policy, draft volunteering policy and operations-role working document were re-read on 7 October 2026. They remain working or draft sources; their unfilled roles and channels are not appointments or adopted procedure. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. People/policy-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.15.0 — Finance
 

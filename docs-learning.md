@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.15.0)
+# Habaq member learning and onboarding (0.16.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 633 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production, Radio and Finance lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 650 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production, Radio, Finance and People Operations lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -132,3 +132,11 @@ The current radio-permission document, programme proposal, editorial-policy draf
 `finance-task` is now “مهمتك الأولى: ملف عملية مالية”. The assignment remains one fictional operation file and reconciliation with five movements and a small budget. Its completed example includes restricted cash received, a file ready for payment review but not paid, a duplicate invoice, a documented fee needing coding and a claim missing approval/evidence. The learner submits a deidentified seven-line summary; no real invoice, contract, statement, supplier, payment data or transaction is used.
 
 Reviewer guidance checks the budget/output link, separation of expected/confirmed/received/liquid funds, evidence and status for each movement, duplicate/missing-item handling and authority boundaries. Educational approval does not approve a payment, grant eligibility, signature, account access or a real reconciliation. The strategic working draft, draft financial procedure, restricted-funds/grants draft and assets/equipment draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Finance/authority-owner and learner acceptance remain pending.
+
+## People Operations path — 0.16.0
+
+`people-ops-basics` is now “بداية العمل في دعم الأشخاص”. A fictional Suwayda newcomer and an unclear-versus-clear comparison show how to agree on the real relationship without assuming it, available time, one small output, a learning companion and task reviewer by responsibility, minimum access, support and a low-connectivity alternative. A seven-line paper or light-text exercise separates ordinary learning support from urgent risk, complaints, testimony, contract, pay, health and disciplinary records.
+
+`people-ops-task` is now “مهمتك الأولى: خطة انضمام”. The assignment remains one fictional onboarding plan covering role, time, companion, small task, criteria, support, review and orderly exit. Its completed example uses a two-week, two-hours-per-week trial with a 45–60 minute fictional indexing task, a midpoint check, observable criteria, minimum access, an offline fallback and handover. The learner submits only a deidentified seven-line summary.
+
+Reviewer guidance checks the relationship and authority boundaries, a small observable task, realistic support/fallback, and separation of learning from complaints, contracts, performance and disciplinary decisions. The strategic working draft, draft HR policy, draft volunteering policy and operations-role working document were re-read on 7 October 2026. Their unfilled roles and channels remain unfilled and no draft is treated as adopted policy. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. People/policy-owner and learner acceptance remain pending.

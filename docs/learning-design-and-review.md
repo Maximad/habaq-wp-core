@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.15.0
+# Habaq visual and course review plan — 0.16.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio and Finance paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance and People Operations paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -226,22 +226,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Implementation: Rewritten in release 0.15.0 as a fictional five-movement operation file with a small budget, completed example, duplicate and missing-item handling, deidentified seven-line submission, low-connectivity alternative and actionable reviewer guidance. Assignment, key and module version remain unchanged; financial/authority-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### الأشخاص والتدريب: بداية الدور (`people-ops-basics`)
+### بداية العمل في دعم الأشخاص (`people-ops-basics`)
 
 - Suggested clearer title: بداية العمل في دعم الأشخاص
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: خطة بداية لعضو افتراضي واتفاق وقت ومهمة ومرافق. قارن نسخة واضحة بنسخة ناقصة.
 - Acceptance: خطة واقعية وطلب دعم مناسب يفصل التعلم عن البلاغات.
+- Implementation: Rewritten in release 0.16.0 with a fictional Suwayda newcomer, unclear/clear start comparison, separate learning support and complaint paths, low-connectivity exercise, expanded start card and formative feedback. Tested requirements, key and module version remain unchanged; people/policy-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### الأشخاص والتدريب: أول مساهمة بمراجعة (`people-ops-task`)
+### مهمتك الأولى: خطة انضمام (`people-ops-task`)
 
-- Suggested clearer title: مهمتك الأولى: دعم الأشخاص
+- Suggested clearer title: مهمتك الأولى: خطة انضمام
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
-- Example to add/refine: خطة بداية لعضو افتراضي واتفاق وقت ومهمة ومرافق. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
-- Acceptance: خطة واقعية وطلب دعم مناسب يفصل التعلم عن البلاغات. يناقش المراجع التعديل والدعم المطلوب.
+- Example to add/refine: خطة انضمام لشخص افتراضي تشمل الوقت ومهمة صغيرة ودعماً وخروجاً منظماً، مع نموذج مكتمل.
+- Acceptance: خطة واقعية تفصل التعلم عن العقد والتقييم والشكاوى، ثم تعديل واحد بعد المراجعة.
+- Implementation: Rewritten in release 0.16.0 as one bounded fictional onboarding plan with a worked example, deidentified seven-line submission, low-connectivity alternative, orderly exit and actionable reviewer guidance. Assignment, key and module version remain unchanged; people/policy-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### ثينك والبحث والذاكرة: بداية الدور (`research-basics`)

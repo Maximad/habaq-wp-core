@@ -298,10 +298,34 @@ Validation and delivery:
 - Financial/authority-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
+## Batch 11 — People Operations path (0.16.0)
+
+Scope and decisions:
+
+- Rewrote `people-ops-basics` as “بداية العمل في دعم الأشخاص” and `people-ops-task` as “مهمتك الأولى: خطة انضمام”. They now use a fictional Suwayda newcomer, an unclear/clear start comparison, a completed two-week onboarding plan, low-connectivity alternatives, orderly handover, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.16.0` records the editorial batch.
+- Learning support, urgent risk, complaints/testimony, relationship and pay decisions, performance/discipline, account access and publishing authority remain separate. The exercise uses fictional people and public-text tasks only. It collects no real person record, contract, complaint, testimony, health/financial detail, credential or contact.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: concentrated knowledge and decisions, incomplete structures, overload and limited specialist capacity support a small delegated start with explicit review. It remains a working draft.
+- `9- مسودة لائحة الموارد البشرية في تجمع حبق`, modified 13 December 2025 at 12:26:30 UTC: relationship, agreement, file, time, performance, complaint, data/access and exit are distinct. It remains a draft; actual people, conduct and safety contacts are unfilled and no review cadence is treated as adopted.
+- `4- مسودة سياسة التطوع لتجمع حبق`, modified 23 December 2025 at 18:19:47 UTC: expectations, support, capacity, safe refusal and orderly handover matter, while volunteering must remain distinct from paid work. It remains a draft with unfilled coordinator and reporting channels.
+- `منسق العمليات - التوصيف الوظيفي`, modified 6 January 2026 at 16:34:09 UTC: basic onboarding covers the correct folder/channel, brief, simple norms, minimum access and risk escalation. It is a working role document, not evidence of an appointment.
+
+Validation and delivery:
+
+- 650 isolated behavioral checks passed. The 17 new People Operations checks cover preserved versions, assignment and answer keys; the fictional local example; unclear/clear comparison; support/complaint separation; no invented relationship or adopted policy; low-connectivity practice; worked bounded plan; midpoint and reviewer guidance; safe seven-line submission; orderly exit; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both generated HTML documents parsed successfully and contain the 0.16.0 People Operations lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 9; both are now version 10. No duplicate artifact was created.
+- Release commit and final checkpoint commit are recorded in the branch history and draft PR #21. Both updates were fast-forward only with expected-head safeguards; no force update or merge to main occurred.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.16.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- People/policy-owner review and learner acceptance remain pending. This batch is complete in implementation.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio and Finance are complete in implementation. Actual first-task relevance chooses the next path; otherwise People operations is next because onboarding and support affect every new member.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance and People Operations are complete in implementation. Actual first-task relevance chooses the next path; otherwise Research/Memory is next because source handling and transferable institutional memory support work across functions.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.15.0');
+define('HABAQ_WP_CORE_VERSION', '0.16.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -445,6 +445,32 @@ expect(str_contains($markup,$finance_basics['feedback']['complete']),'finance ba
 $GLOBALS['meta'][1]['habaq_learning_finance-task']=array('version'=>$finance_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'finance-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$finance_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'finance task review principle rendered without raw key');
+// The People Operations path turns onboarding into one safe, bounded plan without inventing appointments or collecting HR records.
+$people_ops_basics=Habaq_Learning::module('people-ops-basics');$people_ops_task=Habaq_Learning::module('people-ops-task');
+expect($people_ops_basics['version']==='2026-10-07.2'&&$people_ops_task['version']==='2026-10-07.2','people operations editorial versions preserved');
+expect($people_ops_basics['quiz']['correct']===0&&$people_ops_task['quiz']['correct']===2,'people operations answer keys preserved');
+expect($people_ops_task['assignment']==='جهز خطة انضمام لشخص افتراضي تشمل الدور والوقت ومرافقاً بصفته ومهمة صغيرة ومعايير ودعماً ومراجعة وخروجاً منظماً.','people operations practical assignment preserved');
+expect($people_ops_basics['title']==='بداية العمل في دعم الأشخاص'&&str_contains($people_ops_basics['body_html'],'مايا اسم افتراضي لشخص جديد من السويداء'),'people operations introduction and fictional local example');
+expect(str_contains($people_ops_basics['body_html'],'قارن بين بداية مربكة وبداية واضحة')&&str_contains($people_ops_basics['body_html'],'ستة نصوص عامة'),'people operations lesson compares unclear and bounded onboarding');
+expect(str_contains($people_ops_basics['body_html'],'الشكوى أو الإفادة الحساسة')&&str_contains($people_ops_basics['body_html'],'له مسار مستقل'),'people operations lesson separates learning support from complaints');
+expect(str_contains($people_ops_basics['body_html'],'لا نفترض أنها موظفة أو متطوعة')&&str_contains($people_ops_basics['body_html'],'لا يعتمد سياسة'),'people operations lesson avoids invented relationship and policy adoption');
+expect(str_contains($people_ops_basics['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($people_ops_basics['body_html'],'بديل عند ضعف الاتصال'),'people operations lesson supports low connectivity');
+expect(str_contains($people_ops_basics['job_aid'],'المرافق بصفته')&&str_contains($people_ops_basics['job_aid'],'ما يتوقف ويذهب إلى مسار مستقل'),'people operations start card captures support and escalation limits');
+expect($people_ops_task['title']==='مهمتك الأولى: خطة انضمام'&&str_contains($people_ops_task['body_html'],'مثال مكتمل للمقارنة'),'people operations task has a worked onboarding plan');
+expect(str_contains($people_ops_task['body_html'],'45 إلى 60 دقيقة')&&str_contains($people_ops_task['body_html'],'نقطة تحقق في منتصف الفترة'),'people operations task stays small and reviewable');
+expect(str_contains($people_ops_task['body_html'],'إرشاد للمراجع')&&str_contains($people_ops_task['body_html'],'تعديلاً واحداً قابلاً للتنفيذ'),'people operations task gives actionable reviewer guidance');
+expect(str_contains($people_ops_task['body_html'],'سبعة أسطر فقط')&&str_contains($people_ops_task['body_html'],'لا تستخدم اسماً حقيقياً'),'people operations task supports safe low-connectivity submission');
+expect(str_contains($people_ops_task['body_html'],'الخروج المنظم')&&str_contains($people_ops_task['job_aid'],'إلغاء الوصول غير اللازم'),'people operations task covers safe handover and exit');
+$GLOBALS['meta'][1]['habaq_learning_track']='people-ops';
+$GLOBALS['meta'][1]['habaq_learning_people-ops-basics']=array('version'=>$people_ops_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'people-ops-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_ops_basics['feedback']['retry'])&&!str_contains($markup,$people_ops_basics['feedback']['complete']),'people operations basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_people-ops-basics']=array('version'=>$people_ops_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'people-ops-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_ops_basics['feedback']['complete']),'people operations basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_people-ops-task']=array('version'=>$people_ops_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'people-ops-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_ops_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'people operations task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');
