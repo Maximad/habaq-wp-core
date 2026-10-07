@@ -191,10 +191,39 @@ Commit/deployment — prepared, publication blocked:
 - Live publication was not attempted: the existing WordPress deployer redirected to a reauthentication form in this non-interactive run, and no Hostinger WordPress deployment tool was available. Credentials were not requested, inspected or changed. The last verified live release remains `0.10.0`; release `0.11.0` is prepared on the draft PR but is not claimed as live.
 - The public learning page still returns the protected member sign-in message. No learner track, answer, completion or review record was changed during the live read-only check.
 
+## Batch 7 — Habaq People path (0.12.0)
+
+Scope and decisions:
+
+- Rewrote `people-basics` as “بداية العمل في حبق ناس”. It now starts from one cultural purpose and an observable participant action; uses a fictional Suwayda rhythm session; compares a broad idea with a bounded plan; and adds newcomer, rest, access-barrier, non-photographed participation and decision-limit practice.
+- Rewrote `people-task` as “مهمتك الأولى: خطة جلسة”. It remains a one-page fictional 45–60 minute session plan, now with a completed 50-minute example, deidentified low-connectivity submission, four reviewer questions, one-actionable-change guidance and explicit booking, spending, partnership and announcement limits.
+- Preserved both lesson IDs, prerequisites, practical assignment, correct answer indexes and module version `2026-10-07.1`. The tested requirements did not materially change, so existing completions and review history remain current. Plugin release `0.12.0` tracks this editorial batch.
+- Neither lesson authorizes delivering or announcing an event, booking a space, spending money, engaging a real partner or collecting attendance details. Learning completion, human review, partner agreement, safety review, spending authority and announcement authority remain separate. Hub Sweida remains independent and is not presumed to host or approve the fictional session.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: participation and openness are strategic, while overload, unclear roles and unsupported impact claims remain risks. It remains a working draft.
+- `خطة مشروع كاملة - حبق ناس × جوقة Óros`, modified 13 November 2025 at 13:04:01 UTC: short accessible roles, low-electricity options, privacy and participation design. It remains a historical proposal; proposed activities and measurement are not treated as completed or adopted.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: cultural programmes should enable participation and correction, use agreed time/resources and avoid treating reach alone as trust. It remains a proposal.
+- `سياسة خدمات حبق ناس للفعاليات والشراكات`, modified 2 January 2026 at 20:15:45 UTC: event roles, partner/place responsibilities, content and safety expectations, and cancellation/change terms. It remains a draft or proposal.
+- `1- مسودة المبادئ العشرة لتجمع حبق`, modified 26 September 2026 at 07:12:53 UTC: respect, non-discrimination, consent, privacy, safety and non-retaliation. Reporting roles remain unassigned and the document remains a draft.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: participation and photography require distinct decisions, and protection comes before documentation. It remains a draft.
+
+Validation before commit:
+
+- 586 isolated behavioral checks passed. New checks cover preserved module versions, assignments and keys; the fictional local example; broad/clear comparison; newcomer and rest options; participation without photography; Hub independence; access and authority cards; completed session plan; reviewer guidance; safe low-connectivity submission; impact limits; lesson feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
+- Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 6. No duplicate curriculum or review file was created.
+- Programme/safety-owner and learner acceptance are not claimed.
+
+Commit/deployment — active:
+
+- Release commit, rollback point and live deployment evidence are pending at this checkpoint.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination and Habaq Media are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise Habaq People is the next broadly useful path.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media and Habaq People are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise Habaq Production is the next core-unit path.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

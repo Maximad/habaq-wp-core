@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.11.0
+# Habaq visual and course review plan — 0.12.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination and Habaq Media paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media and Habaq People paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -126,22 +126,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Implementation: Rewritten in release 0.11.0 as one bounded story proposal with a completed example, two-claim verification matrix, safe deidentified submission, low-connectivity option, reviewer questions and explicit contact/recording/publication limits. The tested outcome, assignment, answer key and module version remain unchanged; editorial/safety-owner and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
-### ناس: لقاء ثقافي يتيح المشاركة (`people-basics`)
+### بداية العمل في حبق ناس (`people-basics`)
 
 - Suggested clearer title: بداية العمل في حبق ناس
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: خطة جلسة ثقافية تجريبية تتيح المشاركة دون تصوير. قارن نسخة واضحة بنسخة ناقصة.
 - Acceptance: خطة بوقت ومسؤول وبديل مشاركة ومراجعة قبل أي إعلان.
+- Implementation: Rewritten in release 0.12.0 with a fictional Suwayda rhythm session, a broad/clear plan comparison, newcomer and rest options, an access-barrier exercise, separate imaging consent, explicit approval limits and formative feedback. The tested outcome, answer key and module version remain unchanged; programme/safety-owner and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
-### ناس: خطة جلسة تجريبية (`people-task`)
+### مهمتك الأولى: خطة جلسة (`people-task`)
 
-- Suggested clearer title: مهمتك الأولى: حبق ناس
+- Suggested clearer title: مهمتك الأولى: خطة جلسة
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: خطة جلسة ثقافية تجريبية تتيح المشاركة دون تصوير. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
 - Acceptance: خطة بوقت ومسؤول وبديل مشاركة ومراجعة قبل أي إعلان. يناقش المراجع التعديل والدعم المطلوب.
+- Implementation: Rewritten in release 0.12.0 as one fictional 45–60 minute session plan with a completed example, deidentified low-connectivity submission, reviewer questions, one-actionable-change guidance and explicit booking/spending/announcement limits. The tested outcome, assignment, answer key and module version remain unchanged; programme/safety-owner and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
 ### إنتاج: من التصور إلى نسخة قابلة للمراجعة (`production-basics`)

@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.11.0
+# Habaq learning curriculum 0.12.0
+
+## Path checkpoint 0.12.0 — Habaq People
+
+The People path is ready for programme/safety-owner and learner review. `people-basics` is titled “بداية العمل في حبق ناس” and teaches the learner to begin with one cultural purpose and a concrete participant action, welcome a first-time visitor, offer more than one way to participate or rest, name an access barrier honestly and separate attending from being photographed. Its fictional Suwayda rhythm-session example compares a broad event idea with a bounded plan and explicitly prevents booking, announcement, spending or a partnership commitment before review. Hub Sweida remains independent and is not presumed to host or approve the activity.
+
+`people-task` is now “مهمتك الأولى: خطة جلسة”. The required output remains a one-page plan for a fictional 45–60 minute session, not a delivered event. A completed 50-minute example covers the goal, audience, sequence, newcomer entry, roles, resources, known barrier, non-photographed participation, no-electricity option, stopping condition, one feedback question and the approvals still required. The learner submits a deidentified summary only and can prepare it on paper or in a light text file. The reviewer checks purpose, inclusion, honest resources and authority, and separation of attendance from consent and safety, then requests one actionable change or records the educational review.
+
+The strategic note, historical People × Óros proposal, integrated LIFE programme proposal, draft event-services policy, draft principles and draft sensitive-imagery policy were re-read on 7 October 2026. The proposal and policies are not treated as adopted procedure, and their unassigned roles remain unassigned. One feedback answer or attendance count can guide improvement but does not prove social impact. The tested outcomes, assignment, answer keys and module version `2026-10-07.1` did not change, so existing completions and review history stay valid. Programme/safety-owner review and trials with new learners remain required.
 
 ## Path checkpoint 0.11.0 — Habaq Media
 

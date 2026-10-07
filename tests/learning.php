@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.11.0');
+define('HABAQ_WP_CORE_VERSION', '0.12.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -157,10 +157,10 @@ expect(!Habaq_Learning_Journey::completed(1),'track change does not carry whole 
 expect(!empty(Habaq_Learning_Journey::meta(1,'reflection_history')),'track reflection archived');
 expect(Habaq_Learning_Journey::foundation_done(1),'track switch preserves foundation');
 $_GET=array('lesson'=>'people-task');$html=Habaq_Learning::render();
-expect(str_contains($html,'خطة جلسة تجريبية'),'locked lesson readable');
+expect(str_contains($html,'مهمتك الأولى: خطة جلسة'),'locked lesson readable');
 expect(!str_contains($html,'name="op" value="lesson"'),'locked completion form absent');
 $_GET=array();$html=Habaq_Learning::render();
-expect(str_contains($html,'ناس: لقاء ثقافي يتيح المشاركة'),'next incomplete lesson opens automatically');
+expect(str_contains($html,'بداية العمل في حبق ناس'),'next incomplete lesson opens automatically');
 expect(!str_contains($html,'"correct"'),'expanded dashboard still hides keys');
 expect(str_contains($html,'اتفاق البداية الخاص بي'),'member can see plan');
 expect(str_contains($html,'Folder access arranged'),'member can see support reply');
@@ -347,6 +347,30 @@ expect(str_contains($markup,$media_basics['feedback']['complete']),'media basics
 $GLOBALS['meta'][1]['habaq_learning_media-task']=array('version'=>$media_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'media-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$media_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'media task review principle rendered without raw key');
+// The Habaq People path turns an event idea into one inclusive, reviewable session plan without authorizing delivery.
+$people_basics=Habaq_Learning::module('people-basics');$people_task=Habaq_Learning::module('people-task');
+expect($people_basics['version']==='2026-10-07.1'&&$people_task['version']==='2026-10-07.1','people editorial versions preserved');
+expect($people_basics['quiz']['correct']===1&&$people_task['quiz']['correct']===0,'people answer keys preserved');
+expect($people_task['assignment']==='قدّم ملخص خطة الجلسة والجمهور وتوزيع الوقت والأدوار والموارد والمخاطر والتقييم. لا تدرج بيانات حضور حقيقية.','people practical assignment preserved');
+expect($people_basics['title']==='بداية العمل في حبق ناس'&&str_contains($people_basics['body_html'],'ديما اسم افتراضي'),'people introduction and fictional local example');
+expect(str_contains($people_basics['body_html'],'قارن بين فكرة واسعة وخطة واضحة')&&str_contains($people_basics['body_html'],'لا إعلان ولا حجز ولا صرف'),'people lesson compares plans and bounds external action');
+expect(str_contains($people_basics['body_html'],'إذا تعذر احترام الخيار، يتوقف التصوير لا المشاركة')&&str_contains($people_basics['body_html'],'أو يأخذ استراحة'),'people lesson preserves participation without imaging');
+expect(str_contains($people_basics['body_html'],'هب السويداء مساحة مستقلة')&&str_contains($people_basics['body_html'],'لا تستخدم أسماء حضور'),'people lesson preserves Hub independence and safe practice');
+expect(str_contains($people_basics['job_aid'],'ما لا نستطيع توفيره بعد')&&str_contains($people_basics['job_aid'],'ما يحتاج موافقة قبل الإعلان أو الحجز أو الصرف'),'people card captures barriers and authority');
+expect($people_task['title']==='مهمتك الأولى: خطة جلسة'&&str_contains($people_task['body_html'],'خطة مكتملة للمقارنة'),'people task has worked session plan');
+expect(str_contains($people_task['body_html'],'إرشاد للمراجع')&&str_contains($people_task['body_html'],'ملاحظة واحدة قابلة للتنفيذ'),'people task gives actionable reviewer guidance');
+expect(str_contains($people_task['body_html'],'لا تضع أسماء حضور أو أرقام تواصل')&&str_contains($people_task['body_html'],'ملخصاً نصياً قصيراً'),'people task protects data and supports low connectivity');
+expect(str_contains($people_task['job_aid'],'خيارات المشاركة أو الاستراحة')&&str_contains($people_task['job_aid'],'ما الذي لا تثبته النتيجة؟'),'people task card captures inclusion and impact limits');
+$GLOBALS['meta'][1]['habaq_learning_track']='people';
+$GLOBALS['meta'][1]['habaq_learning_people-basics']=array('version'=>$people_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'people-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_basics['feedback']['retry'])&&!str_contains($markup,$people_basics['feedback']['complete']),'people basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_people-basics']=array('version'=>$people_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'people-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_basics['feedback']['complete']),'people basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_people-task']=array('version'=>$people_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'people-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$people_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'people task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.11.0)
+# Habaq member learning and onboarding (0.12.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 500 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters and all seven new functional practical-review flows. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 586 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media and People lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -92,6 +92,14 @@ The media introduction is now titled “بداية العمل الصحفي”. I
 The first assignment is now titled “مهمتك الأولى: مقترح قصة”. It remains a one-page story proposal with a question, audience, public interest, small verification matrix, source/voice plan, risks, protections, timing and reviewer. A completed fictional example, low-connectivity option, deidentified submission prompt and four-question reviewer guide make the handoff practical. The learning form accepts no names, contact details, testimony, recordings or private links.
 
 The journalism training-quality guide, strategic note, draft editorial policy, working language/style guide, Safe Voices proposal and draft sensitive-imagery policy were re-read on 7 October 2026. Their adoption states remain visible. Lesson completion and practical review do not authorize source contact, recording or publication. Both lesson IDs, practical assignment, prerequisites, answer keys and module version `2026-10-07.1` remain unchanged because the tested requirements did not change. Existing completions and review history therefore remain current. Release 0.11.0 tracks the editorial batch; editorial/safety-owner and learner acceptance remain pending.
+
+## Habaq People path — 0.12.0
+
+The People introduction is now titled “بداية العمل في حبق ناس”. A fictional Suwayda rhythm session shows how to start from one cultural purpose and an observable participant action, welcome a first-time visitor, provide participation and rest options, reduce one access barrier and keep attendance separate from photography. A weak-versus-clear comparison makes booking, spending, partnership and announcement limits explicit. Hub Sweida remains an independent space and is not presumed to host or approve the session.
+
+The first assignment is now “مهمتك الأولى: خطة جلسة”. It remains a one-page plan for a fictional 45–60 minute session, not a real event. A completed 50-minute example covers the objective, audience, sequence, newcomer entry, roles, resources, barriers, non-photographed participation, low-electricity alternative, stopping conditions, one useful feedback question and decisions that require authorization. The learner submits only a deidentified summary and can work on paper or in a light text file.
+
+Reviewer guidance checks purpose, inclusion, honest resources/authority and separation of attendance from consent and safety. One feedback question or an attendance count may improve the next session but does not prove long-term social impact. The strategic note, historical People × Óros proposal, integrated LIFE programme proposal, draft event-services policy, draft principles and draft sensitive-imagery policy were re-read on 7 October 2026. Both lesson IDs, practical assignment, prerequisites, answer keys and module version `2026-10-07.1` remain unchanged because the tested requirements did not change. Existing completions and review history remain current. Release 0.12.0 tracks this editorial batch; programme/safety-owner and learner acceptance remain pending.
 
 ## Operations and coordination path — 0.10.0
 
