@@ -88,9 +88,18 @@ Validation before commit:
 
 - 537 isolated behavioral checks passed. New checks cover preserved lesson versions/keys, fictional examples, separate consent decisions, safe alternate role, three-file classification, data minimization, attempt-specific feedback, saved completion feedback, unchanged record behavior and hidden raw keys.
 - All 36 PHP files passed PHP 8.3 lint; `git diff --check` passed.
-- Domain-owner, privacy/safety and learner acceptance are not claimed. Guarded commit, live publication and checks are pending.
+- Domain-owner, privacy/safety and learner acceptance are not claimed. Live publication and checks are recorded below.
 
-Commit/deployment: pending. Preserve 0.7.0 as a rollback branch before publication. Update this section with commit, deployment and live evidence.
+Commit/deployment — completed:
+
+- Release commit: `47d8a813dc293b7575e96b016c72e4d8c3fd49b7`, tree `7b148e7ebc63522cfd8f236703747a888be766ff`. Branch update used expected head `e11c28e2e24383932f303fda6813a97f05b2302f`, fast-forward only.
+- Code rollback preserved as `rollback/learning-0.7.0` at the starting head before publication. No database backup or restore test is claimed.
+- Published through the existing WordPress Deployer for Git on 7 October 2026 around 10:26 UTC. The UI reported “Package updated successfully.” The live stylesheet loads with `ver=0.8.0`.
+- Live `conduct` shows the new title, fictional Layan and Samer event example, separate consent decisions and the lesson-specific retry hint. Live `data` shows the new title, three fictional files, worked card, AI boundary, incident step and its lesson-specific retry hint. No raw `correct` key was present in either frontend response.
+- Both forms remained absent because earlier shared prerequisites were incomplete for the inspecting account, confirming that the existing prerequisite gate still applies. No quiz, acknowledgement, completion, support or review submission was made; learner state was not mutated.
+- At the 1363px desktop viewport, neither live lesson produced horizontal overflow. This does not replace the pending real narrow-screen and zoom checks.
+- Screenshot: `habaq-conduct-data-0-8-0-1791368796176.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_584a5fa329588191af3b2140a3d4275d`.
+- Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
 ## Remaining approved work
 
