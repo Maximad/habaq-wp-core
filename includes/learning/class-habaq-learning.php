@@ -234,6 +234,10 @@ class Habaq_Learning {
             echo '<h2 id="habaq-lesson-title">' . esc_html($module['title']) . '</h2>';
             if (!empty($module['outcome'])) { echo '<p class="habaq-learning__outcome"><strong>بعد هذا الدرس:</strong> ' . esc_html($module['outcome']) . '</p>'; }
             echo wp_kses_post($module['body_html']);
+            $notice_key = isset($_GET['learning_notice']) && is_string($_GET['learning_notice']) ? sanitize_key(wp_unslash($_GET['learning_notice'])) : '';
+            if ($notice_key === 'wrong' && !empty($module['feedback']['retry'])) {
+                echo '<p class="habaq-learning__feedback" role="status"><strong>فكرة تساعدك:</strong> ' . esc_html($module['feedback']['retry']) . '</p>';
+            }
             if (!empty($module['job_aid'])) { echo '<details><summary>بطاقة عمل سريعة قابلة للطباعة</summary><p>قالب مقترح للتطبيق. عدله مع الفريق حسب المهمة.</p><div class="habaq-learning__job-aid">' . wp_kses_post($module['job_aid']) . '</div><p>يمكن طباعة الصفحة أو حفظها PDF من المتصفح للقراءة عند ضعف الاتصال.</p></details>'; }
             echo '<details><summary>المراجع وحالة الوثائق</summary><p>المراجع مسودات أو وثائق عمل. قد تحتاج صلاحية منفصلة على Drive. طلب الوصول لا يفتح الملف تلقائياً.</p><ul>';
             foreach ($catalog['sources'] as $source) {
@@ -244,7 +248,11 @@ class Habaq_Learning {
             echo '</ul></details>';
             if (!empty($state['feedback'])) { echo '<p class="habaq-learning__feedback">ملاحظات المراجع: ' . esc_html($state['feedback']) . '</p>'; }
             $can_submit = self::unlocked($user_id, $selected) && !in_array($state['status'], array('complete', 'pending'), true);
-            if ($state['status'] === 'complete') { echo '<p class="habaq-learning__feedback">سجل إكمال هذا الدرس محفوظ.</p>'; }
+            if ($state['status'] === 'complete') {
+                echo '<p class="habaq-learning__feedback">سجل إكمال هذا الدرس محفوظ.';
+                if (!empty($module['feedback']['complete'])) { echo ' <strong>تذكّر:</strong> ' . esc_html($module['feedback']['complete']); }
+                echo '</p>';
+            }
             elseif ($state['status'] === 'pending') { echo '<p class="habaq-learning__feedback">المهمة بانتظار المراجعة. يناقش المراجع معك المعايير ويطلب تعديلاً عند الحاجة.</p>'; }
             elseif (!$can_submit) { echo '<p class="habaq-learning__feedback">يمكنك قراءة الدرس الآن. سجل إكمال الدرس السابق قبل حفظ نتيجة هذا الدرس.</p>'; }
             if ($can_submit) {

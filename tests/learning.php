@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.6.2');
+define('HABAQ_WP_CORE_VERSION', '0.7.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -269,4 +269,24 @@ ob_start();Habaq_Learning_Library::reading_controls();$controls=ob_get_clean();
 expect(!str_contains($controls,'unknown')&&!str_contains($controls,'secret')&&!str_contains($controls,'q='),'toggle ignores unknown IDs oversized query and unrelated params');
 $GLOBALS['caps']=array('read');$_GET=array('reading'=>'text','view'=>'library');
 expect(!str_contains(Habaq_Learning::render(),'habaq-learning__hero'),'text mode does not bypass member gate');
+// The first editorial batch keeps tested requirements and records while adding useful lesson feedback.
+$welcome=Habaq_Learning::module('welcome');$roles=Habaq_Learning::module('roles');
+expect($welcome['version']==='2026-10-07.1'&&$roles['version']==='2026-10-07.1','shared editorial versions preserved');
+expect($welcome['quiz']['correct']===0&&$roles['quiz']['correct']===1,'shared answer keys preserved');
+expect($welcome['title']==='حبق: من أين نبدأ؟'&&str_contains($welcome['body_html'],'سلمى اسم افتراضي'),'welcome title and fictional local example');
+expect(str_contains($welcome['body_html'],'هب السويداء مساحة مستقلة'),'Hub independence retained');
+expect($roles['title']==='دورك: ما الذي تتولاه، ومن يساعدك؟'&&str_contains($roles['body_html'],'نور اسم افتراضي'),'roles title and fictional work example');
+expect(str_contains($roles['job_aid'],'أطلب موافقة قبل')&&str_contains($roles['job_aid'],'عند التسليم'),'roles card captures authority and handover');
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');$GLOBALS['meta'][1]=array();
+$_GET=array('lesson'=>'welcome','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,'فكرة تساعدك')&&str_contains($markup,$welcome['feedback']['retry']),'welcome retry feedback rendered after attempt');
+expect(!str_contains($markup,$welcome['feedback']['complete']),'completion feedback hidden before completion');
+expect(Habaq_Learning::record(1,$welcome)['status']==='new','retry does not complete rewritten welcome');
+submit(array('op'=>'lesson','lesson'=>'welcome','version'=>$welcome['version'],'ack'=>'1','answer'=>'0'));
+$_GET=array('lesson'=>'welcome','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$welcome['feedback']['complete'])&&Habaq_Learning::record(1,$welcome)['status']==='complete','welcome completion and explanatory feedback');
+submit(array('op'=>'lesson','lesson'=>'roles','version'=>$roles['version'],'ack'=>'1','answer'=>'1'));
+$_GET=array('lesson'=>'roles','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$roles['feedback']['complete'])&&Habaq_Learning::record(1,$roles)['status']==='complete','roles completion and explanatory feedback');
+expect(!str_contains($markup,'"correct"'),'rewritten lessons still hide raw answer keys');
 echo 'Passed '.$count." behavioral checks.\n";

@@ -66,3 +66,9 @@ Code rollback: `rollback/learning-0.5.0` at `cce01cd4b3dabece1e536ec57d1f8e3c7ea
 The portal includes a “قراءة دون صور” switch. `reading=text` prevents generation of the hero image markup and stays active through learning links, filters and form redirects. It is a URL preference only; no cookie or learner-record update. Default mode retains Habaq’s photography. This does not provide offline saving or disable unrelated theme resources. Existing print/PDF guidance remains available.
 
 Lesson links land on focusable, named reading panels; progress has an accessible name. Answer/acknowledgement labels, lesson links and disclosure headings have 44px minimum target heights, and long article content wraps within the RTL grid. All course IDs, versions, quiz keys and stored completions are unchanged. Follow `docs/learning-implementation-progress.md` for batch status and remaining acceptance.
+
+## Shared lessons: welcome and roles — 0.7.0
+
+The first two common lessons now use warm, direct fusha and short sections. Each contains an ordinary fictional situation, a completed example, a small exercise and a printable work card. Welcome explains Habaq through a local need, a small contribution and a new voice or audience. Roles distinguishes preparing, reviewing and authorizing work, with clear support, safe refusal and handover steps.
+
+Server-rendered formative feedback appears after an unsuccessful check and alongside a saved completion. It explains the decision without emitting raw answer keys. Both lesson IDs, answer keys and module versions remain unchanged because their tested learning results did not change. Existing completions therefore remain valid. The plugin release changes to 0.7.0 for cache-busting and release tracking; policy and domain-owner approval remain separate.

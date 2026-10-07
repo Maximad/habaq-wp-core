@@ -1,5 +1,11 @@
 # Habaq learning curriculum 0.5.0
 
+## Editorial checkpoint 0.7.0
+
+The first two shared lessons now use the approved plain-language direction. `welcome` is titled “حبق: من أين نبدأ؟” and asks the learner to explain Habaq in three sentences, connect one small contribution to a local need, and name a voice or audience the work should include. `roles` is titled “دورك: ما الذي تتولاه، ومن يساعدك؟” and asks for one bounded output, one reviewer and one decision that needs authorization. Both use explicitly fictional local examples, a worked answer, a short exercise, an expanded printable work card and feedback after a wrong or completed check.
+
+The learning outcomes and answer keys did not change, so both module IDs and version `2026-10-07.1` remain unchanged and existing completions stay valid. The strategic note, current introductory presentation and draft volunteer policy were re-read on 7 October 2026. The volunteer policy remains a draft, and the lessons continue to separate learning, practical review, policy adoption and authority to publish or spend. Domain-owner review and trials with new learners are still required.
+
 This release adds a separate specialist library to the existing member journey, rather than expanding everybody's required induction. Each new member still takes five shared lessons and two lessons in one chosen path. There are now ten path choices, 36 optional specialist courses in eight subject groups, and 28 proposed role profiles. Profiles are educational mappings, not a list of approved vacancies or staff assignments.
 
 ## Content and source decisions
