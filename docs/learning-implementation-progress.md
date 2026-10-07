@@ -223,10 +223,34 @@ Commit/deployment — prepared, publication still blocked:
 - Live publication was not retried: the preceding checkpoint established that the WordPress deployer requires reauthentication, and this non-interactive run has no Hostinger WordPress deployment tool. Credentials were not requested, inspected or changed. The last verified live release remains `0.10.0`; releases `0.11.0` and `0.12.0` are prepared on the draft PR but are not claimed as live.
 - No live learner page or learner record was changed in this batch.
 
+## Batch 8 — Habaq Production path (0.13.0)
+
+Scope and decisions:
+
+- Rewrote `production-basics` and `production-task` with a fictional Suwayda 40-second prototype, a weak/clear brief comparison, completed storyboard plan, rights register, low-connectivity alternatives, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.1`. Existing completions/history remain valid. Plugin release `0.13.0` records the editorial change.
+- Production quality, rights/safety review, educational review, publishing, purchasing, contracts and equipment authority stay separate. No real people, external music, raw sensitive files or private learner material is requested.
+
+Sources re-read on 7 October 2026:
+
+- Strategic working draft: modified 6 October 2026 at 18:04:46 UTC.
+- Sensitive-imagery policy draft: modified 5 September 2026 at 18:38:54 UTC.
+- Historical People × Óros proposal: modified 13 November 2025 at 13:04:01 UTC.
+- Integrated LIFE programme proposal: modified 18 September 2026 at 13:33:40 UTC.
+- Assets/equipment draft: modified 13 December 2025 at 12:38:15 UTC. The verified ID is `1S3ythF_Faun4llO_C_Tx4Md3whPVCMWMW80Fgg37fVA`, matching the source register. No adoption or appointment is inferred.
+
+Validation and delivery:
+
+- 601 isolated behavioral checks passed, including preserved requirements, rights/consent limits, worked prototype, reviewer guidance, safe submission, feedback and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both HTML documents parsed and their updated production content was verified. The existing 61-card review plan and 61-lesson curriculum were replaced in place with expected Library version 6, both now version 7. No duplicate artifact was created.
+- Commit is in progress; no release publication or human acceptance is claimed.
+- The preceding execution was interrupted by a temporary usage-limit approval-review failure before final lint/commit. The local code and tests were preserved and this batch resumes them.
+- Last verified live release remains `0.10.0`; the established deployment blocker is WordPress reauthentication with no callable Hostinger deployment method. Code rollback remains `rollback/learning-0.10.0`. Credentials and learner state remain untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media and Habaq People are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise Habaq Production is the next core-unit path.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People and Habaq Production are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise the Radio path is next.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.12.0');
+define('HABAQ_WP_CORE_VERSION', '0.13.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -371,6 +371,30 @@ expect(str_contains($markup,$people_basics['feedback']['complete']),'people basi
 $GLOBALS['meta'][1]['habaq_learning_people-task']=array('version'=>$people_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'people-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$people_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'people task review principle rendered without raw key');
+// The Habaq Production path makes one small prototype reviewable without granting rights or publishing authority.
+$production_basics=Habaq_Learning::module('production-basics');$production_task=Habaq_Learning::module('production-task');
+expect($production_basics['version']==='2026-10-07.1'&&$production_task['version']==='2026-10-07.1','production editorial versions preserved');
+expect($production_basics['quiz']['correct']===2&&$production_task['quiz']['correct']===0,'production answer keys preserved');
+expect($production_task['assignment']==='قدّم موجز العمل وخطة الحقوق والموارد والمراجعة، ووصفاً للنسخة التجريبية وأسئلتك للمشرف.','production practical assignment preserved');
+expect($production_basics['title']==='بداية العمل في الإنتاج'&&str_contains($production_basics['body_html'],'ليان اسم افتراضي'),'production introduction and fictional local example');
+expect(str_contains($production_basics['body_html'],'قارن بين طلب ناقص وموجز واضح')&&str_contains($production_basics['body_html'],'لا نشر ولا شراء معدات'),'production lesson compares briefs and bounds authority');
+expect(str_contains($production_basics['body_html'],'لا تحاكِ صوت شخص')&&str_contains($production_basics['body_html'],'موافقة الشخص على الحضور'),'production lesson protects voice and separates consent');
+expect(str_contains($production_basics['body_html'],'على الورق')&&str_contains($production_basics['body_html'],'ملف نصي خفيف'),'production lesson supports low connectivity');
+expect(str_contains($production_basics['job_aid'],'المادة ٢ ومالكها وإذنها')&&str_contains($production_basics['job_aid'],'ما لا أملك قرار شرائه أو نشره'),'production card captures rights and authority');
+expect($production_task['title']==='مهمتك الأولى: نسخة تجريبية'&&str_contains($production_task['body_html'],'مثال مكتمل للمقارنة'),'production task has worked prototype');
+expect(str_contains($production_task['body_html'],'إرشاد للمراجع')&&str_contains($production_task['body_html'],'ملاحظة واحدة قابلة للتنفيذ'),'production task gives actionable reviewer guidance');
+expect(str_contains($production_task['body_html'],'لا ترفع ملفات مصدر')&&str_contains($production_task['body_html'],'ست جمل مرقمة'),'production task protects raw material and supports weak connections');
+expect(str_contains($production_task['job_aid'],'المادة غير الجاهزة أو البديل')&&str_contains($production_task['job_aid'],'ما لا تمنحه هذه المهمة'),'production task card captures exclusions and authority');
+$GLOBALS['meta'][1]['habaq_learning_track']='production';
+$GLOBALS['meta'][1]['habaq_learning_production-basics']=array('version'=>$production_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'production-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$production_basics['feedback']['retry'])&&!str_contains($markup,$production_basics['feedback']['complete']),'production basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_production-basics']=array('version'=>$production_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'production-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$production_basics['feedback']['complete']),'production basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_production-task']=array('version'=>$production_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'production-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$production_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'production task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

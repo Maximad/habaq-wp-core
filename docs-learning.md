@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.12.0)
+# Habaq member learning and onboarding (0.13.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 586 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media and People lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 601 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People and Production lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -108,3 +108,11 @@ The operations introduction is now titled “بداية العمل في التن
 The first assignment is now titled “مهمتك الأولى: التنسيق”. It remains one fictional three-task weekly board with one decision, one blocker and a short handover. A completed example marks unconfirmed resources honestly, prohibits booking, publishing, spending and access changes, and asks the learner for a deidentified summary only. Reviewer guidance uses four practical questions and asks for one actionable revision plus available support.
 
 Both lesson IDs, assignments, prerequisites, answer keys and module version `2026-10-07.2` remain unchanged because the tested requirements did not change. Existing completions and review history therefore remain current. Release 0.10.0 tracks the editorial batch; domain-owner and learner acceptance are still pending.
+
+## Habaq Production path — 0.13.0
+
+`production-basics` is now “بداية العمل في الإنتاج”. A fictional Suwayda 40-second prototype compares an unclear request with a bounded brief, records rights and missing permissions, separates attendance/recording/publication consent and labels uncertain resources. A paper or light-text alternative keeps the exercise feasible. Quality review, publication, purchase, contracting and equipment authority remain separate.
+
+`production-task` is now “مهمتك الأولى: نسخة تجريبية”. The assignment remains a one-page brief and a 30–60 second prototype or storyboard using learner-owned materials. The completed six-shot example uses original text and shapes, with no real people, outside music or archive. The learner submits only a deidentified summary; a human reviewer checks purpose, rights, feasibility and handover, then gives one actionable change. No raw sensitive files or private links are collected.
+
+The strategic working draft, sensitive-imagery draft, historical Óros proposal, integrated LIFE programme proposal and assets/equipment draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, keys and module versions `2026-10-07.1` remain unchanged. Existing completions and review history remain valid. Production/rights-owner and learner acceptance remain pending.

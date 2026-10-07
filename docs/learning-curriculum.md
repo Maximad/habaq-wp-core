@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.12.0
+# Habaq learning curriculum 0.13.0
+
+## Path checkpoint 0.13.0 — Habaq Production
+
+`production-basics` is now “بداية العمل في الإنتاج”. A fictional Suwayda 40-second prototype compares an unclear request with a bounded brief, records rights and missing permissions, separates attendance/recording/publication consent and labels uncertain resources. A paper or light-text alternative keeps the exercise feasible. Quality review, publication, purchase, contracting and equipment authority remain separate.
+
+`production-task` is now “مهمتك الأولى: نسخة تجريبية”. The assignment remains a one-page brief and a 30–60 second prototype or storyboard using learner-owned materials. The completed six-shot example uses original text and shapes, with no real people, outside music or archive. The learner submits only a deidentified summary; a human reviewer checks purpose, rights, feasibility and handover, then gives one actionable change. No raw sensitive files or private links are collected.
+
+The strategic working draft, sensitive-imagery draft, historical Óros proposal, integrated LIFE programme proposal and assets/equipment draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, keys and module versions `2026-10-07.1` remain unchanged. Existing completions and review history remain valid. Production/rights-owner and learner acceptance remain pending.
 
 ## Path checkpoint 0.12.0 — Habaq People
 
