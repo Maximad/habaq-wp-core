@@ -11,19 +11,43 @@ class Habaq_Learning_Library {
         return self::number($value) . ((int) $value >= 3 && (int) $value <= 10 ? ' دقائق' : ' دقيقة');
     }
 
+    /** Presentation only: no cookie, user record, permission or content version change. */
+    public static function text_only() {
+        return self::query('reading') === 'text';
+    }
+
+    public static function reading_url($url) {
+        return self::text_only() ? add_query_arg('reading', 'text', $url) : $url;
+    }
+
+    public static function reading_controls() {
+        $url = get_permalink();
+        if (self::query('view') === 'library') { $url = add_query_arg('view', 'library', $url); }
+        $role = sanitize_key(self::query('role'));
+        if (isset(Habaq_Learning::catalog()['roles'][$role])) { $url = add_query_arg('role', $role, $url); }
+        $id = sanitize_key(self::query('lesson'));
+        if (Habaq_Learning::module($id)) { $url = add_query_arg('lesson', $id, $url); }
+        $query = self::query('q');
+        if ($query !== '' && strlen($query) <= 480) { $url = add_query_arg('q', $query, $url); }
+        if (!self::text_only()) { $url = add_query_arg('reading', 'text', $url); }
+        echo '<div class="habaq-learning__reading"><a href="' . esc_url($url) . '">' . esc_html(self::text_only() ? 'عرض الصور' : 'قراءة دون صور') . '</a><span>' . esc_html(self::text_only() ? 'صورة الافتتاحية متوقفة لتخفيف التحميل. حفظ النتائج يحتاج اتصالاً.' : 'اتصالك ضعيف؟ يمكنك إيقاف صورة الافتتاحية، أو حفظ الدرس PDF من المتصفح.') . '</span></div>';
+    }
+
     public static function tabs($base, $library) {
         echo '<nav class="habaq-learning__tabs" aria-label="أقسام التعلم"><a href="' . esc_url($base) . '"' . (!$library ? ' aria-current="page"' : '') . '>رحلة الانضمام</a><a href="' . esc_url(add_query_arg('view', 'library', $base)) . '"' . ($library ? ' aria-current="page"' : '') . '>مكتبة الدورات حسب الدور</a></nav>';
     }
 
     /** One photographic opening for both views. Lessons use a shorter version. */
     public static function hero($base, $library, $compact = false) {
-        echo '<header class="habaq-learning__hero' . ($compact ? ' habaq-learning__hero--compact' : '') . '">';
-        if (function_exists('wp_get_attachment_image')) {
+        echo '<header class="habaq-learning__hero' . ($compact ? ' habaq-learning__hero--compact' : '') . (self::text_only() ? ' habaq-learning__hero--text' : '') . '">';
+        if (!self::text_only() && function_exists('wp_get_attachment_image')) {
             echo wp_get_attachment_image(Habaq_Learning::photo_id(), 'full', false, array('class' => 'habaq-learning__photo', 'alt' => 'جرار يحمل محصولاً أمام بيوت وجدران حجرية، من مكتبة صور حبق', 'loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '100vw'));
         }
         echo '<div class="habaq-learning__hero-inner"><p class="habaq-learning__eyebrow">حبق · نتعلّم معاً</p><h2>' . esc_html($library ? 'تعلّم لما تحتاجه اليوم' : 'أهلاً بك في حبق') . '</h2><p>' . esc_html($library ? 'اختر درساً يساعدك في مهمتك، جرّب ما تعلمته، وناقش النتيجة مع فريقك.' : 'تعرّف إلى الفريق وطريقة العمل، ثم جرّب مهمة صغيرة مع زميل يرافقك. خطوة واحدة في كل مرة.') . '</p><div class="habaq-learning__actions"><a class="habaq-learning__action" href="' . esc_url($library ? '#habaq-courses' : '#habaq-lesson') . '">' . esc_html($library ? 'اختر دورتك' : 'تابع درسك') . '</a><a class="habaq-learning__action habaq-learning__action--secondary" href="' . esc_url($library ? $base : add_query_arg('view', 'library', $base)) . '">' . esc_html($library ? 'رحلة الانضمام' : 'استكشف الدورات') . '</a></div>';
         if ($library) { echo '<p class="habaq-learning__hero-meta">' . esc_html(self::number(count(self::courses()))) . ' دورة اختيارية · تعلّم حسب حاجتك ووقتك</p>'; }
-        echo '</div><p class="habaq-learning__photo-note">من مكتبة صور حبق</p></header>';
+        echo '</div>';
+        if (!self::text_only()) { echo '<p class="habaq-learning__photo-note">من مكتبة صور حبق</p>'; }
+        echo '</header>';
     }
 
     public static function query($key) {
@@ -42,28 +66,32 @@ class Habaq_Learning_Library {
     public static function render($notice = '') {
         if (!Habaq_Learning::eligible()) { return ''; }
         $catalog = Habaq_Learning::catalog();
-        $base = get_permalink();
+        $base = self::reading_url(get_permalink());
         $library = add_query_arg('view', 'library', $base);
         $role = sanitize_key(self::query('role'));
         if (!isset($catalog['roles'][$role])) { $role = ''; }
         $query = self::query('q');
         if (strlen($query) > 480) { $query = ''; }
         $return = $role ? add_query_arg('role', $role, $library) : $library;
+        if ($query !== '') { $return = add_query_arg('q', $query, $return); }
         $id = sanitize_key(self::query('lesson'));
         $module = Habaq_Learning::module($id);
         $member = get_current_user_id();
         ob_start();
         echo '<section class="habaq-learning alignfull" dir="rtl">';
         self::hero($base, true, $module && !empty($module['optional']));
+        self::reading_controls();
         self::tabs($base, true);
         if ($notice) { echo '<p class="habaq-learning__feedback" role="status">' . esc_html($notice) . '</p>'; }
         echo '<p class="habaq-learning__library-note">ابدأ برحلة الانضمام، ثم اختر مع مرافقك دورة أو اثنتين تناسبان أول مهمة. اقتراحات الأدوار تساعدك على الاختيار، ولا تعني تعييناً أو تغييراً في الصلاحيات. سؤال التحقق يساعدك على فهم الدرس؛ التطبيق وملاحظات الفريق يساعدانك على إتقان العمل.</p>';
         if ($module && !empty($module['optional'])) {
-            echo '<p><a href="' . esc_url($return) . '">العودة إلى الدورات</a></p><article id="habaq-courses" class="habaq-learning__course">';
+            echo '<p><a href="' . esc_url($return) . '">العودة إلى الدورات</a></p><article id="habaq-courses" tabindex="-1" aria-labelledby="habaq-course-title" class="habaq-learning__course">';
             self::lesson($module, $member, $return);
             echo '</article>';
         } else {
-            echo '<form id="habaq-courses" class="habaq-learning__filters" method="get" action="' . esc_url($base) . '"><input type="hidden" name="view" value="library"><label>اعرض ما يناسب دوري<select name="role"><option value="">كل الأدوار والوظائف</option>';
+            echo '<form id="habaq-courses" tabindex="-1" aria-label="اختيار الدورات" class="habaq-learning__filters" method="get" action="' . esc_url($base) . '"><input type="hidden" name="view" value="library">';
+            if (self::text_only()) { echo '<input type="hidden" name="reading" value="text">'; }
+            echo '<label>اعرض ما يناسب دوري<select name="role"><option value="">كل الأدوار والوظائف</option>';
             foreach ($catalog['roles'] as $key => $item) {
                 echo '<option value="' . esc_attr($key) . '" ' . selected($role, $key, false) . '>' . esc_html($item['title']) . '</option>';
             }
@@ -84,7 +112,7 @@ class Habaq_Learning_Library {
                 foreach ($items as $item) {
                     $state = Habaq_Learning::record($member, $item);
                     $priority = $role && in_array($item['id'], $profile['priority'], true);
-                    echo '<article class="habaq-learning__card"><p class="habaq-learning__tag">' . esc_html($role ? ($priority ? 'أولوية للمهمة' : 'تطوير لاحق') : 'دورة تخصصية اختيارية') . '</p><h3><a href="' . esc_url(add_query_arg('lesson', $item['id'], $return)) . '">' . esc_html($item['title']) . '</a></h3><p>' . esc_html($item['outcome']) . '</p><small>' . esc_html(self::duration($item['minutes'])) . ' للقراءة والتحقق · ' . esc_html(self::duration($item['practice_minutes'])) . ' تقريباً للتطبيق</small><p class="habaq-learning__tag">' . esc_html($state['status'] === 'complete' ? 'تم التحقق من الفهم' : 'جاهزة للبدء') . '</p></article>';
+                    echo '<article class="habaq-learning__card"><p class="habaq-learning__tag">' . esc_html($role ? ($priority ? 'أولوية للمهمة' : 'تطوير لاحق') : 'دورة تخصصية اختيارية') . '</p><h3><a href="' . esc_url(add_query_arg('lesson', $item['id'], $return) . '#habaq-courses') . '">' . esc_html($item['title']) . '</a></h3><p>' . esc_html($item['outcome']) . '</p><small>' . esc_html(self::duration($item['minutes'])) . ' للقراءة والتحقق · ' . esc_html(self::duration($item['practice_minutes'])) . ' تقريباً للتطبيق</small><p class="habaq-learning__tag">' . esc_html($state['status'] === 'complete' ? 'تم التحقق من الفهم' : 'جاهزة للبدء') . '</p></article>';
                 }
                 echo '</div></details>';
             }
@@ -96,7 +124,7 @@ class Habaq_Learning_Library {
 
     private static function lesson($module, $member, $return) {
         $state = Habaq_Learning::record($member, $module);
-        echo '<p class="habaq-learning__tag">دورة تخصصية اختيارية · ' . esc_html(self::duration($module['minutes'])) . ' قراءة وتحقق + ' . esc_html(self::duration($module['practice_minutes'])) . ' تطبيق تقريباً</p><h2>' . esc_html($module['title']) . '</h2><p class="habaq-learning__outcome"><strong>بعد هذه الدورة:</strong> ' . esc_html($module['outcome']) . '</p>';
+        echo '<p class="habaq-learning__tag">دورة تخصصية اختيارية · ' . esc_html(self::duration($module['minutes'])) . ' قراءة وتحقق + ' . esc_html(self::duration($module['practice_minutes'])) . ' تطبيق تقريباً</p><h2 id="habaq-course-title">' . esc_html($module['title']) . '</h2><p class="habaq-learning__outcome"><strong>بعد هذه الدورة:</strong> ' . esc_html($module['outcome']) . '</p>';
         echo wp_kses_post($module['body_html']);
         echo '<details><summary>بطاقة عمل سريعة قابلة للطباعة</summary><div class="habaq-learning__job-aid">' . wp_kses_post($module['job_aid']) . '</div><p>يمكن طباعة الصفحة أو حفظها PDF من المتصفح.</p></details><details><summary>المراجع وحالة المحتوى</summary><p>بنينا هذا الدرس على الوثائق التالية، وبعضها ما زال مسودة. التعلم منها لا يعني اعتمادها أو منح صلاحيات جديدة. قد تحتاج إذناً لفتح المصدر.</p><ul>';
         foreach (Habaq_Learning::catalog()['sources'] as $source) {
@@ -107,7 +135,7 @@ class Habaq_Learning_Library {
         echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         wp_nonce_field('habaq_learning');
         echo '<input type="hidden" name="action" value="habaq_learning"><input type="hidden" name="op" value="lesson"><input type="hidden" name="return" value="' . esc_attr($return) . '"><input type="hidden" name="lesson" value="' . esc_attr($module['id']) . '"><input type="hidden" name="version" value="' . esc_attr($module['version']) . '"><fieldset><legend>' . esc_html($module['quiz']['prompt']) . '</legend>';
-        foreach ($module['quiz']['options'] as $key => $option) { echo '<label><input type="radio" name="answer" value="' . esc_attr($key) . '" required> ' . esc_html($option) . '</label>'; }
-        echo '</fieldset><label><input type="checkbox" name="ack" value="1" required> قرأت الدرس وفهمت حدود دوري. سأناقش التطبيق مع المسؤول عند الحاجة.</label><button type="submit">تحقق وحفظ الفهم</button></form>';
+        foreach ($module['quiz']['options'] as $key => $option) { echo '<label class="habaq-learning__choice"><input type="radio" name="answer" value="' . esc_attr($key) . '" required> ' . esc_html($option) . '</label>'; }
+        echo '</fieldset><label class="habaq-learning__choice"><input type="checkbox" name="ack" value="1" required> قرأت الدرس وفهمت حدود دوري. سأناقش التطبيق مع المسؤول عند الحاجة.</label><button type="submit">تحقق وحفظ الفهم</button></form>';
     }
 }

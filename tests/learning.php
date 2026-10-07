@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.6.1');
+define('HABAQ_WP_CORE_VERSION', '0.6.2');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -46,6 +46,8 @@ function wp_safe_redirect($url) { throw new Result($url); }
 function wp_send_json_error($data,$status=400) { throw new Result(array('error'=>$data,'status'=>$status)); }
 function wp_send_json_success($data) { throw new Result(array('success'=>$data)); }
 function wp_enqueue_style() {}
+function apply_filters($name,$value) { return $value; }
+function wp_get_attachment_image($id,$size,$icon,$attributes) { $GLOBALS['photo_requests']=($GLOBALS['photo_requests']??0)+1; return '<img class="habaq-learning__photo" src="https://example.test/habaq-photo.jpg" alt="Habaq photo">'; }
 function selected($a,$b,$echo=false) { return $a===$b ? 'selected' : ''; }
 function add_query_arg($key,$value,$url) { return $url.(str_contains($url,'?')?'&':'?').urlencode($key).'='.urlencode($value); }
 function get_option($key,$default=array()) { return $GLOBALS['options'][$key]??$default; }
@@ -243,4 +245,28 @@ foreach(array('radio','operations','finance','people-ops','research','technology
     submit(array('op'=>'review','member'=>'1','lesson'=>$task['id'],'decision'=>'complete','feedback'=>'Good safe purpose, quality and handover.','version'=>$task['version'],'revision'=>(string)$record['revision'],'criteria'=>array_keys(Habaq_Learning_Journey::criteria())));
     expect(Habaq_Learning_Journey::task_done(1),'new functional practical approved '.$track);
 }
+// Reading mode is presentation-only and survives normal navigation and submissions.
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');
+$before=$GLOBALS['meta'];$GLOBALS['photo_requests']=0;
+$_GET=array('reading'=>'text','lesson'=>'welcome');$markup=Habaq_Learning::render();
+expect($GLOBALS['photo_requests']===0&&!str_contains($markup,'habaq-photo.jpg'),'text mode omits image generation and markup');
+expect(str_contains($markup,'reading=text&amp;lesson=roles#habaq-lesson'),'text mode retained in lesson navigation with reading destination');
+expect(str_contains($markup,'name="return" value="https://example.test/learning/?reading=text"'),'form redirect retains reading mode');
+expect(str_contains($markup,'tabindex="-1" aria-labelledby="habaq-lesson-title"'),'lesson fragment can receive focus and has an accessible name');
+expect(str_contains($markup,'aria-label="تقدم دروس المسار"'),'progress has an accessible name');
+expect($before===$GLOBALS['meta'],'rendering does not mutate learner records');
+$_GET=array('view'=>'library','reading'=>'text','role'=>'photographer','q'=>'صورة','lesson'=>'photo');$markup=Habaq_Learning::render();
+expect($GLOBALS['photo_requests']===0,'specialist reading mode also omits image');
+expect(str_contains($markup,'view=library&amp;role=photographer&amp;lesson=photo&amp;q='),'image toggle retains allowlisted course and filters');
+expect(!str_contains($markup,'"correct"'),'text mode does not expose answer keys');
+$_GET=array('view'=>'library','reading'=>'text');$markup=Habaq_Learning::render();
+expect(str_contains($markup,'name="reading" value="text"'),'GET search retains text mode');
+$_GET=array('reading'=>array('text'),'role'=>array('bad'),'lesson'=>array('bad'),'q'=>array('bad'));
+expect(!Habaq_Learning_Library::text_only(),'array reading mode safely ignored');$markup=Habaq_Learning::render();
+expect($GLOBALS['photo_requests']===1&&str_contains($markup,'habaq-photo.jpg'),'default photograph preserved');
+$_GET=array('reading'=>'text','lesson'=>'unknown','role'=>'unknown','q'=>str_repeat('x',481),'untrusted'=>'secret');
+ob_start();Habaq_Learning_Library::reading_controls();$controls=ob_get_clean();
+expect(!str_contains($controls,'unknown')&&!str_contains($controls,'secret')&&!str_contains($controls,'q='),'toggle ignores unknown IDs oversized query and unrelated params');
+$GLOBALS['caps']=array('read');$_GET=array('reading'=>'text','view'=>'library');
+expect(!str_contains(Habaq_Learning::render(),'habaq-learning__hero'),'text mode does not bypass member gate');
 echo 'Passed '.$count." behavioral checks.\n";

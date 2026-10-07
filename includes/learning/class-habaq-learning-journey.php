@@ -277,7 +277,7 @@ class Habaq_Learning_Journey {
         foreach (array('role' => 'الدور المتفق عليه', 'mentor' => 'مرافق التعلم وجهة التواصل', 'start_date' => 'تاريخ البداية', 'weekly_minutes' => 'دقائق التعلم المتاحة أسبوعياً', 'first_task' => 'مهمة صغيرة، موعدها ومراجعها والموارد المتاحة') as $key => $label) {
             self::field($key, $label, $plan[$key] ?? '', $key === 'first_task' ? 'textarea' : ($key === 'start_date' ? 'date' : ($key === 'weekly_minutes' ? 'number' : 'text')), $key === 'first_task' ? 600 : 160, true);
         }
-        echo '<label><input type="checkbox" name="kickoff" value="1"' . (!empty($plan['kickoff']) ? ' checked' : '') . '> تم لقاء البداية: وضحنا الدور وحدود القرار، عرفنا الفريق، واتفقنا على الوقت والأدوات والصلاحيات المطلوبة.</label><button type="submit">حفظ اتفاق البداية</button></form></details>';
+        echo '<label class="habaq-learning__choice"><input type="checkbox" name="kickoff" value="1"' . (!empty($plan['kickoff']) ? ' checked' : '') . '> تم لقاء البداية: وضحنا الدور وحدود القرار، عرفنا الفريق، واتفقنا على الوقت والأدوات والصلاحيات المطلوبة.</label><button type="submit">حفظ اتفاق البداية</button></form></details>';
         $support = self::meta($member, 'support');
         if ($support) {
             echo '<h3>دعم التعلم</h3><p>' . esc_html(self::blockers()[$support['category']] ?? '') . '</p><p>' . nl2br(esc_html($support['note'])) . '</p>';
@@ -297,7 +297,7 @@ class Habaq_Learning_Journey {
                 if ($member === get_current_user_id()) { echo '<p>يلزم مراجع آخر. لا تعتمد مهمتك بنفسك.</p></li>'; continue; }
                 self::form('review', $return, $member);
                 echo '<input type="hidden" name="lesson" value="' . esc_attr($id) . '"><input type="hidden" name="version" value="' . esc_attr($module['version']) . '"><input type="hidden" name="revision" value="' . esc_attr($item['revision'] ?? 0) . '">';
-                foreach (self::criteria() as $key => $label) { echo '<label><input type="checkbox" name="criteria[]" value="' . esc_attr($key) . '"> ' . esc_html($label) . '</label>'; }
+                foreach (self::criteria() as $key => $label) { echo '<label class="habaq-learning__choice"><input type="checkbox" name="criteria[]" value="' . esc_attr($key) . '"> ' . esc_html($label) . '</label>'; }
                 echo '<p>لإكمال المهمة يلزم تحقق المعايير الأربعة. عند طلب تعديل، حدد التغيير والدعم المطلوب.</p>';
                 self::field('feedback', 'ملاحظات محددة للعضو', '', 'textarea', 600, true);
                 echo '<button name="decision" value="revise" type="submit">طلب تعديل</button> <button name="decision" value="complete" type="submit">اعتماد المهمة التعليمية</button></form></li>';

@@ -194,7 +194,7 @@ class Habaq_Learning {
         $catalog = self::catalog();
         $user_id = get_current_user_id();
         $track = get_user_meta($user_id, 'habaq_learning_track', true);
-        $return = get_permalink();
+        $return = Habaq_Learning_Library::reading_url(get_permalink());
         $path = self::path($user_id);
         $done = 0;
         foreach ($path as $id) {
@@ -205,9 +205,10 @@ class Habaq_Learning {
         ob_start();
         echo '<section class="habaq-learning alignfull" dir="rtl">';
         Habaq_Learning_Library::hero($return, false, isset($_GET['lesson']));
+        Habaq_Learning_Library::reading_controls();
         Habaq_Learning_Library::tabs($return, false);
         if (self::notice()) { echo '<p class="habaq-learning__feedback" role="status">' . esc_html(self::notice()) . '</p>'; }
-        echo '<p>أكملت ' . esc_html(Habaq_Learning_Library::number($done)) . ' من ' . esc_html(Habaq_Learning_Library::number(count($path))) . ' دروس في مسارك الحالي.</p><progress max="' . esc_attr(count($path)) . '" value="' . esc_attr($done) . '"></progress>';
+        echo '<p>أكملت ' . esc_html(Habaq_Learning_Library::number($done)) . ' من ' . esc_html(Habaq_Learning_Library::number(count($path))) . ' دروس في مسارك الحالي.</p><progress aria-label="تقدم دروس المسار" max="' . esc_attr(count($path)) . '" value="' . esc_attr($done) . '"></progress>';
         Habaq_Learning_Journey::dashboard($user_id, $return);
         echo '<details><summary>قبل أن تبدأ: الوقت والخصوصية</summary><p>ابدأ بالدروس المشتركة، ثم اختر مساراً يناسب مهمتك. يمكنك توزيع التعلم على أول أسبوعين، وتعديل الوقت مع مرافقك. بعد مهمة صغيرة ومراجعة من زميل، تحدثا عما طبقته خلال أربعة إلى ستة أسابيع.</p><p>نحفظ تقدمك وإجاباتك وملخص المهمة وملاحظات المراجع في حسابك. تطلع عليها الإدارة. يمكنك طلب تصحيحها أو تصديرها أو حذفها من إدارة الموقع. اكتب أمثلة دون أسماء أو تفاصيل حساسة.</p><p>مواد السياسات مبنية على مسودات ووثائق عمل تحتاج اعتماد الإدارة. إكمال الدروس لا يمنح صلاحية نشر ولا ينشئ اتفاق عمل.</p></details>';
         echo '<details' . (!$track ? ' open' : '') . '><summary>اختيار مسار عملي</summary><p>اختر مع مرافقك المسار الأقرب لمهمتك الأولى. يكفي مسار واحد. يبقى تقدمك في الدروس المشتركة إذا غيرته، لكنك تحتاج مهمة ومراجعة تطبيق للمسار الجديد. اختيار المسار لا يغير دورك أو صلاحياتك.</p>';
@@ -217,20 +218,20 @@ class Habaq_Learning {
         foreach ($catalog['tracks'] as $key => $value) {
             echo '<option value="' . esc_attr($key) . '" ' . selected($track, $key, false) . '>' . esc_html($value['title']) . '</option>';
         }
-        echo '</select></label><button type="submit">حفظ المسار</button></form></details><div class="habaq-learning__layout"><nav aria-label="دروس المسار"><h3>دروس قصيرة، تطبيق واحد</h3><p>اقرأ أي درس تحتاجه. سجل الإكمال بالترتيب كي تبني المهمة الأولى على أساس واضح.</p><ol>';
+        echo '</select></label><button type="submit">حفظ المسار</button></form></details><div class="habaq-learning__layout"><nav aria-label="دروس المسار"><a class="habaq-learning__lesson-jump" href="#habaq-lesson">انتقل إلى الدرس</a><h3>دروس قصيرة، تطبيق واحد</h3><p>اقرأ أي درس تحتاجه. سجل الإكمال بالترتيب كي تبني المهمة الأولى على أساس واضح.</p><ol>';
         $labels = array('new' => 'لم يبدأ', 'complete' => 'مكتمل', 'pending' => 'بانتظار المراجعة', 'revise' => 'يحتاج تعديلاً');
         foreach ($path as $id) {
             $item = self::module($id);
             $state = self::record($user_id, $item);
             echo '<li>';
-            echo '<a href="' . esc_url(add_query_arg('lesson', $id, $return)) . '"' . ($selected === $id ? ' aria-current="step"' : '') . '>' . esc_html($item['title']) . '</a>';
+            echo '<a href="' . esc_url(add_query_arg('lesson', $id, $return) . '#habaq-lesson') . '"' . ($selected === $id ? ' aria-current="step"' : '') . '>' . esc_html($item['title']) . '</a>';
             if (!self::unlocked($user_id, $id)) { echo ' · الإكمال بعد الدرس السابق'; }
             echo '<small>' . esc_html($item['minutes']) . ' دقيقة تقريباً · ' . esc_html(isset($labels[$state['status']]) ? $labels[$state['status']] : '') . '</small></li>';
         }
-        echo '</ol></nav><article id="habaq-lesson">';
+        echo '</ol></nav><article id="habaq-lesson" tabindex="-1" aria-labelledby="habaq-lesson-title">';
         if ($module && in_array($selected, $path, true)) {
             $state = self::record($user_id, $module);
-            echo '<h2>' . esc_html($module['title']) . '</h2>';
+            echo '<h2 id="habaq-lesson-title">' . esc_html($module['title']) . '</h2>';
             if (!empty($module['outcome'])) { echo '<p class="habaq-learning__outcome"><strong>بعد هذا الدرس:</strong> ' . esc_html($module['outcome']) . '</p>'; }
             echo wp_kses_post($module['body_html']);
             if (!empty($module['job_aid'])) { echo '<details><summary>بطاقة عمل سريعة قابلة للطباعة</summary><p>قالب مقترح للتطبيق. عدله مع الفريق حسب المهمة.</p><div class="habaq-learning__job-aid">' . wp_kses_post($module['job_aid']) . '</div><p>يمكن طباعة الصفحة أو حفظها PDF من المتصفح للقراءة عند ضعف الاتصال.</p></details>'; }
@@ -251,16 +252,16 @@ class Habaq_Learning {
             self::form_start('lesson', $return);
             echo '<input type="hidden" name="lesson" value="' . esc_attr($selected) . '"><input type="hidden" name="version" value="' . esc_attr($module['version']) . '"><fieldset><legend>' . esc_html($module['quiz']['prompt']) . '</legend>';
             foreach ($module['quiz']['options'] as $key => $option) {
-                echo '<label><input type="radio" name="answer" value="' . esc_attr($key) . '" required> ' . esc_html($option) . '</label>';
+                echo '<label class="habaq-learning__choice"><input type="radio" name="answer" value="' . esc_attr($key) . '" required> ' . esc_html($option) . '</label>';
             }
             echo '</fieldset>';
             if ($module['requires_review']) {
                 echo '<label>' . esc_html($module['assignment']) . '<textarea name="evidence" rows="6" maxlength="3000" required>' . esc_textarea(isset($state['evidence']) ? $state['evidence'] : '') . '</textarea></label>';
             }
-            echo '<label><input type="checkbox" name="ack" value="1" required> قرأت الدرس وفهمت حدود دوري. هذا تأكيد تعلّم ولا يمثل اعتماداً للمسودات.</label><button type="submit">' . esc_html($module['requires_review'] ? 'إرسال للمراجعة' : 'تحقق وحفظ الإكمال') . '</button></form>';
+            echo '<label class="habaq-learning__choice"><input type="checkbox" name="ack" value="1" required> قرأت الدرس وفهمت حدود دوري. هذا تأكيد تعلّم ولا يمثل اعتماداً للمسودات.</label><button type="submit">' . esc_html($module['requires_review'] ? 'إرسال للمراجعة' : 'تحقق وحفظ الإكمال') . '</button></form>';
             }
         } else {
-            echo '<h2>خطوتك التالية</h2><p>' . esc_html(!$track && $done === count($path) ? 'اختر مسار وحدتك مع مرافق التعلم كي تبدأ المهمة الأولى.' : (Habaq_Learning_Journey::task_done($user_id) ? 'انتقل إلى مراجعة التطبيق أدناه واتفق على هدف التطوير التالي.' : 'اختر درساً من القائمة. سجل الإكمال بالترتيب ثم سلم مهمتك الأولى للمراجعة.')) . '</p>';
+            echo '<h2 id="habaq-lesson-title">خطوتك التالية</h2><p>' . esc_html(!$track && $done === count($path) ? 'اختر مسار وحدتك مع مرافق التعلم كي تبدأ المهمة الأولى.' : (Habaq_Learning_Journey::task_done($user_id) ? 'انتقل إلى مراجعة التطبيق أدناه واتفق على هدف التطوير التالي.' : 'اختر درساً من القائمة. سجل الإكمال بالترتيب ثم سلم مهمتك الأولى للمراجعة.')) . '</p>';
         }
         echo '</article></div>';
         Habaq_Learning_Journey::member_forms($user_id, $return);

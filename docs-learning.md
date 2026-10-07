@@ -59,3 +59,10 @@ A native editable Cover pattern, **حبق: صورة واسعة ونص وأزرا
 See `docs/learning-design-and-review.md` for the 61 lesson review proposals, Arabic voice examples, experience backlog and manageable editorial workflow. These proposals are not yet published course rewrites or adopted policies. Prioritize five common lessons, the actually used path and one or two specialist courses needed for the first task.
 
 Code rollback: `rollback/learning-0.5.0` at `cce01cd4b3dabece1e536ec57d1f8e3c7eaf73ee`. This does not replace a database backup.
+
+
+## Reading/accessibility polish — 0.6.2
+
+The portal includes a “قراءة دون صور” switch. `reading=text` prevents generation of the hero image markup and stays active through learning links, filters and form redirects. It is a URL preference only; no cookie or learner-record update. Default mode retains Habaq’s photography. This does not provide offline saving or disable unrelated theme resources. Existing print/PDF guidance remains available.
+
+Lesson links land on focusable, named reading panels; progress has an accessible name. Answer/acknowledgement labels, lesson links and disclosure headings have 44px minimum target heights, and long article content wraps within the RTL grid. All course IDs, versions, quiz keys and stored completions are unchanged. Follow `docs/learning-implementation-progress.md` for batch status and remaining acceptance.
