@@ -269,7 +269,9 @@ Validation and delivery:
 - 617 isolated behavioral checks passed. New checks cover preserved versions, assignment and answer keys; the fictional local example; distinct rights scopes; no invented radio role; completed three-work plan; safe low-connectivity submission; reviewer guidance; formative feedback; and hidden raw answer keys.
 - All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed before documentation generation.
 - Both generated HTML documents parsed successfully and contain the 0.14.0 Radio lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using the expected Library version 7; both are now version 8. No duplicate artifact was created.
-- GitHub delivery is in progress. No publication or human acceptance is claimed.
+- Saved release commit `40ca4e31a08f3eefd45e112dc48520d78b166077`, tree `25e4f9749a920a0669ffb6d5eb84e41f92680bdb`, to the existing `codex/member-learning` branch using expected head `4514e36c418407f21ee9776f9b49e65bf0290240`, fast-forward only. No force update or merge to main occurred.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.14.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- Editorial/rights-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
 ## Remaining approved work
