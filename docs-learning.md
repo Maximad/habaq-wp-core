@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.5.0)
+# Habaq member learning and onboarding (0.8.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -72,3 +72,9 @@ Lesson links land on focusable, named reading panels; progress has an accessible
 The first two common lessons now use warm, direct fusha and short sections. Each contains an ordinary fictional situation, a completed example, a small exercise and a printable work card. Welcome explains Habaq through a local need, a small contribution and a new voice or audience. Roles distinguishes preparing, reviewing and authorizing work, with clear support, safe refusal and handover steps.
 
 Server-rendered formative feedback appears after an unsuccessful check and alongside a saved completion. It explains the decision without emitting raw answer keys. Both lesson IDs, answer keys and module versions remain unchanged because their tested learning results did not change. Existing completions therefore remain valid. The plugin release changes to 0.7.0 for cache-busting and release tracking; policy and domain-owner approval remain separate.
+
+## Shared lessons: conduct and data — 0.8.0
+
+The next two common lessons use the same short, practical structure. Conduct separates consent to attend, record and publish; gives a fictional local event case; and asks the learner to identify the exact permission, protection step, designated reporting role and independent alternative. Data works through three fictional files, data minimization, limited sharing, safe training copies, unapproved AI-tool exclusions and a brief incident response.
+
+Neither lesson collects real reports or files. Actual reporting, safety and privacy contacts and approved storage locations remain administrator setup decisions. The source policies are drafts, and completing a lesson does not adopt them or grant access. Lesson IDs, answer keys, prerequisites and module versions remain unchanged because the tested decisions did not change; existing completions remain valid. Release 0.8.0 tracks the editorial batch.

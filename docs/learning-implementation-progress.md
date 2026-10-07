@@ -67,10 +67,35 @@ Commit/deployment — completed:
 - Screenshot: `habaq-shared-lessons-0-7-0-1791365402014.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_f52db898eecc8191816c3336c05c0cab`.
 - Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
+## Batch 3 — shared lessons: conduct and data (0.8.0)
+
+Implemented:
+
+- Rewrote `conduct` as “نعمل باحترام، ونطلب الموافقة” in short, direct fusha. It separates consent to attend, record and publish; uses an explicitly fictional small music-event example; adds a completed consent decision and deidentified exercise; and expands the work card to include use, risk, review, designated reporting role and independent alternative.
+- Rewrote `data` as “أين نحفظ الملفات، ومع من نشاركها؟”. It uses three fictional files to practise purpose, classification, least access, deidentification, approved storage, AI-tool boundaries and first response to a lost device or exposed link. It explicitly tells learners not to upload a real file, report, testimony or password.
+- Added lesson-specific retry and completion feedback through the existing server-rendered mechanism. Feedback explains the decision principle without exposing raw answer keys.
+- Preserved both IDs, prerequisites, correct answer indexes and module version `2026-10-07.1`. Their tested outcomes did not materially change, so prior completions remain current. Plugin release `0.8.0` tracks this editorial batch.
+- Regenerated the complete curriculum and review plan from current repository content. Replaced the same Library artifact identities after validation: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 2. No duplicate curriculum or review file was created.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: current institutional context, including the need to adopt basic policies and distribute recurring responsibility.
+- `1- مسودة المبادئ العشرة لتجمع حبق`, modified 26 September 2026 at 07:12:53 UTC: respect, non-discrimination, non-exploitation, privacy, consent, safety, AI boundaries and non-retaliation. Reporting fields remain placeholders.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: data minimization, four classifications, least access, protected storage, incident response and AI exclusions. It remains a draft and names roles that have not been appointed here.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: informed consent, no pressure, separate use decisions, protection beyond consent where risk remains, and sensitive-content access limits. It remains a draft.
+
+Validation before commit:
+
+- 537 isolated behavioral checks passed. New checks cover preserved lesson versions/keys, fictional examples, separate consent decisions, safe alternate role, three-file classification, data minimization, attempt-specific feedback, saved completion feedback, unchanged record behavior and hidden raw keys.
+- All 36 PHP files passed PHP 8.3 lint; `git diff --check` passed.
+- Domain-owner, privacy/safety and learner acceptance are not claimed. Guarded commit, live publication and checks are pending.
+
+Commit/deployment: pending. Preserve 0.7.0 as a rollback branch before publication. Update this section with commit, deployment and live evidence.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue the shared editorial work with conduct and data, followed by workflow, using fresh relevant Drive sources, ordinary fictional local examples, short exercises, explanatory feedback and work cards. Keep IDs/versions when tested meaning is unchanged; deliberately version material requirements.
+2. Complete the shared editorial work with workflow, using fresh relevant Drive sources, an ordinary fictional local example, short exercise, explanatory feedback and work card. Keep IDs/versions when tested meaning is unchanged; deliberately version material requirements.
 3. Improve the two lessons in each existing path in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Actual first-task relevance chooses specialist priorities when available; otherwise start with broadly useful first-task courses.
 4. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 5. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.

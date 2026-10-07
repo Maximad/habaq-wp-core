@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.7.0
+# Habaq visual and course review plan — 0.8.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. `welcome` and `roles` now implement the first editorial batch. Their outcomes, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. `welcome`, `roles`, `conduct` and `data` now implement the first two editorial batches. Their outcomes, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -76,22 +76,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Implementation: Rewritten in release 0.7.0 with a bounded task example, a completed role card, an exercise on decision limits and formative feedback. The learning result and answer key are unchanged, so the module version remains 2026-10-07.1. Domain and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
-### الاحترام والموافقة والإبلاغ (`conduct`)
+### نعمل باحترام، ونطلب الموافقة (`conduct`)
 
 - Suggested clearer title: نعمل باحترام، ونطلب الموافقة
 - Order: ١ · البداية
 - Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
 - Example to add/refine: حالتان منفصلتان: مشاركة في لقاء، وموافقة على نشر صورة.
 - Acceptance: تمييز الموافقتين واختيار جهة آمنة دون سرد معلومات حساسة.
+- Implementation: Rewritten in release 0.8.0 with separate attendance, recording and publishing consent, a fictional local event example, a worked decision, a safe practice exercise, an expanded work card and formative feedback. Reporting roles remain intentionally unfilled pending management setup. The outcome, answer key and module version are unchanged; domain and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
-### الملفات والخصوصية والذكاء الاصطناعي (`data`)
+### أين نحفظ الملفات، ومع من نشاركها؟ (`data`)
 
 - Suggested clearer title: أين نحفظ الملفات، ومع من نشاركها؟
 - Order: ١ · البداية
 - Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
 - Example to add/refine: ثلاثة ملفات افتراضية: منشور عام، مسودة فريق، ومعلومات خاصة.
 - Acceptance: اختيار مكان الحفظ والمشاركة المناسب، وما لا يدخل في أداة ذكاء اصطناعي.
+- Implementation: Rewritten in release 0.8.0 around three fictional files, data minimization, bounded sharing, unapproved AI-tool exclusions, an incident response prompt, a worked card and formative feedback. The outcome, answer key and module version are unchanged; adopted storage locations, contacts, domain review and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
 ### من الفكرة إلى التسليم والتعلّم (`workflow`)

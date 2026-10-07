@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.7.0');
+define('HABAQ_WP_CORE_VERSION', '0.8.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -289,4 +289,25 @@ submit(array('op'=>'lesson','lesson'=>'roles','version'=>$roles['version'],'ack'
 $_GET=array('lesson'=>'roles','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$roles['feedback']['complete'])&&Habaq_Learning::record(1,$roles)['status']==='complete','roles completion and explanatory feedback');
 expect(!str_contains($markup,'"correct"'),'rewritten lessons still hide raw answer keys');
+// The second editorial batch keeps tested requirements while making conduct and data decisions practical.
+$conduct=Habaq_Learning::module('conduct');$data=Habaq_Learning::module('data');
+expect($conduct['version']==='2026-10-07.1'&&$data['version']==='2026-10-07.1','second shared editorial versions preserved');
+expect($conduct['quiz']['correct']===2&&$data['quiz']['correct']===1,'second shared answer keys preserved');
+expect($conduct['title']==='نعمل باحترام، ونطلب الموافقة'&&str_contains($conduct['body_html'],'ليان اسم افتراضي'),'conduct title and fictional local example');
+expect(str_contains($conduct['body_html'],'الموافقة على حضور لقاء لا تعني الموافقة على التصوير')&&str_contains($conduct['job_aid'],'البديل المستقل'),'conduct separates consent and safe alternate');
+expect($data['title']==='أين نحفظ الملفات، ومع من نشاركها؟'&&str_contains($data['body_html'],'ثلاثة ملفات افتراضية'),'data title and three-file exercise');
+expect(str_contains($data['body_html'],'لا ترفع ملفاً حقيقياً')&&str_contains($data['job_aid'],'أقل بيانات نحتاجها'),'data exercise minimizes collection');
+$GLOBALS['meta'][1]['habaq_learning_conduct']=array('version'=>$conduct['version'],'status'=>'new');
+$_GET=array('lesson'=>'conduct','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$conduct['feedback']['retry'])&&!str_contains($markup,$conduct['feedback']['complete']),'conduct retry feedback only after attempt');
+expect(Habaq_Learning::record(1,$conduct)['status']==='new','conduct retry does not complete lesson');
+$GLOBALS['meta'][1]['habaq_learning_conduct']=array('version'=>$conduct['version'],'status'=>'complete');
+$_GET=array('lesson'=>'conduct','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$conduct['feedback']['complete']),'conduct completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_data']=array('version'=>$data['version'],'status'=>'new');
+$_GET=array('lesson'=>'data','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$data['feedback']['retry'])&&!str_contains($markup,'"correct"'),'data retry feedback and hidden key');
+$GLOBALS['meta'][1]['habaq_learning_data']=array('version'=>$data['version'],'status'=>'complete');
+$_GET=array('lesson'=>'data','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$data['feedback']['complete']),'data completion principle rendered');
 echo 'Passed '.$count." behavioral checks.\n";

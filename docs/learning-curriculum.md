@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.5.0
+# Habaq learning curriculum 0.8.0
+
+## Editorial checkpoint 0.8.0
+
+The next two shared lessons now follow the same plain-language pattern. `conduct` is titled “نعمل باحترام، ونطلب الموافقة” and separates consent to attend, record and publish. It uses a fictional small music-event example, a completed consent decision, a deidentified exercise, an expanded work card and formative feedback. `data` is titled “أين نحفظ الملفات، ومع من نشاركها؟” and uses three fictional files to practise purpose, classification, minimum access, deidentification, AI-tool boundaries and first incident steps.
+
+The draft ten principles, draft privacy policy and draft sensitive-imagery policy were re-read on 7 October 2026. Their unfilled reporting and responsible-person fields remain unfilled in the learning material; actual contacts and approved storage locations must be configured by management before use. The lessons do not accept complaints, testimonies, passwords or real sensitive files.
+
+The tested outcomes and answer keys did not change, so both module IDs and version `2026-10-07.1` remain unchanged and existing completions stay valid. Domain-owner review, a privacy/safety review and trials with new learners are still required. Policy adoption, learning completion, access and publication authority remain separate.
 
 ## Editorial checkpoint 0.7.0
 
