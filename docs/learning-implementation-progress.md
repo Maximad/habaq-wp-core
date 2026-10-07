@@ -132,10 +132,33 @@ Commit/deployment — completed:
 - Screenshot: `habaq-workflow-0-9-0-1791372926170.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_a267f6be0dc48191a80cc20642447521`.
 - Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
+## Batch 5 — operations and coordination path (0.10.0)
+
+Scope and decisions:
+
+- Rewrote `operations-basics` as “بداية العمل في التنسيق”. It now separates the task owner, reviewer, decision owner and coordinator; uses a fictional Suwayda work week; compares an unclear task with a clear one; adds a safe exercise, stronger role card and formative feedback.
+- Rewrote `operations-task` as “مهمتك الأولى: التنسيق”. It remains one weekly board of three fictional tasks, one decision, one blocker and a short handover. It now adds a completed example, honest unconfirmed-resource label, deidentified submission prompt, four reviewer questions and one-actionable-change guidance.
+- Preserved both lesson IDs, prerequisites, practical assignment, correct answer indexes and module version `2026-10-07.2`. Their tested requirements did not materially change, so existing completions and review history remain current. Plugin release `0.10.0` tracks this editorial batch.
+- The lessons do not appoint an operations coordinator, adopt draft procedures, approve a budget, change real assignments or grant access. Learning, human review and operational authority remain separate.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: current concentration of knowledge and decisions, limited specialist capacity, overload risk and the goal of delegating recurring operations.
+- `منسق العمليات - التوصيف الوظيفي`, modified 6 January 2026 at 16:34:09 UTC: shared calendar, owners and deadlines, weekly due/blocked/decision summary, simple project boards, early risk signals, organized folders and decision records. It is a working job description, not an appointment.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: planning proposals are conditional on contract and team capacity; shared responsibility needs agreed time, tools and delegation; unconfirmed funds do not justify commitments. It remains a proposal for implementation and internal adoption.
+- `10- مسودة دليل الإجراءات المالية لحبق`, modified 13 December 2025 at 13:19:43 UTC: project owners, finance and approvers have separate roles; placeholder approval limits remain unfilled; spending and commitments require the defined review path. It remains a draft.
+
+Validation before commit:
+
+- 557 isolated behavioral checks passed. New checks cover preserved module versions, assignments and keys; fictional local examples; owner/reviewer/decision separation; authority limits; the three-task board; reviewer guidance; safe summaries; unconfirmed resources; lesson feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
+- Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 4. No duplicate curriculum or review file was created. Guarded commit, publication and live checks remain pending at this checkpoint and must not be claimed until recorded below.
+- Domain-owner and learner acceptance are not claimed.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Improve the two lessons in each existing path in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Actual first-task relevance chooses specialist priorities when available; otherwise start with broadly useful first-task courses.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations and coordination is complete in implementation. Actual first-task relevance chooses the next path when available; otherwise continue with a broadly useful path.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

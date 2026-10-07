@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.9.0
+# Habaq visual and course review plan — 0.10.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons—`welcome`, `roles`, `conduct`, `data` and `workflow`—now implement that editorial direction. Their outcomes, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination path now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -178,22 +178,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Acceptance: نص أو خطة صوتية قصيرة تفصل الاستخدام المسموح عن المطلوب مراجعته. يناقش المراجع التعديل والدعم المطلوب.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### العمليات والتنسيق: بداية الدور (`operations-basics`)
+### بداية العمل في التنسيق (`operations-basics`)
 
 - Suggested clearer title: بداية العمل في التنسيق
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: لوحة متابعة لثلاث مهام افتراضية وقرار واحد معلق. قارن نسخة واضحة بنسخة ناقصة.
 - Acceptance: مالكو مهام ومواعيد وعائق وصاحب قرار وخطوة متابعة.
+- Implementation: Rewritten in release 0.10.0 with a fictional Suwayda week, a clear distinction between task owner, reviewer, decision owner and coordinator, a weak/clear comparison, a small exercise, an expanded role card and formative feedback. The tested outcome, answer key and module version remain unchanged; domain and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### العمليات والتنسيق: أول مساهمة بمراجعة (`operations-task`)
+### مهمتك الأولى: التنسيق (`operations-task`)
 
 - Suggested clearer title: مهمتك الأولى: التنسيق
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: لوحة متابعة لثلاث مهام افتراضية وقرار واحد معلق. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
 - Acceptance: مالكو مهام ومواعيد وعائق وصاحب قرار وخطوة متابعة. يناقش المراجع التعديل والدعم المطلوب.
+- Implementation: Rewritten in release 0.10.0 as one fictional three-task weekly board with a completed example, decision and blocker log, unconfirmed-resource label, safe deidentified submission, reviewer questions and an expanded reusable card. The tested outcome, assignment, answer key and module version remain unchanged; domain and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### المالية والمنح: بداية الدور (`finance-basics`)

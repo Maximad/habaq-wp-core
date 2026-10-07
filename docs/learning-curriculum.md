@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.9.0
+# Habaq learning curriculum 0.10.0
+
+## Path checkpoint 0.10.0 — operations and coordination
+
+The first two-lesson path review is complete in implementation. `operations-basics` is now “بداية العمل في التنسيق” and teaches the difference between task ownership, review, decision authority and coordination through a fictional Suwayda week, a worked comparison, a small exercise and a reusable role card. `operations-task` is now “مهمتك الأولى: التنسيق” and uses one completed three-task weekly board, a decision and blocker log, an unconfirmed-resource label, a deidentified submission prompt and bounded reviewer guidance.
+
+The current operations coordinator working document, integrated LIFE programme proposal, draft financial procedures and strategic note were re-read on 7 October 2026. The lessons adapt the documents' shared emphasis on simple tools, clear owners and deadlines, early risk signals, explicit decision authority and honest resource status. They do not appoint an operations coordinator, adopt the draft procedures, approve a budget or authorize changes to real tasks or access.
+
+The tested outcomes, practical assignment, answer keys and module version `2026-10-07.2` did not change, so existing completions and review history stay valid. Domain-owner review and trials with new learners remain required.
 
 ## Editorial checkpoint 0.9.0
 

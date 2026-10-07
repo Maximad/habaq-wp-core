@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.9.0');
+define('HABAQ_WP_CORE_VERSION', '0.10.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -324,4 +324,25 @@ expect(Habaq_Learning::record(1,$workflow)['status']==='new','workflow retry doe
 $GLOBALS['meta'][1]['habaq_learning_workflow']=array('version'=>$workflow['version'],'status'=>'complete');
 $_GET=array('lesson'=>'workflow','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$workflow['feedback']['complete'])&&!str_contains($markup,'"correct"'),'workflow completion principle rendered without raw key');
+// The first path editorial batch makes operations work concrete without changing tested requirements.
+$operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
+expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');
+expect($operations_basics['quiz']['correct']===0&&$operations_task['quiz']['correct']===2,'operations answer keys preserved');
+expect($operations_basics['title']==='بداية العمل في التنسيق'&&str_contains($operations_basics['body_html'],'هالة، وهي شخصية افتراضية من السويداء'),'operations introduction and fictional local example');
+expect(str_contains($operations_basics['body_html'],'صاحب المهمة')&&str_contains($operations_basics['body_html'],'صاحب القرار')&&str_contains($operations_basics['body_html'],'لا يعتمد ميزانية'),'operations role separates ownership review and authority');
+expect(str_contains($operations_basics['job_aid'],'تمّت المهمة عندما')&&str_contains($operations_basics['job_aid'],'لا أملك قرار'),'operations role card captures completion and limits');
+expect($operations_task['title']==='مهمتك الأولى: التنسيق'&&str_contains($operations_task['body_html'],'لوحة أسبوع مكتملة للمقارنة'),'operations task has worked board');
+expect(str_contains($operations_task['body_html'],'إرشاد للمراجع')&&str_contains($operations_task['body_html'],'ملاحظة واحدة قابلة للتنفيذ'),'operations task gives bounded reviewer guidance');
+expect(str_contains($operations_task['body_html'],'لا تنسخ ملفات المشروع')&&str_contains($operations_task['body_html'],'غير مؤكد'),'operations task protects data and marks uncertain resources');
+expect(str_contains($operations_task['job_aid'],'مهمة ٣')&&str_contains($operations_task['job_aid'],'القرار المعلق وصاحبه وموعده'),'operations task card supports three tasks and decision log');
+$GLOBALS['meta'][1]['habaq_learning_track']='operations';
+$GLOBALS['meta'][1]['habaq_learning_operations-basics']=array('version'=>$operations_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'operations-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$operations_basics['feedback']['retry'])&&!str_contains($markup,$operations_basics['feedback']['complete']),'operations basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_operations-basics']=array('version'=>$operations_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'operations-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$operations_basics['feedback']['complete']),'operations basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_operations-task']=array('version'=>$operations_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'operations-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$operations_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'operations task review principle rendered without raw key');
 echo 'Passed '.$count." behavioral checks.\n";

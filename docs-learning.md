@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.9.0)
+# Habaq member learning and onboarding (0.10.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -84,3 +84,11 @@ Neither lesson collects real reports or files. Actual reporting, safety and priv
 The final common lesson is now titled “من فكرة صغيرة إلى تسليم واضح”. It turns a broad idea into one reviewable output with a definition of done, one reviewer, a deadline, authority limits, a midpoint question and a clear handover. A fictional Suwayda reading-circle example is preparation-only: it permits no booking, public announcement or spending. The exercise uses fictional information, and the work card can be completed on paper or in a light text file when connectivity is weak.
 
 The lesson now gives attempt-specific feedback and distinguishes recorded learning, human review of work, publication or spending authority, reach and evidence of impact. The tested outcome, answer key, lesson ID, prerequisites and module version remain unchanged, so prior completions remain current. Release 0.9.0 tracks this editorial batch; domain-owner review and learner testing are not claimed.
+
+## Operations and coordination path — 0.10.0
+
+The operations introduction is now titled “بداية العمل في التنسيق”. It explains the difference between a task owner, reviewer, decision owner and coordinator, using a fictional Suwayda work week and a weak-versus-clear task comparison. The role card records one output, definition of done, deadline, blocker, support, decision boundary and handover without assigning real staff or granting authority.
+
+The first assignment is now titled “مهمتك الأولى: التنسيق”. It remains one fictional three-task weekly board with one decision, one blocker and a short handover. A completed example marks unconfirmed resources honestly, prohibits booking, publishing, spending and access changes, and asks the learner for a deidentified summary only. Reviewer guidance uses four practical questions and asks for one actionable revision plus available support.
+
+Both lesson IDs, assignments, prerequisites, answer keys and module version `2026-10-07.2` remain unchanged because the tested requirements did not change. Existing completions and review history therefore remain current. Release 0.10.0 tracks the editorial batch; domain-owner and learner acceptance are still pending.
