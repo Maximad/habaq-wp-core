@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.14.0
+# Habaq visual and course review plan — 0.15.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People, Habaq Production and Radio paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio and Finance paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -206,22 +206,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Implementation: Rewritten in release 0.10.0 as one fictional three-task weekly board with a completed example, decision and blocker log, unconfirmed-resource label, safe deidentified submission, reviewer questions and an expanded reusable card. The tested outcome, assignment, answer key and module version remain unchanged; domain and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### المالية والمنح: بداية الدور (`finance-basics`)
+### بداية العمل في المالية (`finance-basics`)
 
 - Suggested clearer title: بداية العمل في المالية
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: ملف عملية افتراضية بميزانية ودليل وطلب اعتماد. قارن نسخة واضحة بنسخة ناقصة.
 - Acceptance: مطابقة الموارد والأدلة وحدود التفويض دون صرف حقيقي.
+- Implementation: Rewritten in release 0.15.0 with a fictional Suwayda printing request, weak/clear comparison, funding and liquidity distinctions, separate operation roles, safe paper exercise, expanded role card and formative feedback. Tested requirements, key and module version remain unchanged; financial/authority-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### المالية والمنح: أول مساهمة بمراجعة (`finance-task`)
+### مهمتك الأولى: ملف عملية مالية (`finance-task`)
 
-- Suggested clearer title: مهمتك الأولى: المالية
+- Suggested clearer title: مهمتك الأولى: ملف عملية مالية
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
-- Example to add/refine: ملف عملية افتراضية بميزانية ودليل وطلب اعتماد. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
-- Acceptance: مطابقة الموارد والأدلة وحدود التفويض دون صرف حقيقي. يناقش المراجع التعديل والدعم المطلوب.
+- Example to add/refine: ملف عملية افتراضية بخمس حركات وميزانية صغيرة، مع نموذج مكتمل ومعلقات واضحة.
+- Acceptance: مطابقة التمويل والسيولة والأدلة وحدود التفويض دون صرف حقيقي، ثم تعديل واحد بعد المراجعة.
+- Implementation: Rewritten in release 0.15.0 as a fictional five-movement operation file with a small budget, completed example, duplicate and missing-item handling, deidentified seven-line submission, low-connectivity alternative and actionable reviewer guidance. Assignment, key and module version remain unchanged; financial/authority-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### الأشخاص والتدريب: بداية الدور (`people-ops-basics`)

@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.14.0
+# Habaq learning curriculum 0.15.0
+
+## Path checkpoint 0.15.0 — Finance
+
+`finance-basics` is now “بداية العمل في المالية”. A fictional Suwayda printing request separates preparation, review, authorization, acceptance and payment. A weak-versus-clear comparison distinguishes expected funding from received cash and available liquidity. The learner checks code and budget line, funding status, restricted-fund eligibility, evidence and acceptance, and the person authorized to decide. A paper or light-text role card keeps the exercise feasible and uses no real amounts, suppliers or payment details.
+
+`finance-task` is now “مهمتك الأولى: ملف عملية مالية”. The assignment remains a fictional operation file and reconciliation with five movements, a small budget, a missing-items list and an owner for each follow-up. The completed example contains one restricted receipt, one operation ready for payment review but not paid, one duplicate, one documented fee needing coding and one unsupported claim left pending. The learner submits only a deidentified seven-line summary. Reviewer guidance checks budget purpose, funding/liquidity distinctions, evidence, duplicate and missing-item handling, and authority boundaries before one actionable revision or educational completion.
+
+The strategic working draft, draft financial procedure, restricted-funds/grants draft and assets/equipment draft were re-read on 7 October 2026. Their approval thresholds, deadlines and assigned roles remain drafts or unfilled fields, not adopted rules or appointments. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. Financial/authority-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.14.0 — Radio
 

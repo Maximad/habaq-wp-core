@@ -274,10 +274,32 @@ Validation and delivery:
 - Editorial/rights-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
+## Batch 10 — Finance path (0.15.0)
+
+Scope and decisions:
+
+- Rewrote `finance-basics` as “بداية العمل في المالية” and `finance-task` as “مهمتك الأولى: ملف عملية مالية”. They now use a fictional Suwayda printing request, a weak/clear comparison, a completed five-movement operation file, explicit funding/liquidity states, duplicate and missing-document handling, a low-connectivity summary, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.15.0` records the editorial batch.
+- Preparing, reviewing, authorizing, accepting, paying and reconciling remain separate. The exercise uses fictional units and documents only. It collects no supplier identity, invoice, contract, bank statement, payment details or real amount, and it does not execute a payment.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: financial fragility, short-term funding, concentrated decisions and limited specialist capacity remain institutional risks. It remains a working draft.
+- `10- مسودة دليل الإجراءات المالية لحبق`, modified 13 December 2025 at 13:19:43 UTC: project owner, financial review, authorization, acceptance and payment are distinct steps; a complete operation file precedes payment. Approval thresholds, deadlines and several role assignments remain unfilled draft fields.
+- `8- مسودة سياسة المنح والأموال المقيدة والتقارير للممولين لتجمع حبق`, modified 26 December 2025 at 15:34:23 UTC: restricted funds need project/budget coding, eligible purpose, evidence, no double funding and documented change approval. It remains a draft with unfilled funder-specific rules.
+- `13- مسودة ملحق E: سياسة الأصول والمعدات في حبق`, modified 13 December 2025 at 12:38:15 UTC: purchase, approval, receipt and asset registration are distinct, and equipment needs traceable custody. It remains a draft and does not appoint an asset owner here.
+
+Validation and delivery:
+
+- 633 isolated behavioral checks passed. The 16 new Finance checks cover preserved versions, assignment and answer keys; the fictional local example; funding/liquidity distinctions; separation of evidence and approval; completed five-movement file; duplicate/missing handling; safe low-connectivity submission; reviewer guidance; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both generated HTML documents parsed successfully and contain the 0.15.0 Finance lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using the expected Library version 8; both are now version 9. No duplicate artifact was created.
+- GitHub delivery is in progress. No publication or human acceptance is claimed.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production and Radio are complete in implementation. Actual first-task relevance chooses the next path; otherwise Finance is next because its first task has high authority risk.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio and Finance are complete in implementation. Actual first-task relevance chooses the next path; otherwise People operations is next because onboarding and support affect every new member.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

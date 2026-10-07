@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.14.0');
+define('HABAQ_WP_CORE_VERSION', '0.15.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -420,6 +420,31 @@ expect(str_contains($markup,$radio_basics['feedback']['complete']),'radio basics
 $GLOBALS['meta'][1]['habaq_learning_radio-task']=array('version'=>$radio_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'radio-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$radio_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'radio task review principle rendered without raw key');
+// The Finance path makes one fictional operation file reviewable without granting approval or payment authority.
+$finance_basics=Habaq_Learning::module('finance-basics');$finance_task=Habaq_Learning::module('finance-task');
+expect($finance_basics['version']==='2026-10-07.2'&&$finance_task['version']==='2026-10-07.2','finance editorial versions preserved');
+expect($finance_basics['quiz']['correct']===0&&$finance_task['quiz']['correct']===2,'finance answer keys preserved');
+expect($finance_task['assignment']==='جهز ملف عملية ومطابقة افتراضيين بخمس حركات وميزانية صغيرة، مع قائمة نقص ومالك معالجة. لا تستخدم كشفاً أو بيانات دفع حقيقية.','finance practical assignment preserved');
+expect($finance_basics['title']==='بداية العمل في المالية'&&str_contains($finance_basics['body_html'],'ريم اسم افتراضي'),'finance introduction and fictional local example');
+expect(str_contains($finance_basics['body_html'],'قارن بين طلب ناقص وطلب واضح')&&str_contains($finance_basics['body_html'],'التمويل متوقع ولم يُقبض بعد'),'finance lesson compares requests and separates expected funding');
+expect(str_contains($finance_basics['body_html'],'الفاتورة ليست الملف كله')&&str_contains($finance_basics['body_html'],'لا يعتمد الشخص طلبه وحده'),'finance lesson separates evidence and approval');
+expect(str_contains($finance_basics['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($finance_basics['body_html'],'لا تستخدم مبلغاً حقيقياً'),'finance lesson supports low connectivity and safe practice');
+expect(str_contains($finance_basics['job_aid'],'حالة التمويل')&&str_contains($finance_basics['job_aid'],'ما لا أملك قرار توقيعه أو دفعه'),'finance role card captures liquidity and authority');
+expect($finance_task['title']==='مهمتك الأولى: ملف عملية مالية'&&str_contains($finance_task['body_html'],'مثال مكتمل للمقارنة'),'finance task has worked operation file');
+expect(str_contains($finance_task['body_html'],'الحركة ٥')&&str_contains($finance_task['body_html'],'نسخة مكررة'),'finance task models five movements and duplicate detection');
+expect(str_contains($finance_task['body_html'],'إرشاد للمراجع')&&str_contains($finance_task['body_html'],'تعديلاً واحداً قابلاً للتنفيذ'),'finance task gives actionable reviewer guidance');
+expect(str_contains($finance_task['body_html'],'لا تنفذ دفعة')&&str_contains($finance_task['body_html'],'سبعة أسطر فقط'),'finance task blocks real payment and supports weak connection');
+expect(str_contains($finance_task['job_aid'],'الحركة ٥')&&str_contains($finance_task['job_aid'],'من يراجع الدفع'),'finance task card captures movements and payment review');
+$GLOBALS['meta'][1]['habaq_learning_track']='finance';
+$GLOBALS['meta'][1]['habaq_learning_finance-basics']=array('version'=>$finance_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'finance-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$finance_basics['feedback']['retry'])&&!str_contains($markup,$finance_basics['feedback']['complete']),'finance basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_finance-basics']=array('version'=>$finance_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'finance-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$finance_basics['feedback']['complete']),'finance basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_finance-task']=array('version'=>$finance_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'finance-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$finance_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'finance task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

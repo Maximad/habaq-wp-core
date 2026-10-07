@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.14.0)
+# Habaq member learning and onboarding (0.15.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 617 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production and Radio lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 633 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production, Radio and Finance lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -124,3 +124,11 @@ The strategic working draft, sensitive-imagery draft, historical Óros proposal,
 `radio-task` remains a fictional short episode or playlist with three imaginary works. Its completed example includes one linear-only work, one requiring separate archive permission and one expired work with a substitute. Learners submit a safe seven-line summary, while a human reviewer checks purpose, rights, feasibility and handover and requests one actionable change. Completion does not authorize contact, recording, broadcasting, archiving, downloading or signing.
 
 The current radio-permission document, programme proposal, editorial-policy draft and strategic working draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Editorial/rights-owner and learner acceptance remain pending.
+
+## Finance path — 0.15.0
+
+`finance-basics` is now “بداية العمل في المالية”. A fictional Suwayda printing request separates preparation, review, authorization, acceptance and payment. A weak-versus-clear comparison distinguishes expected funding, confirmed funding, received cash and liquidity. The learner uses five questions to check project code/budget line, funding/liquidity, restricted-fund eligibility, evidence/acceptance and decision authority, then completes a safe paper or light-text role card.
+
+`finance-task` is now “مهمتك الأولى: ملف عملية مالية”. The assignment remains one fictional operation file and reconciliation with five movements and a small budget. Its completed example includes restricted cash received, a file ready for payment review but not paid, a duplicate invoice, a documented fee needing coding and a claim missing approval/evidence. The learner submits a deidentified seven-line summary; no real invoice, contract, statement, supplier, payment data or transaction is used.
+
+Reviewer guidance checks the budget/output link, separation of expected/confirmed/received/liquid funds, evidence and status for each movement, duplicate/missing-item handling and authority boundaries. Educational approval does not approve a payment, grant eligibility, signature, account access or a real reconciliation. The strategic working draft, draft financial procedure, restricted-funds/grants draft and assets/equipment draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Finance/authority-owner and learner acceptance remain pending.
