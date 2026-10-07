@@ -118,8 +118,19 @@ Validation before commit:
 
 - 545 isolated behavioral checks passed. New checks cover the preserved lesson version/key, fictional example, external-action limits, low-connectivity option, safe exercise, expanded handover card, attempt-specific feedback, unchanged completion behavior and hidden raw answer key.
 - All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
-- Regenerated and validated the 61-card review plan and the 61-lesson curriculum. Replaced the same Library artifact identities using expected version 2: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 3. No duplicate curriculum or review file was created. Release commit, publication and live checks remain pending at this checkpoint and must not be claimed until recorded below.
+- Regenerated and validated the 61-card review plan and the 61-lesson curriculum. Replaced the same Library artifact identities using expected version 2: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 3. No duplicate curriculum or review file was created.
 - Domain-owner and learner acceptance are not claimed.
+
+Commit/deployment — completed:
+
+- Release commit: `86143ced83c50cb405448f467e8c8d6f356d1a89`, tree `6e669692f72c190b6c218cadee0b31f3968f7f84`. The branch was rechecked as identical to expected head `03d0b4388c85580486960d7d40bfe1ef129d282c`, then updated fast-forward only with that expected-head safeguard.
+- Code rollback preserved as `rollback/learning-0.8.0` at the starting head before publication. No database backup or restore test is claimed.
+- Published through the existing WordPress Deployer for Git on 7 October 2026 around 11:35 UTC. The UI reported “Package updated successfully.” The live learning stylesheet loads with `ver=0.9.0`.
+- Live `workflow` shows the new title, fictional Mira example, completed-card disclosure, low-connectivity option, exercise and lesson-specific retry hint. No raw `correct` key was present in the frontend response.
+- The inspecting account had not completed earlier shared prerequisites, so the workflow form remained absent while the content was readable. This confirms the existing prerequisite gate remained active. No quiz, acknowledgement, completion, support or review submission was made; learner state was not mutated.
+- At the 1348px desktop viewport, the lesson had no horizontal overflow. This does not replace the pending real narrow-screen, keyboard and larger-text acceptance checks.
+- Screenshot: `habaq-workflow-0-9-0-1791372926170.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_a267f6be0dc48191a80cc20642447521`.
+- Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
 ## Remaining approved work
 
