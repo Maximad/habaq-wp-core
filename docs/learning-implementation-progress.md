@@ -54,9 +54,18 @@ Validation before commit:
 
 - 526 isolated behavioral checks passed. New checks cover preserved lesson versions/keys, explicit fictional examples, Hub independence, role authority/handover, attempt-specific feedback, saved completion feedback, unchanged record behavior and hidden raw keys.
 - All 36 PHP files passed PHP 8.3 lint; `git diff --check` passed.
-- Domain-owner and learner acceptance are not claimed. Live publication and checks are pending the guarded release commit.
+- Domain-owner and learner acceptance are not claimed. Live publication and checks are recorded below.
 
-Commit/deployment: pending. Preserve 0.6.2 as a rollback branch before publication. Update this section with commit, deployment and live evidence.
+Commit/deployment — completed:
+
+- Release commit: `946834786af1b346ab4d803d4a93fb32fbcefd19`, tree `3a97979797f985488856a2809a7b6c692f12ee80`. Branch update used expected head `3ba5caf7383a8c98d1236b8eba2e25fd432881ae`, fast-forward only; the local staged tree matched the created remote tree exactly.
+- Code rollback preserved as `rollback/learning-0.6.2` at `3ba5caf7383a8c98d1236b8eba2e25fd432881ae` before publication. No database backup or restore test is claimed.
+- Published through the existing WordPress Deployer for Git on 7 October 2026 around 10:29 UTC. The UI reported “Package updated successfully.” The live stylesheet loads with `ver=0.7.0`.
+- Live `welcome` shows the new title, fictional Salma example, worked example and explicit Hub Sweida independence. Live `roles` shows the new title, fictional Noor example, worked role card and the specific retry hint when the bounded wrong-notice state is rendered. No raw `correct` key was present in either frontend response.
+- The `roles` form remained absent because `welcome` was not completed for the inspecting account, confirming that the existing prerequisite gate still applies. No quiz, acknowledgement, completion or review submission was made during the live checks; learner state was not mutated.
+- At 1363px viewport width, the live welcome view had 1348px document width and no horizontal overflow. This is desktop evidence only and does not replace the pending real narrow-screen and zoom checks.
+- Screenshot: `habaq-shared-lessons-0-7-0-1791365402014.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_f52db898eecc8191816c3336c05c0cab`.
+- Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
 ## Remaining approved work
 
