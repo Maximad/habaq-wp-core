@@ -293,7 +293,9 @@ Validation and delivery:
 
 - 633 isolated behavioral checks passed. The 16 new Finance checks cover preserved versions, assignment and answer keys; the fictional local example; funding/liquidity distinctions; separation of evidence and approval; completed five-movement file; duplicate/missing handling; safe low-connectivity submission; reviewer guidance; formative feedback; and hidden raw answer keys.
 - All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both generated HTML documents parsed successfully and contain the 0.15.0 Finance lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using the expected Library version 8; both are now version 9. No duplicate artifact was created.
-- GitHub delivery is in progress. No publication or human acceptance is claimed.
+- Saved release commit `d99fb57fb00560a3d3f2921a41f61cdd0af307ac`, tree `8c8d9c51e0e9c6070869d5584f4008335266d5a6`, to the existing `codex/member-learning` branch using expected head `76b3699b7d4edc2cafed05e496d6782cb8e12982`, fast-forward only. No force update or merge to main occurred.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.15.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- Financial/authority-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
 ## Remaining approved work
