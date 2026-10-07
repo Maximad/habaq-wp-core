@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.13.0
+# Habaq learning curriculum 0.14.0
+
+## Path checkpoint 0.14.0 — Radio
+
+`radio-basics` is now “بداية العمل في الراديو”. A fictional Suwayda five-minute segment compares a broad idea with a bounded episode plan, separates linear broadcast, AutoDJ, promotion, podcast/archive, download and video rights, and gives the learner a paper or light-text exercise. The role card records the version, rights holder, scope, duration, ending method, credit, fallback, reviewer and decision limits.
+
+`radio-task` is now “مهمتك الأولى: مخطط حلقة”. The required assignment remains a short fictional episode or playlist with three imaginary works, a rights register, review plan and fallback. The completed example marks one work as linear-only, one as needing separate archive permission and one as expired. The learner submits a seven-line deidentified summary without music, recordings, signed permissions, contact details or private links. The reviewer checks purpose, rights, feasibility and handover, then requests one actionable change or records the educational review.
+
+The strategic working draft, limited radio-permission draft, integrated LIFE programme proposal and editorial-policy draft were re-read on 7 October 2026. Their unfilled fields and proposed roles remain unfilled. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. Editorial/rights-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.13.0 — Habaq Production
 

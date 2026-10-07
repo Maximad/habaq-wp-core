@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.13.0)
+# Habaq member learning and onboarding (0.14.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 601 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People and Production lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 617 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production and Radio lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -116,3 +116,11 @@ Both lesson IDs, assignments, prerequisites, answer keys and module version `202
 `production-task` is now “مهمتك الأولى: نسخة تجريبية”. The assignment remains a one-page brief and a 30–60 second prototype or storyboard using learner-owned materials. The completed six-shot example uses original text and shapes, with no real people, outside music or archive. The learner submits only a deidentified summary; a human reviewer checks purpose, rights, feasibility and handover, then gives one actionable change. No raw sensitive files or private links are collected.
 
 The strategic working draft, sensitive-imagery draft, historical Óros proposal, integrated LIFE programme proposal and assets/equipment draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, keys and module versions `2026-10-07.1` remain unchanged. Existing completions and review history remain valid. Production/rights-owner and learner acceptance remain pending.
+
+## Radio path — 0.14.0
+
+`radio-basics` now uses a fictional five-minute Suwayda segment to distinguish a clear episode plan from an open-ended idea. It records linear broadcast, AutoDJ, promotional excerpt, archive/podcast, download and video as separate uses. A paper or light-text exercise captures the rights holder, version, scope, duration, ending method, credit, fallback, reviewer and decision limit.
+
+`radio-task` remains a fictional short episode or playlist with three imaginary works. Its completed example includes one linear-only work, one requiring separate archive permission and one expired work with a substitute. Learners submit a safe seven-line summary, while a human reviewer checks purpose, rights, feasibility and handover and requests one actionable change. Completion does not authorize contact, recording, broadcasting, archiving, downloading or signing.
+
+The current radio-permission document, programme proposal, editorial-policy draft and strategic working draft were re-read on 7 October 2026. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Editorial/rights-owner and learner acceptance remain pending.

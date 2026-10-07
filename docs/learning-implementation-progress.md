@@ -249,10 +249,33 @@ Validation and delivery:
 - The preceding execution was interrupted by a temporary usage-limit approval-review failure before final lint/commit. The local code and tests were preserved and this batch resumes them.
 - Last verified live release remains `0.10.0`; the established deployment blocker is WordPress reauthentication with no callable Hostinger deployment method. Code rollback remains `rollback/learning-0.10.0`. Credentials and learner state remain untouched.
 
+## Batch 9 — Radio path (0.14.0)
+
+Scope and decisions:
+
+- Rewrote `radio-basics` as “بداية العمل في الراديو” and `radio-task` as “مهمتك الأولى: مخطط حلقة”. They now use a fictional Suwayda five-minute segment, a broad/clear comparison, a completed three-work episode plan, explicit rights scopes, low-connectivity alternatives, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.14.0` records the editorial batch.
+- Learning completion, educational review, editorial/rights review, permission to contact or record, broadcast, AutoDJ, archive, download and signing authority remain separate. The exercise uses imaginary works and collects no music, recordings, signed permissions, contact details or private links.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: audio and platform distribution can widen access, while capacity and priorities remain limited. It remains a working draft.
+- `إذن محدود لبث أعمال موسيقية عبر راديو حبق`, modified 8 September 2026 at 00:39:53 UTC: the proposed permission is limited, non-exclusive and terminable; linear broadcast, AutoDJ, promotion, archive/podcast, download, video and modification have distinct scopes. It remains a draft with unfilled fields.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: Radio is proposed as a six-item experiment within Media and expands only after evaluation. It remains a proposal.
+- `17- مسودة سياسة التحرير والنشر والتصحيح وحق الرد في حبق`, modified 13 December 2025 at 12:48:25 UTC: production, fact review, sensitivity review, publication decision and archiving are distinct steps; music and effects require license, own production or written permission. It remains a draft.
+
+Validation and delivery:
+
+- 617 isolated behavioral checks passed. New checks cover preserved versions, assignment and answer keys; the fictional local example; distinct rights scopes; no invented radio role; completed three-work plan; safe low-connectivity submission; reviewer guidance; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed before documentation generation.
+- Both generated HTML documents parsed successfully and contain the 0.14.0 Radio lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using the expected Library version 7; both are now version 8. No duplicate artifact was created.
+- GitHub delivery is in progress. No publication or human acceptance is claimed.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People and Habaq Production are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise the Radio path is next.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production and Radio are complete in implementation. Actual first-task relevance chooses the next path; otherwise Finance is next because its first task has high authority risk.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.13.0');
+define('HABAQ_WP_CORE_VERSION', '0.14.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -395,6 +395,31 @@ expect(str_contains($markup,$production_basics['feedback']['complete']),'product
 $GLOBALS['meta'][1]['habaq_learning_production-task']=array('version'=>$production_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'production-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$production_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'production task review principle rendered without raw key');
+// The Radio path keeps its existing requirements while making rights and first review concrete.
+$radio_basics=Habaq_Learning::module('radio-basics');$radio_task=Habaq_Learning::module('radio-task');
+expect($radio_basics['version']==='2026-10-07.2'&&$radio_task['version']==='2026-10-07.2','radio editorial versions preserved');
+expect($radio_basics['quiz']['correct']===0&&$radio_task['quiz']['correct']===2,'radio answer keys preserved');
+expect($radio_task['assignment']==='جهز مخطط حلقة قصيرة أو قائمة بث افتراضية بثلاثة أعمال وهمية، مع سجل حقوق وخطة مراجعة وبديل لعمل غير مصرح به.','radio practical assignment preserved');
+expect($radio_basics['title']==='بداية العمل في الراديو'&&str_contains($radio_basics['body_html'],'سامر اسم افتراضي'),'radio introduction and fictional local example');
+expect(str_contains($radio_basics['body_html'],'قارن بين فكرة واسعة وخطة واضحة')&&str_contains($radio_basics['body_html'],'لا ينشئ اسم المسار فريقاً'),'radio lesson compares plans and avoids invented role');
+expect(str_contains($radio_basics['body_html'],'البث المباشر أو الخطي')&&str_contains($radio_basics['body_html'],'لا تعتبر خانة فارغة موافقة'),'radio lesson distinguishes rights scopes');
+expect(str_contains($radio_basics['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($radio_basics['body_html'],'لا تستخدم أسماء فنانين'),'radio lesson supports low connectivity and safe practice');
+expect(str_contains($radio_basics['job_aid'],'المدة وطريقة الإنهاء')&&str_contains($radio_basics['job_aid'],'ما لا أملك قرار بثه'),'radio role card captures rights and authority');
+expect($radio_task['title']==='مهمتك الأولى: مخطط حلقة'&&str_contains($radio_task['body_html'],'مثال مكتمل للمقارنة'),'radio task has worked episode plan');
+expect(str_contains($radio_task['body_html'],'العمل «ب» يحتاج إذناً منفصلاً للأرشيف')&&str_contains($radio_task['body_html'],'ضع «غير جاهز»'),'radio task models rights state and fallback');
+expect(str_contains($radio_task['body_html'],'إرشاد للمراجع')&&str_contains($radio_task['body_html'],'ملاحظة واحدة قابلة للتنفيذ'),'radio task gives actionable reviewer guidance');
+expect(str_contains($radio_task['body_html'],'لا ترفع ملفات موسيقية')&&str_contains($radio_task['body_html'],'بطاقة نصية من سبعة أسطر'),'radio task protects files and supports weak connection');
+expect(str_contains($radio_task['job_aid'],'العمل ٣ والنسخة والحق')&&str_contains($radio_task['job_aid'],'ما يحتاج اعتماداً منفصلاً'),'radio task card captures three works and separate authority');
+$GLOBALS['meta'][1]['habaq_learning_track']='radio';
+$GLOBALS['meta'][1]['habaq_learning_radio-basics']=array('version'=>$radio_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'radio-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$radio_basics['feedback']['retry'])&&!str_contains($markup,$radio_basics['feedback']['complete']),'radio basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_radio-basics']=array('version'=>$radio_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'radio-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$radio_basics['feedback']['complete']),'radio basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_radio-task']=array('version'=>$radio_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'radio-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$radio_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'radio task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

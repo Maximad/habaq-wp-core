@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.13.0
+# Habaq visual and course review plan — 0.14.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People and Habaq Production paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and the two-lesson operations/coordination, Habaq Media, Habaq People, Habaq Production and Radio paths now implement that editorial direction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. The other rows below are proposals for the next editorial reviews, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -166,22 +166,24 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Implementation: Rewritten in release 0.13.0 as one 30–60 second fictional prototype with a completed example, safe summary, rights exclusions, low-connectivity alternative and actionable reviewer guidance. Assignment, answer key and module version remain unchanged; production/rights-owner and learner review remain pending.
 - Current content version: 2026-10-07.1; keep source references during review.
 
-### راديو حبق والصوت: بداية الدور (`radio-basics`)
+### بداية العمل في الراديو (`radio-basics`)
 
 - Suggested clearer title: بداية العمل في الراديو
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
 - Example to add/refine: تخطيط حلقة قصيرة وسجل مواد وحقوق افتراضي. قارن نسخة واضحة بنسخة ناقصة.
 - Acceptance: نص أو خطة صوتية قصيرة تفصل الاستخدام المسموح عن المطلوب مراجعته.
+- Implementation: Rewritten in release 0.14.0 with a fictional Suwayda five-minute segment, broad/clear comparison, explicit linear/AutoDJ/archive/download rights scopes, safe paper exercise, role card and formative feedback. Tested requirements, key and module version remain unchanged; editorial/rights-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
-### راديو حبق والصوت: أول مساهمة بمراجعة (`radio-task`)
+### مهمتك الأولى: مخطط حلقة (`radio-task`)
 
-- Suggested clearer title: مهمتك الأولى: الراديو
+- Suggested clearer title: مهمتك الأولى: مخطط حلقة
 - Order: ٢ · حسب المسار المختار
 - Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
-- Example to add/refine: تخطيط حلقة قصيرة وسجل مواد وحقوق افتراضي. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
-- Acceptance: نص أو خطة صوتية قصيرة تفصل الاستخدام المسموح عن المطلوب مراجعته. يناقش المراجع التعديل والدعم المطلوب.
+- Example to add/refine: مخطط حلقة قصيرة وسجل حقوق لثلاثة أعمال وهمية مع نموذج مكتمل.
+- Acceptance: خطة صوتية قصيرة تفصل البث والأرشفة والتحميل، وتحدد البديل والمراجع.
+- Implementation: Rewritten in release 0.14.0 as a fictional five-to-seven-minute episode plan with three imaginary works, a completed rights register, deidentified text-only submission, low-connectivity alternative and actionable reviewer guidance. Assignment, key and module version remain unchanged; editorial/rights-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### بداية العمل في التنسيق (`operations-basics`)
