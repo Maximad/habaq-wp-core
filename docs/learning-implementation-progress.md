@@ -152,7 +152,11 @@ Validation before commit:
 
 - 557 isolated behavioral checks passed. New checks cover preserved module versions, assignments and keys; fictional local examples; owner/reviewer/decision separation; authority limits; the three-task board; reviewer guidance; safe summaries; unconfirmed resources; lesson feedback; and hidden raw answer keys.
 - All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
-- Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 4. No duplicate curriculum or review file was created. Guarded commit, publication and live checks remain pending at this checkpoint and must not be claimed until recorded below.
+- Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 4. No duplicate curriculum or review file was created.
+- Created rollback branch `rollback/learning-0.9.0` from the previous live head `763f267e755d10ff9b6b027363d6e177f1619897`. Saved release commit `1899ec4a4d3e2158b150f70f3b1fcba91663af84` to `codex/member-learning` with an expected-head safeguard; no force update or merge to `main` was used.
+- Published release `0.10.0` through the existing authenticated WordPress Deployer for Git workflow on 7 October 2026 at approximately 14:31 UTC. The deployer reported “Package updated successfully.”
+- Verified the live installed-plugin row reports Habaq Engine `0.10.0`, and the protected learning page loads `assets/learning.css?ver=0.10.0`. The inspecting account remains on its existing leadership path; the operations path was not selected during verification, so no learner track, answer, completion or review record was changed. Operations lesson content was verified by the isolated behavioral checks and generated curriculum rather than by mutating that account.
+- Screenshot: `habaq-operations-0-10-0-1791383457475.jpg`, captured 7 October 2026 and saved as live version evidence. Library identity `libfile_6507c3bc54dc8191b63c578d370697b2`.
 - Domain-owner and learner acceptance are not claimed.
 
 ## Remaining approved work
