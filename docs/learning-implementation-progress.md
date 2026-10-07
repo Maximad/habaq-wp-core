@@ -216,9 +216,12 @@ Validation before commit:
 - Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 6. No duplicate curriculum or review file was created.
 - Programme/safety-owner and learner acceptance are not claimed.
 
-Commit/deployment — active:
+Commit/deployment — prepared, publication still blocked:
 
-- Release commit, rollback point and live deployment evidence are pending at this checkpoint.
+- Saved release commit `370c4e84b78873a5f91f8fb4f688ef15c03ea1d4`, tree `d9dc85f21dcda0b09964f639690fec869f2b5c60`, to `codex/member-learning` with an expected-head fast-forward safeguard. No force update or merge to `main` was used.
+- Existing code rollback branch `rollback/learning-0.10.0` still preserves the last verified live code point. Because `0.11.0` was not published, no misleading live rollback branch was created for it. No database backup or restore test is claimed.
+- Live publication was not retried: the preceding checkpoint established that the WordPress deployer requires reauthentication, and this non-interactive run has no Hostinger WordPress deployment tool. Credentials were not requested, inspected or changed. The last verified live release remains `0.10.0`; releases `0.11.0` and `0.12.0` are prepared on the draft PR but are not claimed as live.
+- No live learner page or learner record was changed in this batch.
 
 ## Remaining approved work
 
