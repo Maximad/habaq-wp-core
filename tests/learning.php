@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.5.0');
+define('HABAQ_WP_CORE_VERSION', '0.6.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();

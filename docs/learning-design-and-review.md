@@ -1,0 +1,606 @@
+# Habaq visual and course review plan — 0.6.0
+
+The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
+
+A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
+
+The new wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. Portal guidance changed; lesson bodies, quiz keys, versions and completion records remain the existing draft curriculum. The 61 rows below are proposals for the next editorial review, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+
+## A manageable review process
+
+1. Start with the five shared lessons. Rewrite one or two at a time, preserve the intended learning result, remove repeated policy text, add one worked example and a short exercise. Keep source status visible.
+2. Review the two lessons in the actual onboarding path and one or two specialist courses needed for the first task. Choose the next batch from real learner needs. Do not review ten paths or assign 36 specialist courses to every member at once.
+3. The author prepares a draft; the domain owner checks facts, boundaries and source status; two learners unfamiliar with the lesson try it and explain what they would do next; publish after necessary corrections. Use fictional or appropriately cleared work. Safety, finance and rights content need a qualified reviewer before expanded practical use.
+4. Record only the misunderstanding, unclear sentence, actual time and exercise result needed to improve the content. Preserve IDs. Meaningful changed tested requirements get a new module version and explicit re-learning decision; wording/style corrections do not reset completion.
+5. At the normal review or after a source/tool change, check the source date and unresolved questions. Defer low-use additions until the pilot identifies a need. The constraint is reviewer time, not course count.
+
+## Each lesson should meet this bar
+
+- One observable result, three or fewer main ideas, and a brief explanation of unfamiliar terms.
+- One recognizably local, ordinary scenario without invented testimony or identified vulnerable people.
+- A worked example, one small application, one check that tests a decision and a reusable work card.
+- A clear difference between practice, real authority and any source policy still awaiting adoption.
+- A domain review and a learner explanation of the next action without needing the author to translate the wording.
+- Time estimated from the pilot. Split a long lesson into linked steps only when doing so reduces cognitive load; retain the required onboarding workload.
+
+## Experience review backlog
+
+| Experience | Next improvement | Acceptance |
+| --- | --- | --- |
+| First arrival | Photograph, one sentence and two actions; keep the H1 accessible without a duplicated giant title | Member identifies where to continue within a short orientation |
+| Choosing a path | Ask about the first real task, not an abstract department name | Member chooses one appropriate path with their companion |
+| Learning plan | Agree time, contact and a small output before assigning more courses | Required contacts and a realistic task are visible |
+| Course discovery | Role filter and plain search; review priority course labels with each actual role | Learner finds one relevant course without reading all profiles |
+| Reading a lesson | 16px Arabic body type, smaller headings, quiet panels, one primary action | Text stays readable on a narrow screen and browser zoom; no sideways scroll |
+| Knowledge check | Explain why an answer fits and make retry supportive, not punitive | Learner can describe the decision, not only remember an answer index |
+| First task | Good example plus blank template; reviewers agree rubric beforehand | A small output is reviewed with one concrete next step |
+| Requesting support | Visible contact and honest response expectations; separate learning help from reports | Member knows how to ask for urgent help and where sensitive reports belong |
+| Feedback/revision | State one observed issue, one requested change and available help | Learner knows what to change and how to proceed |
+| Application review | Brief conversation about one applied skill and next goal | One example of use and one next goal, without rankings |
+| Low connectivity | Compressed responsive photo; print/offline reading guidance; no mandatory video | Main text and forms remain usable when the photo fails |
+| Maintaining content | Small register with owner, source, version, last review and next trigger | A changed source leads to one identifiable course action |
+
+## Arabic voice examples
+
+| Earlier phrase | Preferred phrase |
+| --- | --- |
+| المحلي بوصفه نقطة انطلاق | من هنا نبدأ، وننفتح على تجارب جديدة |
+| ناتج عملي مقترح | ما الذي ستنجزه؟ |
+| صغر المهمة مع مرافقك | اختارا خطوة أصغر |
+| التقدير المقترح للمهمة | قد تحتاج المهمة نحو… |
+| المراجعة التطبيقية | حديث قصير عما جرّبته |
+| لا تعتمد السياسات أو تنشئ تفويضاً | بعض المراجع ما زال مسودة. التعلم منها لا يمنح صلاحيات جديدة. |
+| المخرجات المستندة إلى الأدلة | عمل واضح يمكن التحقق منه |
+
+Keep necessary technical terms when they are accurate, followed by a short explanation. Address the learner respectfully, avoid dialect, forced slogans and institutional abstractions. The examples above are style proposals; do not remove necessary contractual or safety meaning.
+
+## Course-by-course proposals
+
+### حبق: المحلي بوصفه نقطة انطلاق (`welcome`)
+
+- Suggested clearer title: حبق: من أين نبدأ؟
+- Order: ١ · البداية
+- Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
+- Example to add/refine: قصة قصيرة من الحياة المحلية، ثم مثال يوضح كيف تصل إلى جمهور أوسع.
+- Acceptance: شرح حبق في ثلاث جمل وربط مهمة العضو بحاجة واضحة.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### الدور والالتزام والتفويض (`roles`)
+
+- Suggested clearer title: دورك: ما الذي تتولاه، ومن يساعدك؟
+- Order: ١ · البداية
+- Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
+- Example to add/refine: بطاقة دور من صفحة واحدة مع مثال على قرار يحتاج الرجوع إلى المسؤول.
+- Acceptance: تحديد ناتج واحد ومراجع واحد وقرار يحتاج تفويضاً.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### الاحترام والموافقة والإبلاغ (`conduct`)
+
+- Suggested clearer title: نعمل باحترام، ونطلب الموافقة
+- Order: ١ · البداية
+- Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
+- Example to add/refine: حالتان منفصلتان: مشاركة في لقاء، وموافقة على نشر صورة.
+- Acceptance: تمييز الموافقتين واختيار جهة آمنة دون سرد معلومات حساسة.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### الملفات والخصوصية والذكاء الاصطناعي (`data`)
+
+- Suggested clearer title: أين نحفظ الملفات، ومع من نشاركها؟
+- Order: ١ · البداية
+- Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
+- Example to add/refine: ثلاثة ملفات افتراضية: منشور عام، مسودة فريق، ومعلومات خاصة.
+- Acceptance: اختيار مكان الحفظ والمشاركة المناسب، وما لا يدخل في أداة ذكاء اصطناعي.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### من الفكرة إلى التسليم والتعلّم (`workflow`)
+
+- Suggested clearer title: من فكرة صغيرة إلى تسليم واضح
+- Order: ١ · البداية
+- Proposed reviewer: منسق التعلم ومسؤول المجال عند الحاجة
+- Example to add/refine: نموذج مهمة مكتمل وآخر ناقص؛ يضيف المتعلم النتيجة والموعد والمراجع.
+- Acceptance: بطاقة مهمة يمكن لزميل استكمالها دون شرح إضافي.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### ميديا: الفكرة والتحقق والمراجعة (`media-basics`)
+
+- Suggested clearer title: بداية العمل الصحفي
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: مقترح تقرير قصير مع سؤال ومصدرين وخطة تحقق. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: مقترح محدود مع حماية المصدر ومراجع وتعديل واحد بعد الملاحظات.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### ميديا: أول تكليف تحت الإشراف (`media-task`)
+
+- Suggested clearer title: مهمتك الأولى: بداية العمل الصحفي
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: مقترح تقرير قصير مع سؤال ومصدرين وخطة تحقق. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: مقترح محدود مع حماية المصدر ومراجع وتعديل واحد بعد الملاحظات. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### ناس: لقاء ثقافي يتيح المشاركة (`people-basics`)
+
+- Suggested clearer title: بداية العمل في حبق ناس
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: خطة جلسة ثقافية تجريبية تتيح المشاركة دون تصوير. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: خطة بوقت ومسؤول وبديل مشاركة ومراجعة قبل أي إعلان.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### ناس: خطة جلسة تجريبية (`people-task`)
+
+- Suggested clearer title: مهمتك الأولى: حبق ناس
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: خطة جلسة ثقافية تجريبية تتيح المشاركة دون تصوير. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: خطة بوقت ومسؤول وبديل مشاركة ومراجعة قبل أي إعلان. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### إنتاج: من التصور إلى نسخة قابلة للمراجعة (`production-basics`)
+
+- Suggested clearer title: بداية العمل في الإنتاج
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: موجز ونسخة تجريبية قصيرة بمواد مأذونة. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: حقوق واضحة ونطاق محدود ونسخة مراجعة وتسليم منظم.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### إنتاج: موجز ونسخة تجريبية (`production-task`)
+
+- Suggested clearer title: مهمتك الأولى: الإنتاج
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: موجز ونسخة تجريبية قصيرة بمواد مأذونة. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: حقوق واضحة ونطاق محدود ونسخة مراجعة وتسليم منظم. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.1; keep source references during review.
+
+### راديو حبق والصوت: بداية الدور (`radio-basics`)
+
+- Suggested clearer title: بداية العمل في الراديو
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: تخطيط حلقة قصيرة وسجل مواد وحقوق افتراضي. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: نص أو خطة صوتية قصيرة تفصل الاستخدام المسموح عن المطلوب مراجعته.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### راديو حبق والصوت: أول مساهمة بمراجعة (`radio-task`)
+
+- Suggested clearer title: مهمتك الأولى: الراديو
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: تخطيط حلقة قصيرة وسجل مواد وحقوق افتراضي. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: نص أو خطة صوتية قصيرة تفصل الاستخدام المسموح عن المطلوب مراجعته. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### العمليات والتنسيق: بداية الدور (`operations-basics`)
+
+- Suggested clearer title: بداية العمل في التنسيق
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: لوحة متابعة لثلاث مهام افتراضية وقرار واحد معلق. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: مالكو مهام ومواعيد وعائق وصاحب قرار وخطوة متابعة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### العمليات والتنسيق: أول مساهمة بمراجعة (`operations-task`)
+
+- Suggested clearer title: مهمتك الأولى: التنسيق
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: لوحة متابعة لثلاث مهام افتراضية وقرار واحد معلق. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: مالكو مهام ومواعيد وعائق وصاحب قرار وخطوة متابعة. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المالية والمنح: بداية الدور (`finance-basics`)
+
+- Suggested clearer title: بداية العمل في المالية
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: ملف عملية افتراضية بميزانية ودليل وطلب اعتماد. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: مطابقة الموارد والأدلة وحدود التفويض دون صرف حقيقي.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المالية والمنح: أول مساهمة بمراجعة (`finance-task`)
+
+- Suggested clearer title: مهمتك الأولى: المالية
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: ملف عملية افتراضية بميزانية ودليل وطلب اعتماد. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: مطابقة الموارد والأدلة وحدود التفويض دون صرف حقيقي. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الأشخاص والتدريب: بداية الدور (`people-ops-basics`)
+
+- Suggested clearer title: بداية العمل في دعم الأشخاص
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: خطة بداية لعضو افتراضي واتفاق وقت ومهمة ومرافق. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: خطة واقعية وطلب دعم مناسب يفصل التعلم عن البلاغات.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الأشخاص والتدريب: أول مساهمة بمراجعة (`people-ops-task`)
+
+- Suggested clearer title: مهمتك الأولى: دعم الأشخاص
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: خطة بداية لعضو افتراضي واتفاق وقت ومهمة ومرافق. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: خطة واقعية وطلب دعم مناسب يفصل التعلم عن البلاغات. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### ثينك والبحث والذاكرة: بداية الدور (`research-basics`)
+
+- Suggested clearer title: بداية العمل في البحث والذاكرة
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: سؤال محدود وبطاقة مصدر وفهرس ملف يمكن استكماله. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: منهج مختصر وقيود وسياق وحقوق واضحة للمصدر.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### ثينك والبحث والذاكرة: أول مساهمة بمراجعة (`research-task`)
+
+- Suggested clearer title: مهمتك الأولى: البحث والذاكرة
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: سؤال محدود وبطاقة مصدر وفهرس ملف يمكن استكماله. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: منهج مختصر وقيود وسياق وحقوق واضحة للمصدر. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### غيكس والموقع والأدوات: بداية الدور (`technology-basics`)
+
+- Suggested clearer title: بداية العمل في التقنية
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: طلب تغيير افتراضي بواجهة تجريبية ومراجعة وخطة رجوع. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: معايير قبول واختبار مناسب وحدود وصول وخطوة رجوع.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### غيكس والموقع والأدوات: أول مساهمة بمراجعة (`technology-task`)
+
+- Suggested clearer title: مهمتك الأولى: التقنية
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: طلب تغيير افتراضي بواجهة تجريبية ومراجعة وخطة رجوع. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: معايير قبول واختبار مناسب وحدود وصول وخطوة رجوع. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### القيادة والحوكمة والشراكات: بداية الدور (`leadership-basics`)
+
+- Suggested clearer title: بداية العمل في القيادة
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: مذكرة قرار صغيرة تتضمن الموارد والتفويض ومراجعة القدرة. قارن نسخة واضحة بنسخة ناقصة.
+- Acceptance: قرار محدود مع مسؤول ومصلحة وحدود ومتابعة واضحة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### القيادة والحوكمة والشراكات: أول مساهمة بمراجعة (`leadership-task`)
+
+- Suggested clearer title: مهمتك الأولى: القيادة
+- Order: ٢ · حسب المسار المختار
+- Proposed reviewer: منسق التعلم ومراجع المهمة في المجال
+- Example to add/refine: مذكرة قرار صغيرة تتضمن الموارد والتفويض ومراجعة القدرة. اعرض نموذجاً مكتملاً ثم قالباً فارغاً.
+- Acceptance: قرار محدود مع مسؤول ومصلحة وحدود ومتابعة واضحة. يناقش المراجع التعديل والدعم المطلوب.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### من السؤال المحلي إلى تقرير صحفي (`reporting`)
+
+- Suggested clearer title: ابدأ بسؤال محلي واضح
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: فكرة تقرير عن الوصول إلى خدمة عامة، مع مصادر وأدلة افتراضية متعارضة.
+- Acceptance: تكليف محدود يميّز ما نعرفه وما نحتاج إلى التحقق منه.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التحقق من الادعاءات والصور (`verification`)
+
+- Suggested clearer title: كيف نتحقق قبل أن نشارك؟
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: صورة قديمة يعاد نشرها بسياق جديد؛ خطوات بحث وسجل دليل دون ادعاء تحقق حقيقي.
+- Acceptance: قرار نشر أو انتظار مع سبب ولغة تطابق قوة الدليل.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التحرير وحق الرد والتصحيح (`editing`)
+
+- Suggested clearer title: راجع المادة، وصحّح بوضوح
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: نسخة قصيرة فيها تعميم وخطأ رقمي ونقص في حق الرد.
+- Acceptance: تحرير يغيّر مواضع الخطأ وتصحيح مفهوم للقارئ.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المقابلة والموافقة والسرد الآمن (`interview`)
+
+- Suggested clearer title: مقابلة مريحة، وأسئلة واضحة
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: بطاقة افتتاح مقابلة وخيار رفض التسجيل أو إخفاء الهوية.
+- Acceptance: أسئلة مفتوحة وموافقة محددة وخيار انسحاب وخطة لحماية الهوية.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### النشر الاجتماعي وإدارة المجتمع الرقمي (`social`)
+
+- Suggested clearer title: من مادة معتمدة إلى منشور واضح
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: نسخة طويلة مع عنوان مقترح مبالغ فيه وتعليق يحتاج استجابة.
+- Acceptance: منشور يحفظ المعنى ورابط المصدر، ورد أو تصعيد مناسب للتعليق.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الترجمة والتحرير العربي (`translation`)
+
+- Suggested clearer title: ترجمة دقيقة وعربية سهلة
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع التحرير
+- Example to add/refine: مقطع قصير فيه درجة يقين واسم ورقم، مع نسختين للمقارنة.
+- Acceptance: الحفاظ على المعنى واليقين والأسماء والأرقام دون لغة ثقيلة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التصوير الفوتوغرافي والتسليم الآمن (`photo`)
+
+- Suggested clearer title: صور تحكي، وتسليم يحفظ السياق
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: مجموعة صور مرخصة مع لقطة تحتاج بديلاً لحماية الهوية.
+- Acceptance: اختيار صور مع وصف وسياق وحقوق وبديل آمن، وذكر حدود القص.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المونتاج والسرد البصري (`video`)
+
+- Suggested clearer title: ابنِ تسلسلاً بصرياً واضحاً
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: مشهدان وتوقيتان مختلفان؛ قارن مونتاجاً أميناً بآخر يغيّر المعنى.
+- Acceptance: نسخة مراجعة قصيرة لا توهم بتتابع أو علاقة لم تحدث.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التسجيل الصوتي والبودكاست (`audio`)
+
+- Suggested clearer title: صوت مفهوم، وحلقة بسيطة
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: مقطع مصطنع بضجيج ثم نسخة محسنة ونص افتتاح قصير.
+- Acceptance: عينة مفهومة مع حقوق واضحة ونسخة نصية وملفات تسليم منظمة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### راديو حبق: البرمجة وسجل حقوق الموسيقى (`radio-rights`)
+
+- Suggested clearer title: قبل البث: تأكد من إذن الاستخدام
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: بطاقة إذن افتراضي تفصل البث المباشر عن إعادة النشر والبودكاست.
+- Acceptance: تحديد الاستخدام المسموح وما يحتاج إذناً آخر؛ مراجعة مختص قبل أي استعمال حقيقي.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التصميم بهوية حبق وإتاحة المحتوى (`design`)
+
+- Suggested clearer title: صمّم بلغة حبق، وبوضوح
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: صورة واسعة من المكتبة وعنوان قصير وزر، ثم نسخة على شاشة ضيقة.
+- Acceptance: نص مقروء، صورة ذات سياق وحقوق، وزر يوضح الخطوة التالية.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الإنتاج للعميل والنطاق ومعيار القبول (`client-production`)
+
+- Suggested clearer title: اتفق على النطاق قبل الإنتاج
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مراجع الإنتاج أو التصميم؛ الحقوق بمراجعة مختصة
+- Example to add/refine: طلب مفتوح من عميل يتحول إلى موجز بحدود ومراجعات وتسليم محدد.
+- Acceptance: موجز يوضح الداخل والخارج ومعيار القبول، دون وعد غير مفوض.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### تشغيل الفعالية من الدعوة إلى الإغلاق (`events`)
+
+- Suggested clearer title: فعالية صغيرة، من الدعوة إلى الإغلاق
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البرنامج؛ الحماية والسلامة بمراجعة مختصة
+- Example to add/refine: لقاء افتراضي بعدد حضور محدود مع خطة مشاركة وتجهيز وإغلاق.
+- Acceptance: خطة بأدوار ووقت وموارد وموافقة تصوير وخيار مشاركة بديل.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### تيسير الحوار والورش (`facilitation`)
+
+- Suggested clearer title: افتح مساحة للحوار
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البرنامج؛ الحماية والسلامة بمراجعة مختصة
+- Example to add/refine: تمثيل موقف يهيمن فيه مشارك على الحديث وآخر يفضل عدم الكلام.
+- Acceptance: تدخل لطيف يتيح الاختيار ويوزع المشاركة دون إحراج أو ضغط.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المشاركة والإتاحة في البرامج والمحتوى (`accessibility`)
+
+- Suggested clearer title: اجعل المشاركة أسهل
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البرنامج؛ الحماية والسلامة بمراجعة مختصة
+- Example to add/refine: مشارك باتصال ضعيف وآخر يحتاج نسخة نصية أو وقتاً مختلفاً.
+- Acceptance: إزالة عائق واحد واضح ضمن قدرة الفريق، مع بديل عملي.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### حماية الأطفال والفئات الأضعف (`safeguarding`)
+
+- Suggested clearer title: تعرّف إلى الخطر، واطلب المساعدة
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: مسؤول البرنامج؛ الحماية والسلامة بمراجعة مختصة
+- Example to add/refine: حالة افتراضية بلا أسماء تتطلب وقف التصوير والرجوع إلى جهة مختصة.
+- Acceptance: إيقاف مناسب وإحالة محددة دون تحقيق ذاتي أو وعود بالسرية المطلقة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### السلامة الميدانية وقرار الإيقاف (`field-safety`)
+
+- Suggested clearer title: متى نتابع، ومتى نتوقف؟
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: مسؤول البرنامج؛ الحماية والسلامة بمراجعة مختصة
+- Example to add/refine: مهمة منخفضة الخطر تتغير ظروفها؛ خيار إلغاء واضح بلا ضغط.
+- Acceptance: قرار توقف وخطة تواصل مناسبة؛ لا نشاط ميداني فعلي ولا شهادة سلامة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### إدارة المشروع والتنسيق الأسبوعي (`project-management`)
+
+- Suggested clearer title: نسّق الأسبوع بخطوات واضحة
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول التنسيق أو دعم الأشخاص
+- Example to add/refine: لوحة صغيرة بثلاث مهام، إحداها متعثرة وتحتاج قراراً.
+- Acceptance: مسؤول وموعد لكل مهمة، وعائق وصاحب قرار وخطوة متابعة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التطوع والانضمام والخروج المنظم (`volunteer-coordination`)
+
+- Suggested clearer title: مساهمة واضحة، وبداية وخروج منظمان
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول التنسيق أو دعم الأشخاص
+- Example to add/refine: بطاقة مساهمة قصيرة وتسليم دور عند انتهاء الفترة المتفق عليها.
+- Acceptance: توقعات ووقت ودعم وخطة خروج وتسليم صلاحيات عبر المسؤول.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التغذية الراجعة وتطوير الأداء (`feedback`)
+
+- Suggested clearer title: ملاحظات تساعد على التحسن
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول التنسيق أو دعم الأشخاص
+- Example to add/refine: حوار قصير يقارن الحكم على الشخص بوصف ملاحظة في عمله.
+- Acceptance: ملاحظة محددة وطلب قابل للتنفيذ ودعم متفق عليه دون حكم على الشخصية.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### العهد والمعدات والأرشيف الخام (`equipment`)
+
+- Suggested clearer title: استلم المعدات، وأعدها بوضوح
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول التنسيق أو دعم الأشخاص
+- Example to add/refine: عدة افتراضية فيها نقص عند الاسترجاع، مع سجل حالة وعهدة.
+- Acceptance: مطابقة واضحة وخطوة متابعة، مع حماية الملفات المخزنة على الجهاز.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التدريب والمرافقة ونقل المهارة (`mentoring`)
+
+- Suggested clearer title: رافق زميلك دون أن تثقل عليه
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول التنسيق أو دعم الأشخاص
+- Example to add/refine: لقاء عشر دقائق: عرض خطوة، تجربة مستقلة، ومراجعة واحدة.
+- Acceptance: شرح واضح وفرصة تجربة وملاحظة مفيدة ووقت واقعي للمرافق.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الميزانية والتكلفة والسيولة (`budgeting`)
+
+- Suggested clearer title: كم تحتاج المهمة، ومتى يتوفر المال؟
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: المسؤول المالي المخول
+- Example to add/refine: ميزانية افتراضية لحدث صغير فيها تمويل متوقع وسيولة أقل من المطلوب.
+- Acceptance: فصل التكلفة عن النقد المتاح وتحديد فجوة دون افتراض تمويل مؤكد.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الشراء والتعاقد وملف الدفعة (`procurement`)
+
+- Suggested clearer title: جهّز ملف شراء يمكن مراجعته
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: المسؤول المالي المخول
+- Example to add/refine: ثلاثة عروض افتراضية وملف دفعة تنقصه وثيقة أساسية.
+- Acceptance: مقارنة معللة وملف كامل وجهة اعتماد محددة، دون شراء أو صرف.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### التسويات والمطابقة والإغلاق المالي (`reconciliation`)
+
+- Suggested clearer title: طابق السجل، واشرح الفرق
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: المسؤول المالي المخول
+- Example to add/refine: سجل افتراضي بمبالغ قليلة وفرق معروف مع وثيقة ناقصة.
+- Acceptance: تحديد الفرق وقائمة المعلقات والخطوة التالية دون تعديل يخفيه.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المنح والأموال المقيدة والتقارير (`grant-management`)
+
+- Suggested clearer title: تابع المنحة وشروطها
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: المسؤول المالي المخول
+- Example to add/refine: بطاقة منحة افتراضية فيها بند مقيد وتاريخ تقرير ومصروف غير واضح الأهلية.
+- Acceptance: ربط المصروف بالبند والدليل وتحديد سؤال يحتاج موافقة المختص.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### البحث والسؤال والمنهج والقيود (`research`)
+
+- Suggested clearer title: سؤال بحث صغير، وخطة قابلة للتنفيذ
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البحث والتعلم
+- Example to add/refine: سؤال محلي محدود مع خيارات عينة ومصادر وحدود استنتاج.
+- Acceptance: سؤال ومنهج ومصادر وقيود واضحة دون تعميم لا تدعمه العينة.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### المتابعة والقياس والتعلم من الأثر (`measurement`)
+
+- Suggested clearer title: ما الذي أنجزناه، وما الذي تغيّر؟
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البحث والتعلم
+- Example to add/refine: فعالية لها عدد مشاركين ومخرج وتغير متوقع؛ قارن مؤشرين.
+- Acceptance: مؤشر مناسب مع مصدر ووقت قياس وحدود ما يمكن استنتاجه.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الأرشيف والذاكرة وإدارة المعرفة (`knowledge`)
+
+- Suggested clearer title: احفظ العمل ليكمله غيرك
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: مسؤول البحث والتعلم
+- Example to add/refine: مجلد افتراضي غير منظم مع ملفات ذات حقوق وصلاحيات مختلفة.
+- Acceptance: تسمية وفهرسة وسياق وحقوق ومكان حفظ ودليل استكمال.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### استخدام الموقع والصلاحيات والنشر (`wordpress`)
+
+- Suggested clearer title: جهّز مسودة على الموقع
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول التقني
+- Example to add/refine: صور لواجهة التدريب أو بيئة تجريبية، من مسودة إلى طلب مراجعة.
+- Acceptance: تحديد حالتي المسودة والنشر وصاحب القرار؛ لا نشر مباشر ضمن التمرين.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### أمن الحسابات والاستجابة للحوادث (`digital-security`)
+
+- Suggested clearer title: احمِ حسابك، وانتبه للرسائل المشبوهة
+- Order: ٢ · عند الحاجة، بمراجع مختص
+- Proposed reviewer: المسؤول التقني
+- Example to add/refine: رسالة تصيد مصطنعة ورابط غير فعّال، مع مسار إبلاغ خالٍ من الأسرار.
+- Acceptance: التعرف على العلامات وإيقاف التفاعل وطلب المساعدة دون مشاركة رمز أو كلمة مرور.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### تطوير التقنية والاختبار والإصدار (`software-delivery`)
+
+- Suggested clearer title: تغيير صغير، واختبار ورجوع واضحان
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول التقني
+- Example to add/refine: طلب تعديل افتراضي على فرع تجريبي مع قبل وبعد ومعايير قبول.
+- Acceptance: تغيير محدود واختبار ذي معنى ومسؤول مراجعة وخطة رجوع قابلة للتطبيق.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### استخدام الذكاء الاصطناعي والتحقق (`responsible-ai`)
+
+- Suggested clearer title: استخدم الأداة، وراجع النتيجة
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول التقني
+- Example to add/refine: نص عام فيه معلومة خاطئة بعد توليده؛ تمرين تحقق قبل الاستخدام.
+- Acceptance: اختيار بيانات مناسبة وتصحيح المعلومة وتوضيح ما راجعه الإنسان.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### القيادة والتفويض وتضارب المصالح (`governance`)
+
+- Suggested clearer title: قرار واضح، وتفويض محدد
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول المخول في القيادة أو الشراكات
+- Example to add/refine: قرار صغير مع تعارض مصلحة افتراضي وحد للمدة والموارد.
+- Acceptance: توثيق المسؤول والحدود والتعارض وجهة المراجعة قبل الالتزام.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### الشراكات والعناية الواجبة (`partnership-development`)
+
+- Suggested clearer title: شراكة مفيدة، والتزامات واقعية
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول المخول في القيادة أو الشراكات
+- Example to add/refine: عرض تعاون جذاب يتجاوز قدرة الفريق أو يخل بالاستقلال.
+- Acceptance: قيمة متبادلة وحدود ومخاطر وأسئلة تحتاج جواباً قبل موافقة المخول.
+- Current content version: 2026-10-07.2; keep source references during review.
+
+### تنمية الموارد والرعاية والتمويل الجماعي (`fundraising`)
+
+- Suggested clearer title: عرض دعم يشرح الحاجة بصدق
+- Order: ٣ · حسب المهمة والحاجة
+- Proposed reviewer: المسؤول المخول في القيادة أو الشراكات
+- Example to add/refine: رسالة دعم افتراضية لمخرج محدود مع استخدام موارد واضح.
+- Acceptance: عرض قابل للتحقق بلا مبالغة أو وعد غير مفوض، يحفظ استقلال القرار.
+- Current content version: 2026-10-07.2; keep source references during review.

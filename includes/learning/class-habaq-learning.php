@@ -8,8 +8,49 @@ class Habaq_Learning {
         add_action('admin_menu', array(__CLASS__, 'menu'));
         add_action('admin_post_habaq_learning', array(__CLASS__, 'submit'));
         add_action('template_redirect', array(__CLASS__, 'prevent_cache'));
+        add_filter('body_class', array(__CLASS__, 'page_classes'));
+        add_action('wp_enqueue_scripts', array(__CLASS__, 'photo_styles'));
+        add_action('enqueue_block_assets', array(__CLASS__, 'photo_editor_styles'));
+        self::photo_pattern();
         add_filter('wp_privacy_personal_data_exporters', array(__CLASS__, 'exporters'));
         add_filter('wp_privacy_personal_data_erasers', array(__CLASS__, 'erasers'));
+    }
+
+    /** Scope the page layout to the learning shortcode; other theme pages keep their layout. */
+    public static function page_classes($classes) {
+        global $post;
+        if ($post && has_shortcode($post->post_content, 'habaq_learning')) { $classes[] = 'habaq-learning-page'; }
+        return $classes;
+    }
+
+    public static function photo_styles() {
+        global $post;
+        if ($post && strpos($post->post_content, 'habaq-photo-banner') !== false) {
+            wp_enqueue_style('habaq-photo-banner', HABAQ_WP_CORE_URL . 'assets/photo-banner.css', array(), HABAQ_WP_CORE_VERSION);
+        }
+    }
+
+    public static function photo_editor_styles() {
+        if (is_admin()) { wp_enqueue_style('habaq-photo-banner', HABAQ_WP_CORE_URL . 'assets/photo-banner.css', array(), HABAQ_WP_CORE_VERSION); }
+    }
+
+    /** Existing Habaq media asset. Sites can override the attachment without changing lesson records. */
+    public static function photo_id() {
+        return absint(apply_filters('habaq_learning_photo_id', 2564));
+    }
+
+    public static function photo_pattern() {
+        if (!function_exists('register_block_pattern') || !function_exists('wp_get_attachment_image_url')) { return; }
+        $id = self::photo_id();
+        $url = wp_get_attachment_image_url($id, 'full');
+        if (!$url) { return; }
+        $url = set_url_scheme($url, 'https');
+        register_block_pattern_category('habaq', array('label' => 'حبق'));
+        // Native Cover, Heading, Paragraph and Buttons blocks stay editable in the page editor.
+        $cover = wp_json_encode(array('url' => $url, 'id' => $id, 'dimRatio' => 70, 'customOverlayColor' => '#141711', 'isUserOverlayColor' => true, 'minHeight' => 420, 'align' => 'full', 'className' => 'habaq-photo-banner', 'layout' => array('type' => 'constrained')));
+        $content = '<!-- wp:cover ' . $cover . ' --><div class="wp-block-cover alignfull habaq-photo-banner" style="min-height:420px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-70 has-background-dim" style="background-color:#141711"></span><img class="wp-block-cover__image-background wp-image-' . esc_attr($id) . '" alt="" src="' . esc_url($url) . '" data-object-fit="cover"/><div class="wp-block-cover__inner-container">';
+        $content .= '<!-- wp:paragraph --><p>من هنا نبدأ</p><!-- /wp:paragraph --><!-- wp:heading --><h2 class="wp-block-heading">مساحة للعمل والتعلّم معاً</h2><!-- /wp:heading --><!-- wp:paragraph --><p>وصف قصير يشرح ما تقدمه هذه الصفحة، بلغة واضحة وقريبة.</p><!-- /wp:paragraph --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button --><div class="wp-block-button"><a class="wp-block-button__link wp-element-button">ابدأ هنا</a></div><!-- /wp:button --></div><!-- /wp:buttons --></div></div><!-- /wp:cover -->';
+        register_block_pattern('habaq/local-photo-opening', array('title' => 'حبق: صورة واسعة ونص وأزرار', 'description' => 'افتتاحية بصورة من مكتبة حبق. غيّر الصورة والنص والرابط بحسب الصفحة.', 'categories' => array('habaq'), 'content' => $content));
     }
 
     public static function catalog() {
@@ -162,13 +203,14 @@ class Habaq_Learning {
         $selected = isset($_GET['lesson']) && is_string($_GET['lesson']) ? sanitize_key(wp_unslash($_GET['lesson'])) : Habaq_Learning_Journey::next_lesson($user_id);
         $module = self::module($selected);
         ob_start();
-        echo '<section class="habaq-learning alignwide" dir="rtl"><header class="habaq-learning__hero"><p class="habaq-learning__eyebrow">تعلّم · جرّب · ناقش</p><h2>' . esc_html($catalog['title']) . '</h2><p>' . esc_html($catalog['notice']) . '</p></header>';
+        echo '<section class="habaq-learning alignfull" dir="rtl">';
+        Habaq_Learning_Library::hero($return, false, isset($_GET['lesson']));
         Habaq_Learning_Library::tabs($return, false);
-        echo '<p role="status">' . esc_html(self::notice()) . '</p>';
-        echo '<p>أكملت ' . esc_html($done) . ' من ' . esc_html(count($path)) . ' دروس في مسارك الحالي.</p><progress max="' . esc_attr(count($path)) . '" value="' . esc_attr($done) . '"></progress>';
+        if (self::notice()) { echo '<p class="habaq-learning__feedback" role="status">' . esc_html(self::notice()) . '</p>'; }
+        echo '<p>أكملت ' . esc_html(Habaq_Learning_Library::number($done)) . ' من ' . esc_html(Habaq_Learning_Library::number(count($path))) . ' دروس في مسارك الحالي.</p><progress max="' . esc_attr(count($path)) . '" value="' . esc_attr($done) . '"></progress>';
         Habaq_Learning_Journey::dashboard($user_id, $return);
-        echo '<details><summary>كيف تبدأ؟</summary><p>ابدأ بالدروس المشتركة، ثم أكمل مسار الوحدة. الوقت المقترح موزع على أول أسبوعين ويمكن تعديله مع مسؤولك. اعمل على مهمة أولى صغيرة بمراجعة بشرية، ثم ناقش التطبيق بعد أربعة إلى ستة أسابيع.</p><p>نحفظ مسارك وإجابات التحقق وملخص التكليف وملاحظات المراجع في حسابك. تطلع عليها الإدارة فقط. اطلب تصحيحها أو تصديرها أو حذفها من إدارة الموقع. لا تدرج معلومات حساسة في الإجابات.</p></details>';
-        echo '<details' . (!$track ? ' open' : '') . '><summary>اختيار مسار عملي</summary><p>اختر مع مرافق التعلم الوحدة أو الوظيفة الأقرب لأول مهمة. لا يلزم إكمال بقية المسارات. اختيار المسار لا ينشئ منصباً أو يغير صلاحياتك. الدروس المشتركة محفوظة عند تغييره؛ المراجعة التطبيقية تبدأ من جديد إذا غيرت المسار بعد إكماله.</p>';
+        echo '<details><summary>قبل أن تبدأ: الوقت والخصوصية</summary><p>ابدأ بالدروس المشتركة، ثم اختر مساراً يناسب مهمتك. يمكنك توزيع التعلم على أول أسبوعين، وتعديل الوقت مع مرافقك. بعد مهمة صغيرة ومراجعة من زميل، تحدثا عما طبقته خلال أربعة إلى ستة أسابيع.</p><p>نحفظ تقدمك وإجاباتك وملخص المهمة وملاحظات المراجع في حسابك. تطلع عليها الإدارة. يمكنك طلب تصحيحها أو تصديرها أو حذفها من إدارة الموقع. اكتب أمثلة دون أسماء أو تفاصيل حساسة.</p><p>مواد السياسات مبنية على مسودات ووثائق عمل تحتاج اعتماد الإدارة. إكمال الدروس لا يمنح صلاحية نشر ولا ينشئ اتفاق عمل.</p></details>';
+        echo '<details' . (!$track ? ' open' : '') . '><summary>اختيار مسار عملي</summary><p>اختر مع مرافقك المسار الأقرب لمهمتك الأولى. يكفي مسار واحد. يبقى تقدمك في الدروس المشتركة إذا غيرته، لكنك تحتاج مهمة ومراجعة تطبيق للمسار الجديد. اختيار المسار لا يغير دورك أو صلاحياتك.</p>';
         self::form_start('track', $return);
         echo '<label>مسار العمل <select name="track" required>';
         echo '<option value="">اختر المسار</option>';
@@ -185,7 +227,7 @@ class Habaq_Learning {
             if (!self::unlocked($user_id, $id)) { echo ' · الإكمال بعد الدرس السابق'; }
             echo '<small>' . esc_html($item['minutes']) . ' دقيقة تقريباً · ' . esc_html(isset($labels[$state['status']]) ? $labels[$state['status']] : '') . '</small></li>';
         }
-        echo '</ol></nav><article>';
+        echo '</ol></nav><article id="habaq-lesson">';
         if ($module && in_array($selected, $path, true)) {
             $state = self::record($user_id, $module);
             echo '<h2>' . esc_html($module['title']) . '</h2>';
@@ -205,7 +247,7 @@ class Habaq_Learning {
             elseif ($state['status'] === 'pending') { echo '<p class="habaq-learning__feedback">المهمة بانتظار المراجعة. يناقش المراجع معك المعايير ويطلب تعديلاً عند الحاجة.</p>'; }
             elseif (!$can_submit) { echo '<p class="habaq-learning__feedback">يمكنك قراءة الدرس الآن. سجل إكمال الدرس السابق قبل حفظ نتيجة هذا الدرس.</p>'; }
             if ($can_submit) {
-            if ($module['requires_review']) { echo '<h3>معايير المهمة قبل إرسالها</h3><ul>'; foreach (Habaq_Learning_Journey::criteria() as $criterion) { echo '<li>' . esc_html($criterion) . '</li>'; } echo '</ul><p>التقدير المقترح للمهمة 45 إلى 90 دقيقة وفق النطاق المتفق عليه. إذا زاد الوقت، صغر المهمة مع مرافقك.</p>'; }
+            if ($module['requires_review']) { echo '<h3>معايير المهمة قبل إرسالها</h3><ul>'; foreach (Habaq_Learning_Journey::criteria() as $criterion) { echo '<li>' . esc_html($criterion) . '</li>'; } echo '</ul><p>اتفق مع مرافقك على مهمة تحتاج نحو ٤٥ إلى ٩٠ دقيقة. إذا احتاجت وقتاً أطول، اختارا خطوة أصغر.</p>'; }
             self::form_start('lesson', $return);
             echo '<input type="hidden" name="lesson" value="' . esc_attr($selected) . '"><input type="hidden" name="version" value="' . esc_attr($module['version']) . '"><fieldset><legend>' . esc_html($module['quiz']['prompt']) . '</legend>';
             foreach ($module['quiz']['options'] as $key => $option) {

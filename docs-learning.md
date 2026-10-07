@@ -47,3 +47,15 @@ Task approval requires four checked criteria, written feedback, a current conten
 New metadata keys are `habaq_learning_plan`, `habaq_learning_support`, `habaq_learning_reflection` and `habaq_learning_reflection_history`. All participate in native privacy export/erase. A unit change archives the previous application reflection and retains shared/other lesson records. No database tables or schema migrations. Last support request replaces the prior request, as stated in the UI. The course is not a complaint or HR case-management system.
 
 Before the 0.4.0 release preserve `rollback/learning-0.3.0` at `21e24ecdafdb65d7b455a1351639845d1310a48d`; use Deployer for Git to select that branch and deploy if rollback is needed. Records remain intact and can be exported. A code rollback branch is not a database backup. Obtain hosting backups before inviting a larger cohort.
+
+## Visual release 0.6.0
+
+The portal now has a full-width photo opening, compact headings, 16px Arabic body text, plain fusha guidance and direct actions to the current lesson/library filters. A scoped body class removes the duplicate visible theme title and opening whitespace only on the learning page; the H1 remains available to assistive technology. Lesson views use a shorter photo header. Existing lesson IDs, bodies, quizzes, versions and learner records are preserved.
+
+The default photograph is existing Habaq media attachment 2564 (`ADN4981-scaled.jpg`). `habaq_learning_photo_id` can override the attachment ID. Native WordPress responsive images serve the appropriate size. A missing attachment leaves the dark hero usable. The source is the existing media collection; do not infer photographer, location or copyright metadata from the filename. Newly selected photographs need appropriate rights, privacy and crop review.
+
+A native editable Cover pattern, **حبق: صورة واسعة ونص وأزرار**, is in the Habaq pattern category. It uses standard Cover, Heading, Paragraph and Buttons blocks. Change the image, short copy and button URL when inserting it in another page. Pattern CSS loads on content containing its class and in the block editor. This provides the photographic style for other page work without bulk altering unrelated pages.
+
+See `docs/learning-design-and-review.md` for the 61 lesson review proposals, Arabic voice examples, experience backlog and manageable editorial workflow. These proposals are not yet published course rewrites or adopted policies. Prioritize five common lessons, the actually used path and one or two specialist courses needed for the first task.
+
+Code rollback: `rollback/learning-0.5.0` at `cce01cd4b3dabece1e536ec57d1f8e3c7eaf73ee`. This does not replace a database backup.

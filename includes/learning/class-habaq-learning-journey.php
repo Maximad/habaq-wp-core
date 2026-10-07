@@ -96,7 +96,7 @@ class Habaq_Learning_Journey {
             array('مساهمة أولى بمراجعة', 14, self::task_done($member), 'مسار وحدتك ومهمة صغيرة بمعايير معلنة وملاحظات بشرية.'),
             array('مراجعة التطبيق', 42, ($reflection['status'] ?? '') === 'complete', 'ناقش ما طبقته وما تحتاجه. اتفق على هدف التعلم التالي.')
         );
-        echo '<section class="habaq-learning__journey" aria-label="خطة الانضمام"><h2>بداية واضحة، خطوة واحدة كل مرة</h2><p>هذه رحلة مقترحة لستة أسابيع. نكيف الوقت وحجم المهمة مع ظروفك ونوع تعاونك. لا تقييم للحضور على الشاشة.</p><ol class="habaq-learning__milestones">';
+        echo '<section class="habaq-learning__journey" aria-label="خطة الانضمام"><h2>رحلتك، خطوة بخطوة</h2><p>يمكن توزيع هذه الخطوات على نحو ستة أسابيع. اتفق مع مرافقك على وقت يناسب ظروفك وحجم مهمتك.</p><ol class="habaq-learning__milestones">';
         foreach ($milestones as $stage) {
             echo '<li' . ($stage[2] ? ' class="is-complete"' : '') . '><strong>' . esc_html($stage[0]) . '</strong><span>' . esc_html($stage[2] ? 'مكتمل' : 'قادم') . '</span><small>' . esc_html($stage[3]) . '</small>';
             if ($start) { echo '<small>موعد مقترح: ' . esc_html(self::due($start, $stage[1])) . '</small>'; }
@@ -104,7 +104,7 @@ class Habaq_Learning_Journey {
         }
         echo '</ol>';
         if (!$plan) {
-            echo '<p class="habaq-learning__feedback">يمكنك بدء القراءة الآن. تطلب الإدارة خطة قصيرة تحدد دورك ومرافق التعلم ومهمتك الأولى. هذا النموذج لا ينشئ اتفاق عمل.</p>';
+            echo '<p class="habaq-learning__feedback">يمكنك بدء القراءة الآن. اتفق مع الفريق على دورك، والزميل الذي يرافقك، ومهمة أولى صغيرة. تسجل الإدارة هذه الخطة في حسابك. وهي خطة للتعلم، وليست اتفاق عمل.</p>';
         } else {
             echo '<details><summary>اتفاق البداية الخاص بي</summary><dl>';
             foreach (array('role' => 'الدور', 'mentor' => 'مرافق التعلم', 'start_date' => 'تاريخ البداية', 'weekly_minutes' => 'دقائق التعلم المتاحة أسبوعياً', 'first_task' => 'المساهمة الأولى المتفق عليها') as $key => $label) {
@@ -118,7 +118,7 @@ class Habaq_Learning_Journey {
 
     public static function member_forms($member, $return) {
         $support = self::meta($member, 'support');
-        echo '<details class="habaq-learning__panel"><summary>أحتاج مساعدة كي أكمل</summary><p>سجل عائق التعلم وخطوة الدعم المطلوبة فقط. تطلع الإدارة على الطلب عند فتح لوحة التعلم. لا يرسل النظام تنبيهاً آلياً. للأمور العاجلة، استخدم جهة الدعم المعلنة.</p>';
+        echo '<details class="habaq-learning__panel"><summary>أحتاج مساعدة كي أكمل</summary><p>أخبرنا بما يعطّل تقدمك وما المساعدة التي تحتاجها. ترى الإدارة طلبك عند فتح لوحة التعلم. لا يصل تنبيه آلي؛ إذا كان الأمر عاجلاً، تواصل مباشرة مع جهة الدعم الموضحة أعلاه.</p>';
         if ($support) {
             echo '<p>آخر طلب: ' . esc_html(self::blockers()[$support['category']] ?? '') . ' · ' . esc_html(($support['status'] ?? '') === 'resolved' ? 'تم الرد' : 'بانتظار الرد') . '</p><p>' . nl2br(esc_html($support['note'] ?? '')) . '</p>';
             if (!empty($support['feedback'])) { echo '<p class="habaq-learning__feedback">' . nl2br(esc_html($support['feedback'])) . '</p>'; }
