@@ -1,0 +1,58 @@
+# Habaq learning curriculum 0.5.0
+
+This release adds a separate specialist library to the existing member journey, rather than expanding everybody's required induction. Each new member still takes five shared lessons and two lessons in one chosen path. There are now ten path choices, 36 optional specialist courses in eight subject groups, and 28 proposed role profiles. Profiles are educational mappings, not a list of approved vacancies or staff assignments.
+
+## Content and source decisions
+
+The extension adapts Habaq's current integrated programme, Operations Coordinator description, language/style guide, and working/draft documents for HR, editorial review and correction, privacy, safeguarding, digital and field security, finance, restricted grants, partnerships, equipment, events, radio music permissions, Safe Voices and Drive structure. References and source update dates are bundled with every lesson. The programme describes Radio within Media, Think and Geeks as shared functions, and Hub and other projects as independent potential partners. No separate team, budget, accepted policy, contract or legal registration is invented.
+
+Each specialist course includes an outcome, three teaching sections, a fictional case, a small practical exercise, an expandable worked example, a server-graded formative check and a printable work card. Practical exercises use fictional or approved deidentified work. They do not ask learners to publish, sign, spend, change production settings, disclose secrets, collect sensitive stories or conduct dangerous fieldwork. Safeguarding and field safety lessons introduce boundaries and referral; they do not certify specialist capability.
+
+Priority courses are suggestions to discuss with the learner's supervisor. Choose one or two for the first assignment; do not mandate all courses listed in a profile. Development suggestions are for later work. Selecting a library filter neither changes the stored onboarding path nor assigns a WordPress role. Knowledge checks record understanding only. The initial practical assignment and application review continue to require an authorized human reviewer.
+
+## Coverage
+
+| Group | Courses | Functions covered |
+| --- | --- | --- |
+| Editorial | 6 | Reporting, fact checking, editing, interviewing, platforms, translation |
+| Creative | 6 | Photography, video, audio/podcast, radio permissions, visual design, client production |
+| Community | 5 | Events, facilitation, participation/accessibility, safeguarding, field safety |
+| Operations | 5 | Project coordination, volunteering/onboarding/offboarding, feedback, equipment, mentoring |
+| Finance | 4 | Budget/cash flow, purchasing/payment records, reconciliation, restricted grants/reporting |
+| Research | 3 | Research methods, monitoring/measurement, knowledge/archive/memory |
+| Technology | 4 | WordPress use, digital security, software delivery, responsible AI |
+| Leadership | 3 | Delegation/governance, partnership assessment, resource development |
+
+New functional induction options are Radio, Operations, Finance, People/Training, Research/Memory, Technology, and Leadership. Existing Media, People and Production paths and all original lesson IDs, quiz answers and content versions remain intact. Each new functional option has a short role introduction and one bounded practical assignment using the same purpose/safety/quality/handover rubric.
+
+## Learning operations
+
+1. The coordinator and member agree the real role, time, first output, support and review contact. A role label is not sufficient to establish a contract or authority.
+2. The member takes the shared induction plus one relevant path. The coordinator chooses one or two specialist lessons for the first output, adjusting time and connection constraints.
+3. A subject reviewer discusses the output; an existing authorized administrator records the review. Naming a mentor does not grant site permissions. The four-criterion practical review and no-self-approval protection remain enforced.
+4. At the four-to-six-week application conversation, agree one next skill and one observable output. Later development may use job shadowing, peer review, a short teach-back, or a small cross-unit task with a supervisor.
+5. Review after a role change, a repeated problem, a changed policy or a new tool. Do not impose blanket annual retesting before a real need exists.
+
+Start with the existing proposed cohort of three to five and one coordinator. Initially limit a companion to three starters, subject to their available time. A small course library has low technical cost; the scarce resource is practical review. Before growing a cohort, confirm actual reviewers, safe reporting contacts, hosting/data backups and time for support.
+
+## Content ownership and maintenance
+
+The coordinator maintains the course register. Editorial reviewers check editorial and media examples; programme/event leads check community and creative cases; designated finance, people, safety and technical owners check their fields. These are proposed responsibilities to assign, not named appointments. Separate educational approval from adoption of source policies.
+
+Review the content register quarterly or after a source change. Preserve module IDs. Bump a module version when its tested requirement changes; previous completions then remain exportable history rather than silently satisfying the new version. Cosmetic changes and optional aids do not require resetting understanding. Decide source conflicts with the authorized owner; the course does not resolve contractual or legal questions.
+
+Collect only what helps improve the pilot: whether the member understood the role, where they were blocked, whether the first output met the rubric, and whether they applied learning later. Check a small sample of practical outputs rather than rank people by course count. Specialist completion totals measure use of the library, not competence or organizational impact.
+
+## Brand adaptation
+
+The visual reference is Habaq's existing Canva recruitment artwork `DAG-mB_C2-c`: charcoal, white, an amber flower, prominent Arabic headings, and rounded outline labels. The learning UI uses a dark hero, warm light reading panels, amber accents, outlined navigation and a decorative flower motif. The site logo and typography remain those configured in the WordPress theme. Colors are an adaptation from inspected artwork, not claimed official brand-kit tokens. No Canva source was changed. No formal font or palette specification was available.
+
+## Technical scope and verification
+
+Shortcode remains `[habaq_learning]`; the library is the same page with `view=library`, optional `role`, `q`, and `lesson` filters. Arabic search checks static course titles/outcomes. No JavaScript or external font request is needed. Static catalog sections are allowlisted by internal category IDs and read server-side. Quiz keys are never emitted to the UI. All submissions reuse the existing membership, nonce, current-version and server-grading checks. Optional checks cannot satisfy required path lessons or reviewed application milestones.
+
+The same WordPress user-meta record format and privacy export/erase cover new course records. No new database table, subscription, tracking provider, mail queue, role escalation, certificate or case-management system is introduced. Role recommendations are read-only. Current support remains a learning-support form, not a confidential reporting channel. The administrator handles actual reporting contacts separately.
+
+Validation: 500 isolated behavioral assertions, PHP 8.3 lint for all 36 PHP files, existing player JavaScript syntax, catalog integrity, new path prerequisite/review flows, specialist authorization/version/answer handling, user isolation, unchanged required path size, role/search filtering, escaping and privacy export/erase. These tests use WordPress stubs. Live rendering, filtering, course links and deployment must also be verified; a complete independent-member production workflow remains pilot acceptance.
+
+Rollback source: `rollback/learning-0.4.0` at `4fdef6c399c944997d47c9ba7020ddb8e1cc1b70`. Code rollback preserves learner records; it is not a database backup. The previous version does not enumerate new course metadata in its privacy tools, so export any new records before prolonged rollback, or use this version's privacy handlers to service those requests.

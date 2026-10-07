@@ -14,7 +14,17 @@ class Habaq_Learning {
 
     public static function catalog() {
         static $data;
-        if ($data === null) { $data = require __DIR__ . '/catalog.php'; }
+        if ($data === null) {
+            $data = require __DIR__ . '/catalog.php';
+            $extension = require __DIR__ . '/curriculum/index.php';
+            $data['tracks'] = array_merge($data['tracks'], $extension['tracks']);
+            $data['sources'] = array_merge($data['sources'], $extension['sources']);
+            $data['categories'] = $extension['categories'];
+            $data['roles'] = $extension['roles'];
+            foreach (array_merge(array('onboarding'), array_keys($extension['categories'])) as $group) {
+                $data['modules'] = array_merge($data['modules'], require __DIR__ . '/curriculum/' . $group . '.php');
+            }
+        }
         return is_array($data) ? $data : array();
     }
 
@@ -111,6 +121,9 @@ class Habaq_Learning {
     }
 
     public static function unlocked($user_id, $id) {
+        $module = self::module($id);
+        // Specialist checks are optional and never change the required onboarding path.
+        if ($module && !empty($module['optional'])) { return true; }
         foreach (self::path($user_id) as $step) {
             if ($step === $id) { return true; }
             if (self::record($user_id, self::module($step))['status'] !== 'complete') { return false; }
@@ -134,6 +147,9 @@ class Habaq_Learning {
             return '<p dir="rtl">مساحة التعلم مخصصة لأعضاء حبق. <a href="' . esc_url(wp_login_url(get_permalink())) . '">تسجيل الدخول</a>. إذا كنت مسجلاً، اطلب تفعيل عضويتك من الإدارة.</p>';
         }
         wp_enqueue_style('habaq-learning', HABAQ_WP_CORE_URL . 'assets/learning.css', array(), HABAQ_WP_CORE_VERSION);
+        if (isset($_GET['view']) && is_string($_GET['view']) && $_GET['view'] === 'library') {
+            return Habaq_Learning_Library::render(self::notice());
+        }
         $catalog = self::catalog();
         $user_id = get_current_user_id();
         $track = get_user_meta($user_id, 'habaq_learning_track', true);
@@ -146,12 +162,13 @@ class Habaq_Learning {
         $selected = isset($_GET['lesson']) && is_string($_GET['lesson']) ? sanitize_key(wp_unslash($_GET['lesson'])) : Habaq_Learning_Journey::next_lesson($user_id);
         $module = self::module($selected);
         ob_start();
-        echo '<section class="habaq-learning alignwide" dir="rtl"><header><p class="habaq-learning__eyebrow">تعلّم · جرّب · ناقش</p><h2>' . esc_html($catalog['title']) . '</h2><p>' . esc_html($catalog['notice']) . '</p></header>';
+        echo '<section class="habaq-learning alignwide" dir="rtl"><header class="habaq-learning__hero"><p class="habaq-learning__eyebrow">تعلّم · جرّب · ناقش</p><h2>' . esc_html($catalog['title']) . '</h2><p>' . esc_html($catalog['notice']) . '</p></header>';
+        Habaq_Learning_Library::tabs($return, false);
         echo '<p role="status">' . esc_html(self::notice()) . '</p>';
         echo '<p>أكملت ' . esc_html($done) . ' من ' . esc_html(count($path)) . ' دروس في مسارك الحالي.</p><progress max="' . esc_attr(count($path)) . '" value="' . esc_attr($done) . '"></progress>';
         Habaq_Learning_Journey::dashboard($user_id, $return);
         echo '<details><summary>كيف تبدأ؟</summary><p>ابدأ بالدروس المشتركة، ثم أكمل مسار الوحدة. الوقت المقترح موزع على أول أسبوعين ويمكن تعديله مع مسؤولك. اعمل على مهمة أولى صغيرة بمراجعة بشرية، ثم ناقش التطبيق بعد أربعة إلى ستة أسابيع.</p><p>نحفظ مسارك وإجابات التحقق وملخص التكليف وملاحظات المراجع في حسابك. تطلع عليها الإدارة فقط. اطلب تصحيحها أو تصديرها أو حذفها من إدارة الموقع. لا تدرج معلومات حساسة في الإجابات.</p></details>';
-        echo '<details' . (!$track ? ' open' : '') . '><summary>اختيار مسار وحدتي</summary><p>اختر المسار مع مرافق التعلم. الدروس المشتركة محفوظة عند تغييره. المراجعة التطبيقية تبدأ من جديد إذا غيرت الوحدة بعد إكمال المسار.</p>';
+        echo '<details' . (!$track ? ' open' : '') . '><summary>اختيار مسار عملي</summary><p>اختر مع مرافق التعلم الوحدة أو الوظيفة الأقرب لأول مهمة. لا يلزم إكمال بقية المسارات. اختيار المسار لا ينشئ منصباً أو يغير صلاحياتك. الدروس المشتركة محفوظة عند تغييره؛ المراجعة التطبيقية تبدأ من جديد إذا غيرت المسار بعد إكماله.</p>';
         self::form_start('track', $return);
         echo '<label>مسار العمل <select name="track" required>';
         echo '<option value="">اختر المسار</option>';

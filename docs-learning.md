@@ -1,8 +1,8 @@
-# Habaq member learning and onboarding (0.4.0)
+# Habaq member learning and onboarding (0.5.0)
 
-Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md).
+Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
-Shortcode: `[habaq_learning]`. Arabic, RTL, text-first, works without JavaScript. Five shared modules plus two per Media, People or Production path. Checks are graded on the server. First assignments require a written admin review; learning completion never authorizes publication or employment. Source policies remain labeled as drafts.
+Shortcode: `[habaq_learning]`. Arabic, RTL, text-first, works without JavaScript. Five shared modules plus two in one of ten unit/function paths. A separate library offers 36 optional specialist courses and 28 proposed role profiles. Checks are graded on the server. First assignments require a written admin review; learning completion never authorizes publication or employment. Source policies remain labeled as drafts.
 
 ## Source basis
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 124 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure and existing player progress authorization. These use WordPress function stubs, not a real WordPress installation. The 0.3.0 live page, incorrect answer, navigation, job page and registry were verified. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 500 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters and all seven new functional practical-review flows. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.4.0');
+define('HABAQ_WP_CORE_VERSION', '0.5.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -54,6 +54,7 @@ function trailingslashit($s) { return rtrim($s,'/').'/'; }
 function __($s,$domain='') { return $s; }
 require __DIR__.'/../includes/learning/class-habaq-learning.php';
 require __DIR__.'/../includes/learning/class-habaq-learning-journey.php';
+require __DIR__.'/../includes/learning/class-habaq-learning-library.php';
 require __DIR__.'/../includes/training/class-habaq-training-player.php';
 $count=0;
 function expect($ok,$label) { global $count; if (!$ok) { throw new Exception('FAIL: '.$label); } $count++; }
@@ -61,7 +62,7 @@ function submit($data) { $_POST=array_merge(array('_wpnonce'=>'ok','return'=>hom
 function review($decision,$extra=array()) { $m=Habaq_Learning::module('media-task'); $record=Habaq_Learning::record(1,$m); return submit(array_merge(array('op'=>'review','member'=>'1','lesson'=>'media-task','decision'=>$decision,'feedback'=>'Specific review feedback','version'=>$m['version'],'revision'=>(string)($record['revision']??0),'criteria'=>array_keys(Habaq_Learning_Journey::criteria())),$extra)); }
 function ajax($method,$data) { $_POST=array_merge(array('nonce'=>'ok','slug'=>'check','version'=>'2','current_slide'=>'1'),$data); try { Habaq_Training_Player::$method(); } catch(Result $r) { return $r->value; } }
 $c=Habaq_Learning::catalog();
-expect(count($c['modules'])===11,'catalog size');
+expect(count($c['modules'])===61,'catalog size');
 $source_ids=array_column($c['sources'],'id');
 foreach($c['modules'] as $m) { expect(count(array_diff($m['sources'],$source_ids))===0,'valid sources '.$m['id']); expect(Habaq_Learning::grade($m,(string)$m['quiz']['correct']),'correct key '.$m['id']); expect(!Habaq_Learning::grade($m,array(0)),'array answer rejected'); }
 $GLOBALS['uid']=0; expect(!Habaq_Learning::eligible(),'anonymous denied'); expect(!str_contains(Habaq_Learning::render(),'من الفكرة'),'anonymous sees no lessons');
@@ -188,4 +189,58 @@ $GLOBALS['meta'][1]['habaq_training_progress']['check']['version']='1';
 ajax('ajax_save_progress',array());expect(!$GLOBALS['meta'][1]['habaq_training_progress']['check']['completed'],'old completion not carried forward');
 expect(ajax('ajax_save_progress',array('slug'=>'unknown'))['status']===400,'unknown player slug denied');
 unlink($root.'/training.json');rmdir($root);rmdir(dirname($root));rmdir($GLOBALS['upload']);
+// Specialist learning remains independent of induction and system permissions.
+$GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');$GLOBALS['meta'][1]=array();
+$optional=Habaq_Learning::module('radio-rights');
+expect(count(Habaq_Learning_Library::courses())===36,'specialist course count');
+expect(count($c['roles'])===28,'role profile count');
+expect(count($c['tracks'])===10,'ten induction choices');
+expect(count(array_unique(array_column($c['modules'],'id')))===61,'stable unique module IDs');
+foreach($c['roles'] as $role=>$profile) {
+    expect(isset($c['tracks'][$profile['track']]),'role induction track '.$role);
+    foreach(array_merge($profile['priority'],$profile['development']) as $id) { expect(!empty(Habaq_Learning::module($id)['optional']),'role course exists '.$role.' '.$id); }
+}
+expect(Habaq_Learning::unlocked(1,'radio-rights'),'specialist check available before induction');
+expect(!Habaq_Learning::unlocked(1,'imaginary-course'),'unknown specialist denied');
+expect(count(Habaq_Learning::path(1))===5,'library does not expand required induction');
+expect(str_contains(submit(array('op'=>'lesson','lesson'=>'radio-rights','version'=>$optional['version'],'ack'=>'1','answer'=>'0')),'wrong'),'wrong specialist answer not recorded');
+expect(Habaq_Learning::record(1,$optional)['status']==='new','wrong specialist remains new');
+expect(str_contains(submit(array('op'=>'lesson','lesson'=>'radio-rights','version'=>'old','ack'=>'1','answer'=>'1')),'invalid'),'stale specialist blocked');
+expect(str_contains(submit(array('op'=>'lesson','lesson'=>'radio-rights','version'=>$optional['version'],'ack'=>'1','answer'=>'1')),'saved'),'specialist understanding saved');
+expect(Habaq_Learning::record(1,$optional)['status']==='complete','specialist self check complete');
+expect(!Habaq_Learning_Journey::foundation_done(1),'optional completion does not finish foundation');
+expect(!Habaq_Learning_Journey::completed(1),'optional completion does not grant onboarding approval');
+expect(Habaq_Learning::record(2,$optional)['status']==='new','specialist user isolation');
+expect($GLOBALS['caps']===array('habaq_insider_access'),'no capability changes');
+$role_courses=array_column(Habaq_Learning_Library::courses('photographer'),'id');
+expect(in_array('photo',$role_courses,true)&&in_array('safeguarding',$role_courses,true)&&!in_array('reconciliation',$role_courses,true),'photographer recommendation filter');
+expect(count(Habaq_Learning_Library::courses('','ميزانية'))>0,'Arabic search');
+expect(count(Habaq_Learning_Library::courses('','no_matching_course_987'))===0,'empty search result');
+$_GET=array('view'=>'library','role'=>'photographer','q'=>'');$markup=Habaq_Learning::render();
+expect(str_contains($markup,'تصوير فوتوغرافي')&&str_contains($markup,'أولوية للمهمة'),'role library rendered');
+expect(get_user_meta(1,'habaq_learning_track',true)==='','role filter does not assign a track');
+$_GET=array('view'=>'library','lesson'=>'radio-rights');$markup=Habaq_Learning::render();
+expect(str_contains($markup,'تم حفظ التحقق')&&!str_contains($markup,'name="answer"'),'completed specialist read without another submission');
+$_GET=array('view'=>'library','q'=>'<img src=x onerror=alert(1)>');$markup=Habaq_Learning::render();
+expect(!str_contains($markup,'<img src=x'),'search input escaped');
+$_GET=array('view'=>'library','role'=>array('bad'),'q'=>array('bad'),'lesson'=>array('bad'));expect(str_contains(Habaq_Learning::render(),'كل الأدوار'),'array filters safely ignored');
+$GLOBALS['caps']=array('read');expect(!str_contains(Habaq_Learning::render(),'بث خطي'),'ordinary login cannot read specialist content');
+$GLOBALS['caps']=array('habaq_insider_access');$_GET=array();
+$export=Habaq_Learning::export_data('member@example.test');expect(str_contains(json_encode($export),'habaq_learning_radio-rights'),'specialist privacy export');
+Habaq_Learning::erase_data('member@example.test');expect(get_user_meta(1,'habaq_learning_radio-rights',true)==='','specialist privacy erase');
+// Every new functional induction follows the same protected practical workflow.
+foreach(array('radio','operations','finance','people-ops','research','technology','leadership') as $track) {
+    $GLOBALS['uid']=1;$GLOBALS['caps']=array('habaq_insider_access');$GLOBALS['meta'][1]=array();
+    submit(array('op'=>'track','track'=>$track));
+    expect(count(Habaq_Learning::path(1))===7,'bounded induction '.$track);
+    $ids=$c['tracks'][$track]['modules'];$task=Habaq_Learning::module($ids[1]);
+    expect(str_contains(submit(array('op'=>'lesson','lesson'=>$task['id'],'version'=>$task['version'],'ack'=>'1','answer'=>'2','evidence'=>'Deidentified task summary with safe scope and reviewer.')),'invalid'),'new track prerequisites '.$track);
+    foreach(array_merge($c['shared'],array($ids[0])) as $id) {$m=Habaq_Learning::module($id);submit(array('op'=>'lesson','lesson'=>$id,'version'=>$m['version'],'ack'=>'1','answer'=>(string)$m['quiz']['correct']));}
+    submit(array('op'=>'lesson','lesson'=>$task['id'],'version'=>$task['version'],'ack'=>'1','answer'=>'2','evidence'=>'Deidentified task summary with safe scope and reviewer.'));
+    $record=Habaq_Learning::record(1,$task);expect($record['status']==='pending','human practical review '.$track);
+    expect(!Habaq_Learning_Journey::task_done(1),'pending not passed '.$track);
+    $GLOBALS['uid']=2;$GLOBALS['caps']=array('manage_options');
+    submit(array('op'=>'review','member'=>'1','lesson'=>$task['id'],'decision'=>'complete','feedback'=>'Good safe purpose, quality and handover.','version'=>$task['version'],'revision'=>(string)$record['revision'],'criteria'=>array_keys(Habaq_Learning_Journey::criteria())));
+    expect(Habaq_Learning_Journey::task_done(1),'new functional practical approved '.$track);
+}
 echo 'Passed '.$count." behavioral checks.\n";
