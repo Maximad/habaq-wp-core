@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.10.0');
+define('HABAQ_WP_CORE_VERSION', '0.11.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -324,6 +324,29 @@ expect(Habaq_Learning::record(1,$workflow)['status']==='new','workflow retry doe
 $GLOBALS['meta'][1]['habaq_learning_workflow']=array('version'=>$workflow['version'],'status'=>'complete');
 $_GET=array('lesson'=>'workflow','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$workflow['feedback']['complete'])&&!str_contains($markup,'"correct"'),'workflow completion principle rendered without raw key');
+// The media path editorial batch makes the first journalistic task safe and reviewable without changing requirements.
+$media_basics=Habaq_Learning::module('media-basics');$media_task=Habaq_Learning::module('media-task');
+expect($media_basics['version']==='2026-10-07.1'&&$media_task['version']==='2026-10-07.1','media editorial versions preserved');
+expect($media_basics['quiz']['correct']===1&&$media_task['quiz']['correct']===1,'media answer keys preserved');
+expect($media_task['assignment']==='قدّم ملخص مقترح القصة وخطة التحقق والحماية، وما الدعم المطلوب. استخدم مثالاً افتراضياً ولا تدرج بيانات أشخاص.','media practical assignment preserved');
+expect($media_basics['title']==='بداية العمل الصحفي'&&str_contains($media_basics['body_html'],'ريم اسم افتراضي'),'media introduction and fictional local example');
+expect(str_contains($media_basics['body_html'],'قارن بين مقترح ضعيف ومقترح واضح')&&str_contains($media_basics['body_html'],'المصدران اللذان ينقلان عن الشخص نفسه'),'media lesson compares pitches and source independence');
+expect(str_contains($media_basics['body_html'],'لا تتصل بمصدر حقيقي قبل اعتماد التكليف')&&str_contains($media_basics['body_html'],'قرار عدم النشر'),'media lesson bounds contact and publishing authority');
+expect(str_contains($media_basics['job_aid'],'الادعاء ٢')&&str_contains($media_basics['job_aid'],'تفاصيل قد تكشف الهوية'),'media card supports verification and indirect identification');
+expect($media_task['title']==='مهمتك الأولى: مقترح قصة'&&str_contains($media_task['body_html'],'مقترح مكتمل للمقارنة'),'media task has worked pitch');
+expect(str_contains($media_task['body_html'],'إرشاد للمراجع')&&str_contains($media_task['body_html'],'تعديلاً واحداً محدداً'),'media task gives actionable reviewer guidance');
+expect(str_contains($media_task['body_html'],'لا تضع أسماء أو أرقام تواصل أو شهادات')&&str_contains($media_task['body_html'],'ملف نصي خفيف'),'media task protects data and supports low connectivity');
+expect(str_contains($media_task['job_aid'],'ما الذي قد يوقف القصة؟')&&str_contains($media_task['job_aid'],'حدود الاتصال والتسجيل والنشر'),'media task card captures stop and authority boundaries');
+$GLOBALS['meta'][1]['habaq_learning_track']='media';
+$GLOBALS['meta'][1]['habaq_learning_media-basics']=array('version'=>$media_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'media-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$media_basics['feedback']['retry'])&&!str_contains($markup,$media_basics['feedback']['complete']),'media basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_media-basics']=array('version'=>$media_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'media-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$media_basics['feedback']['complete']),'media basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_media-task']=array('version'=>$media_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'media-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$media_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'media task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

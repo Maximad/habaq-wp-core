@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.10.0)
+# Habaq member learning and onboarding (0.11.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -84,6 +84,14 @@ Neither lesson collects real reports or files. Actual reporting, safety and priv
 The final common lesson is now titled “من فكرة صغيرة إلى تسليم واضح”. It turns a broad idea into one reviewable output with a definition of done, one reviewer, a deadline, authority limits, a midpoint question and a clear handover. A fictional Suwayda reading-circle example is preparation-only: it permits no booking, public announcement or spending. The exercise uses fictional information, and the work card can be completed on paper or in a light text file when connectivity is weak.
 
 The lesson now gives attempt-specific feedback and distinguishes recorded learning, human review of work, publication or spending authority, reach and evidence of impact. The tested outcome, answer key, lesson ID, prerequisites and module version remain unchanged, so prior completions remain current. Release 0.9.0 tracks this editorial batch; domain-owner review and learner testing are not claimed.
+
+## Habaq Media path — 0.11.0
+
+The media introduction is now titled “بداية العمل الصحفي”. It starts with one answerable question rather than a conclusion, uses a fictional Suwayda neighbourhood-library example, compares a weak pitch with a clear one and asks the learner to connect each claim to a possible source and independent verification. It explicitly prohibits contacting a real source during the exercise and explains that stopping or not publishing can be the professional decision.
+
+The first assignment is now titled “مهمتك الأولى: مقترح قصة”. It remains a one-page story proposal with a question, audience, public interest, small verification matrix, source/voice plan, risks, protections, timing and reviewer. A completed fictional example, low-connectivity option, deidentified submission prompt and four-question reviewer guide make the handoff practical. The learning form accepts no names, contact details, testimony, recordings or private links.
+
+The journalism training-quality guide, strategic note, draft editorial policy, working language/style guide, Safe Voices proposal and draft sensitive-imagery policy were re-read on 7 October 2026. Their adoption states remain visible. Lesson completion and practical review do not authorize source contact, recording or publication. Both lesson IDs, practical assignment, prerequisites, answer keys and module version `2026-10-07.1` remain unchanged because the tested requirements did not change. Existing completions and review history therefore remain current. Release 0.11.0 tracks the editorial batch; editorial/safety-owner and learner acceptance remain pending.
 
 ## Operations and coordination path — 0.10.0
 

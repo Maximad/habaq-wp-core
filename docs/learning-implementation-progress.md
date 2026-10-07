@@ -159,10 +159,39 @@ Validation before commit:
 - Screenshot: `habaq-operations-0-10-0-1791383457475.jpg`, captured 7 October 2026 and saved as live version evidence. Library identity `libfile_6507c3bc54dc8191b63c578d370697b2`.
 - Domain-owner and learner acceptance are not claimed.
 
+## Batch 6 — Habaq Media path (0.11.0)
+
+Scope and decisions:
+
+- Rewrote `media-basics` as “بداية العمل الصحفي”. It now starts from one answerable question, uses a fictional Suwayda neighbourhood-library example, compares a weak pitch with a bounded one, maps claims to independent verification and adds a paper-friendly exercise and fuller reporting card.
+- Rewrote `media-task` as “مهمتك الأولى: مقترح قصة”. The assignment remains a one-page fictional story pitch, now with a completed 500-word example, two-claim verification matrix, safe deidentified submission, low-connectivity option, four reviewer questions and one-actionable-change guidance.
+- Preserved both lesson IDs, prerequisites, practical assignment, correct answer indexes and module version `2026-10-07.1`. The tested requirements did not materially change, so existing completions and review history remain current. Plugin release `0.11.0` tracks this editorial batch.
+- Neither lesson authorizes contacting, recording or photographing a real source, publishing a story, or collecting a sensitive testimony. Learning completion, editorial review, safety review and publication authority remain separate; a professional review may conclude that the story should not proceed.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: local narrative and cultural/media production are strategic, while clear roles and a realistic workload remain necessary.
+- `حبق ميديا | دليل متابعة التدريب وجودة العمل الصحفي`, modified 28 September 2026 at 10:36:23 UTC: learning, work review and publication decisions must remain separate; use safe deidentified records and human editorial review. It remains a consultation document.
+- `17- مسودة سياسة التحرير والنشر والتصحيح وحق الرد في حبق`, modified 13 December 2025 at 12:48:25 UTC: accuracy before speed, independent verification, careful certainty language, identity protection, right of reply and editor approval. It remains a draft.
+- `دليل اللغة والأسلوب لحبق ميديا`, modified 28 October 2025 at 19:41:07 UTC: precise, calm, human-centred Arabic; no exaggeration; identify uncertainty; use independent support for harmful claims. It remains a working guide.
+- `أصوات آمنة`, modified 19 September 2026 at 14:14:44 UTC: proposed training, production, review and safe-publishing sequence; informed consent and non-publication where risk remains. It remains a proposal, not an adopted service or completed project.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: protect people before the story, consider indirect identification, and add review or withhold publication for sensitive material. It remains a draft.
+
+Validation before commit:
+
+- 571 isolated behavioral checks passed. New checks cover preserved module versions, assignments and keys; the fictional local example; weak/clear comparison; independent verification; contact and publication boundaries; completed pitch; reviewer guidance; safe low-connectivity submission; lesson feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
+- Regenerated and validated the 61-card review plan and 61-lesson curriculum. Replaced the same Library artifact identities with expected-version safeguards: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 5. No duplicate curriculum or review file was created.
+- Editorial/safety-owner and learner acceptance are not claimed.
+
+Commit/deployment — active:
+
+- Release commit, rollback point and live deployment evidence are pending in this batch checkpoint.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations and coordination is complete in implementation. Actual first-task relevance chooses the next path when available; otherwise continue with a broadly useful path.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination and Habaq Media are complete in implementation. Actual first-task relevance chooses the next path when available; otherwise Habaq People is the next broadly useful path.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

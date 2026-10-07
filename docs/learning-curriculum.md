@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.10.0
+# Habaq learning curriculum 0.11.0
+
+## Path checkpoint 0.11.0 — Habaq Media
+
+The media path is now ready for domain and learner review. `media-basics` is titled “بداية العمل الصحفي” and teaches the learner to start from one answerable question, distinguish observation, source statement and inference, map each claim to evidence and protect people before gathering material. Its fictional Suwayda neighbourhood-library example compares a conclusion-led pitch with a clear, bounded proposal and includes a safe exercise and expanded work card.
+
+`media-task` is now “مهمتك الأولى: مقترح قصة”. The required output remains a one-page proposal, not a published story or real interview. A completed example covers the question, audience, output size, two claims, independent verification, voices, consent, risk, deadline, reviewer and contact/publication limits. The learner submits only a deidentified summary. The reviewer checks public interest, evidence, fairness/safety and feasible scope, then requests one actionable change or records the educational review.
+
+The strategic note, journalism training-quality guide, draft editorial policy, working language/style guide, Safe Voices proposal and draft sensitive-imagery policy were re-read on 7 October 2026. The drafts and consultation material are not treated as adopted policy. The tested outcomes, assignment, answer keys and module version `2026-10-07.1` did not change, so existing completions and review history stay valid. Editorial/safety-owner review and trials with new learners remain required.
 
 ## Path checkpoint 0.10.0 — operations and coordination
 
