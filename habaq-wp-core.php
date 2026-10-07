@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Habaq Engine
  * Description: Core plugin scaffold for Habaq.
- * Version: 0.6.0
+ * Version: 0.6.1
  * Author: Habaq
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('HABAQ_WP_CORE_VERSION', '0.6.0');
+define('HABAQ_WP_CORE_VERSION', '0.6.1');
 define('HABAQ_WP_CORE_FILE', __FILE__);
 define('HABAQ_WP_CORE_DIR', __DIR__);
 define('HABAQ_WP_CORE_URL', plugin_dir_url(__FILE__));
