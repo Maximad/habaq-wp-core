@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.8.0');
+define('HABAQ_WP_CORE_VERSION', '0.9.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -310,4 +310,18 @@ expect(str_contains($markup,$data['feedback']['retry'])&&!str_contains($markup,'
 $GLOBALS['meta'][1]['habaq_learning_data']=array('version'=>$data['version'],'status'=>'complete');
 $_GET=array('lesson'=>'data','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$data['feedback']['complete']),'data completion principle rendered');
+// The final shared editorial lesson keeps its tested decision while making a bounded handover practical.
+$workflow=Habaq_Learning::module('workflow');
+expect($workflow['version']==='2026-10-07.1'&&$workflow['quiz']['correct']===1,'workflow editorial version and answer key preserved');
+expect($workflow['title']==='من فكرة صغيرة إلى تسليم واضح'&&str_contains($workflow['body_html'],'ميرا اسم افتراضي'),'workflow title and fictional local example');
+expect(str_contains($workflow['body_html'],'لا تحجز مكاناً ولا تنشر إعلاناً')&&str_contains($workflow['body_html'],'حدود القرار'),'workflow example bounds external action');
+expect(str_contains($workflow['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($workflow['body_html'],'لا تضع بيانات أشخاص أو ميزانية حقيقية'),'workflow supports low connectivity and safe practice');
+expect(str_contains($workflow['job_aid'],'تمّ عندما')&&str_contains($workflow['job_aid'],'من يعتمد القرار عند الحاجة')&&str_contains($workflow['job_aid'],'ما بقي والخطوة التالية'),'workflow card supports review authority and handover');
+$GLOBALS['meta'][1]['habaq_learning_workflow']=array('version'=>$workflow['version'],'status'=>'new');
+$_GET=array('lesson'=>'workflow','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$workflow['feedback']['retry'])&&!str_contains($markup,$workflow['feedback']['complete']),'workflow retry feedback only after attempt');
+expect(Habaq_Learning::record(1,$workflow)['status']==='new','workflow retry does not complete lesson');
+$GLOBALS['meta'][1]['habaq_learning_workflow']=array('version'=>$workflow['version'],'status'=>'complete');
+$_GET=array('lesson'=>'workflow','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$workflow['feedback']['complete'])&&!str_contains($markup,'"correct"'),'workflow completion principle rendered without raw key');
 echo 'Passed '.$count." behavioral checks.\n";

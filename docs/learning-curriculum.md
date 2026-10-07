@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.8.0
+# Habaq learning curriculum 0.9.0
+
+## Editorial checkpoint 0.9.0
+
+The fifth shared lesson now follows the same warm, practical pattern. `workflow` is titled “من فكرة صغيرة إلى تسليم واضح” and uses a fictional Suwayda reading-circle task to show the difference between a broad idea and a bounded, reviewable output. Its completed card includes the definition of done, reviewer, deadline, decision limits, midpoint question and handover. It also supports paper or a light text file when connectivity is weak, and its practice prompt excludes real personal data and budgets.
+
+The current strategic note and the Habaq Media training follow-up guide were re-read on 7 October 2026. The lesson keeps their distinction between learning records, human review, publication authority, reach and evidence of impact. It does not invent a missing baseline. The four-to-six-week application conversation remains a proposed practice, not an automatic deadline or a judgment on a person.
+
+The tested outcome and answer key did not change, so the lesson ID and version `2026-10-07.1` remain unchanged and existing completions stay valid. Domain-owner review and trials with new learners are still required. Release `0.9.0` is the implementation checkpoint for the editorial change.
 
 ## Editorial checkpoint 0.8.0
 

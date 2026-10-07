@@ -101,13 +101,32 @@ Commit/deployment — completed:
 - Screenshot: `habaq-conduct-data-0-8-0-1791368796176.jpg`, captured 7 October 2026 and saved as live evidence. Library identity `libfile_584a5fa329588191af3b2140a3d4275d`.
 - Active batch is complete. The documentation-only checkpoint that records this evidence does not change plugin code or require another deployment. Draft PR #21 remains the review entry point.
 
+## Batch 4 — shared lesson: workflow (0.9.0)
+
+Scope and decisions:
+
+- Rewrote `workflow` as “من فكرة صغيرة إلى تسليم واضح” in warm, direct fusha. It now has one observable result, a fictional Suwayda reading-circle example, a completed task card, a small safe exercise, low-connectivity guidance, a clearer handover and attempt-specific feedback.
+- The example limits the learner to preparing a one-page plan. It does not authorize booking, announcement, spending or another external commitment. The lesson separates recorded learning, human review of work, publication/spending authority, reach and evidence of impact.
+- Preserved the lesson ID, prerequisite, correct answer index and module version `2026-10-07.1`. The tested outcome—turning an idea into a small task with an output, reviewer, deadline and follow-up—did not materially change, so prior completions remain current. Plugin release `0.9.0` tracks this editorial batch.
+
+Sources re-read on 7 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: Habaq can experiment quickly, but needs clearer priorities, delegation, institutional roles and measurement boundaries.
+- `حبق ميديا | دليل متابعة التدريب وجودة العمل الصحفي`, modified 28 September 2026 at 10:36:23 UTC: separate monitoring from evaluation and publication decisions; do not invent a pre-training score; use a current baseline with stated limitations; a four-to-six-week application conversation is a proposed follow-up practice.
+
+Validation before commit:
+
+- 545 isolated behavioral checks passed. New checks cover the preserved lesson version/key, fictional example, external-action limits, low-connectivity option, safe exercise, expanded handover card, attempt-specific feedback, unchanged completion behavior and hidden raw answer key.
+- All 36 PHP files passed PHP 8.3 lint; the existing training JavaScript passed syntax validation; `git diff --check` passed.
+- Regenerated and validated the 61-card review plan and the 61-lesson curriculum. Replaced the same Library artifact identities using expected version 2: review plan `libfile_0b83affecccc8191bfe9e24644ab0345` and curriculum `libfile_17af04fe58748191b961a4e5480eaed6`, both now at Library version 3. No duplicate curriculum or review file was created. Release commit, publication and live checks remain pending at this checkpoint and must not be claimed until recorded below.
+- Domain-owner and learner acceptance are not claimed.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Complete the shared editorial work with workflow, using fresh relevant Drive sources, an ordinary fictional local example, short exercise, explanatory feedback and work card. Keep IDs/versions when tested meaning is unchanged; deliberately version material requirements.
-3. Improve the two lessons in each existing path in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Actual first-task relevance chooses specialist priorities when available; otherwise start with broadly useful first-task courses.
-4. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
-5. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
+2. Improve the two lessons in each existing path in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Actual first-task relevance chooses specialist priorities when available; otherwise start with broadly useful first-task courses.
+3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
+4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
 ## Decisions and human acceptance still needed
 

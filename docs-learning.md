@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.8.0)
+# Habaq member learning and onboarding (0.9.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -78,3 +78,9 @@ Server-rendered formative feedback appears after an unsuccessful check and along
 The next two common lessons use the same short, practical structure. Conduct separates consent to attend, record and publish; gives a fictional local event case; and asks the learner to identify the exact permission, protection step, designated reporting role and independent alternative. Data works through three fictional files, data minimization, limited sharing, safe training copies, unapproved AI-tool exclusions and a brief incident response.
 
 Neither lesson collects real reports or files. Actual reporting, safety and privacy contacts and approved storage locations remain administrator setup decisions. The source policies are drafts, and completing a lesson does not adopt them or grant access. Lesson IDs, answer keys, prerequisites and module versions remain unchanged because the tested decisions did not change; existing completions remain valid. Release 0.8.0 tracks the editorial batch.
+
+## Shared lesson: workflow — 0.9.0
+
+The final common lesson is now titled “من فكرة صغيرة إلى تسليم واضح”. It turns a broad idea into one reviewable output with a definition of done, one reviewer, a deadline, authority limits, a midpoint question and a clear handover. A fictional Suwayda reading-circle example is preparation-only: it permits no booking, public announcement or spending. The exercise uses fictional information, and the work card can be completed on paper or in a light text file when connectivity is weak.
+
+The lesson now gives attempt-specific feedback and distinguishes recorded learning, human review of work, publication or spending authority, reach and evidence of impact. The tested outcome, answer key, lesson ID, prerequisites and module version remain unchanged, so prior completions remain current. Release 0.9.0 tracks this editorial batch; domain-owner review and learner testing are not claimed.
