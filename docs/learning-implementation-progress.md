@@ -243,7 +243,9 @@ Validation and delivery:
 
 - 601 isolated behavioral checks passed, including preserved requirements, rights/consent limits, worked prototype, reviewer guidance, safe submission, feedback and hidden raw answer keys.
 - All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both HTML documents parsed and their updated production content was verified. The existing 61-card review plan and 61-lesson curriculum were replaced in place with expected Library version 6, both now version 7. No duplicate artifact was created.
-- Commit is in progress; no release publication or human acceptance is claimed.
+- Saved release commit `130cb28834ef8878ae0d73972bbfb332af623add`, tree `d7086ede03eed378490cc5ccdc8d6056b5e4a37b`, to the existing `codex/member-learning` branch using expected head `e2259ee585658e1ed275c1fcb0cc442361722d64`, fast-forward only. No force update or merge to main occurred.
+- Publication was not retried against the already-established WordPress reauthentication blocker. Current callable Hostinger tools cover AI Builder sites, not this WordPress deployment. Releases 0.11.0–0.13.0 are prepared on draft PR #21; last verified live remains 0.10.0. No live learner records changed.
+- Production/rights-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - The preceding execution was interrupted by a temporary usage-limit approval-review failure before final lint/commit. The local code and tests were preserved and this batch resumes them.
 - Last verified live release remains `0.10.0`; the established deployment blocker is WordPress reauthentication with no callable Hostinger deployment method. Code rollback remains `rollback/learning-0.10.0`. Credentials and learner state remain untouched.
 
