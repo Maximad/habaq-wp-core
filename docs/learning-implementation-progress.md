@@ -483,11 +483,38 @@ Validation and delivery:
 - Release `0.22.0` remains prepared on draft PR #21 rather than live. Authenticated WordPress access and the Deployer action were verified earlier on 8 October 2026, while the installed release remained `0.10.0`. The deployment action was not taken in this non-interactive run because it changes the public site and requires action-time confirmation. No learner state, permission or production code changed. Code rollback remains `rollback/learning-0.10.0`.
 - Editorial/rights/safeguarding/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
 
+## Batch 18 — Specialist social publishing and translation (0.23.0)
+
+Scope and decisions:
+
+- Rewrote optional specialist course `social` as “من مادة معتمدة إلى منشور واضح”. A fictional Suwayda contributor now prepares a bounded platform package from one approved fictional story, preserves the number and uncertainty, records the link, image rights, alt text and crop, and separates questions, criticism, correction requests and privacy threats.
+- Rewrote optional specialist course `translation` as “ترجمة دقيقة وعربية سهلة”. A fictional Suwayda translator now restores the number, attribution and uncertainty lost from a short English sentence, records a three-term glossary and leaves an open editorial question instead of inventing meaning.
+- Both courses add paper/light-text exercises, expanded work cards, reviewer guidance and specialist retry/completion feedback. Raw answer keys remain server-side and absent from the frontend.
+- Preserved both IDs, tested outcomes, correct answer indexes and module version `2026-10-07.2`. Existing completions remain current. Plugin release `0.23.0` records this specialist editorial batch.
+- Learning completion, account access, moderation, translation approval, rights/privacy review and publishing authority remain separate. Exercises use fictional people, accounts, comments, images, texts and numbers; they collect no credentials, private messages, real correction request, source identity or personal data.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: Habaq seeks locally grounded expression and wider digital reach while procedures, roles and specialist capacity remain incomplete. It remains a working draft.
+- `17- مسودة سياسة التحرير والنشر والتصحيح وحق الرد في حبق`, modified 13 December 2025 at 12:48:25 UTC: platform copies should preserve evidence strength, correction requests return to editorial review and publication remains a separate decision. It remains a draft.
+- `دليل اللغة والأسلوب لحبق ميديا`, modified 28 October 2025 at 19:41:07 UTC: language should remain calm, precise and readable, preserve attribution and uncertainty and avoid exaggeration. It remains a working document whose adoption must be confirmed.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: visual use requires consent or another valid right, context, dignity and a crop that does not create harm. It remains a draft.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: public replies must not repeat private data; handling should minimize and restrict records, and translation exercises must not expose private text. It remains a draft with unfilled roles and channels.
+
+Validation and delivery:
+
+- 809 isolated behavioral checks passed. The 24 new checks cover preserved versions, outcomes and answer keys; fictional local cases; approved-copy fidelity; number, attribution and uncertainty; image rights and alt text; question, criticism, correction and privacy routing; measurement limits; worked examples; low-connectivity exercises; reviewer authority limits; expanded work cards; source references; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed syntax lint with isolated PHP 8.5.10. Training JavaScript syntax and `git diff --check` passed. Both generated HTML documents parsed successfully with 61 entries each.
+- The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 16. Both are now version 17. No duplicate artifact was created.
+- Saved release commit `008e91d3463a7104e243d773f6a68161d1825938`, tree `9253af7a41f6eea005de9a16cb08e01a821cd96a`, to `codex/member-learning` using expected head `cf562904265bf20320ce92facf4a8fdefd404bc9`, fast-forward only. No force update or merge to main occurred.
+- Release `0.23.0` remains prepared on draft PR #21 rather than live. The last independently verified live release remains `0.10.0`. Deployment was not attempted in this non-interactive run because the public-site action requires action-time confirmation. No learner state, permission or production code changed. Code rollback remains `rollback/learning-0.10.0`.
+- Editorial/audience/rights/privacy/language-owner review and learner acceptance remain pending. This batch is complete in implementation.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
 2. All ten two-lesson onboarding paths are complete in implementation. Domain-owner and learner review remain human acceptance steps, not completed claims.
-3. Review the remaining 30 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use, digital security, verification, interviewing/consent, reporting and editing are complete in implementation. Actual first-task relevance chooses the next batch; otherwise social publishing and translation are next because they complete the first editorial specialist group without expanding the required joining path.
+3. Review the remaining 28 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use, digital security and all six editorial specialist courses are complete in implementation. Actual first-task relevance chooses the next batch; otherwise photography and video are next because they support Habaq Media and Production first outputs without expanding the required joining path.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
 ## Decisions and human acceptance still needed
