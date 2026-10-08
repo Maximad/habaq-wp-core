@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.16.0
+# Habaq learning curriculum 0.17.0
+
+## Path checkpoint 0.17.0 — Research and Memory
+
+`research-basics` is now “بداية العمل في البحث والذاكرة”. A fictional researcher from Suwayda starts from one decision and one bounded question before collecting data. The lesson compares a broad claim with a reviewable question, separates documented fact, attributed account, interpretation and recommendation, and gives a three-source exercise that works on paper or in a light text file. Each source card records what the source establishes and does not establish, along with date, location, rights and access.
+
+`research-task` is now “مهمتك الأولى: مذكرة بحث وذاكرة”. The assignment remains a fictional one-page memo with a question, three sources, method, two limitations, labelled fictional finding, recommendation and handover index. The worked example avoids testimony and private links, marks its three cases as non-representative, proposes one small test, and hands over a memo, source table, readme and rights/access note. The learner submits only a safe seven-line summary. Reviewer guidance checks the question, evidence limits, method, rights and handover before one actionable revision or educational completion.
+
+The strategic working draft, integrated-program proposal, language/style working document, privacy draft and folder-structure working document were re-read on 8 October 2026. Their metrics, structures, folders and roles remain proposals, drafts or working references rather than adopted procedure. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. Research/privacy-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.16.0 — People Operations
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.16.0');
+define('HABAQ_WP_CORE_VERSION', '0.17.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -471,6 +471,32 @@ expect(str_contains($markup,$people_ops_basics['feedback']['complete']),'people 
 $GLOBALS['meta'][1]['habaq_learning_people-ops-task']=array('version'=>$people_ops_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'people-ops-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$people_ops_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'people operations task review principle rendered without raw key');
+// The Research and Memory path makes one small question reviewable without collecting testimony or authorizing publication.
+$research_basics=Habaq_Learning::module('research-basics');$research_task=Habaq_Learning::module('research-task');
+expect($research_basics['version']==='2026-10-07.2'&&$research_task['version']==='2026-10-07.2','research editorial versions preserved');
+expect($research_basics['quiz']['correct']===0&&$research_task['quiz']['correct']===2,'research answer keys preserved');
+expect($research_task['assignment']==='اكتب مذكرة افتراضية من صفحة واحدة: سؤال، ثلاثة مصادر مقترحة، منهج، قيدان، نتيجة افتراضية موضحة وتوصية وفهرس تسليم.','research practical assignment preserved');
+expect($research_basics['title']==='بداية العمل في البحث والذاكرة'&&str_contains($research_basics['body_html'],'رؤى اسم افتراضي لباحثة جديدة من السويداء'),'research introduction and fictional local example');
+expect(str_contains($research_basics['body_html'],'قارن بين ادعاء واسع وسؤال واضح')&&str_contains($research_basics['body_html'],'لا تمثل سكان المدينة'),'research lesson compares broad claim with bounded question');
+expect(str_contains($research_basics['body_html'],'واقعة موثقة')&&str_contains($research_basics['body_html'],'رواية منسوبة')&&str_contains($research_basics['body_html'],'تفسير')&&str_contains($research_basics['body_html'],'توصية'),'research lesson separates evidence statement types');
+expect(str_contains($research_basics['body_html'],'بطاقة المصدر تحفظ الذاكرة')&&str_contains($research_basics['body_html'],'لا تنسخ شهادة'),'research lesson captures source context without testimony');
+expect(str_contains($research_basics['job_aid'],'ما يثبته وما لا يثبته')&&str_contains($research_basics['job_aid'],'حقوق ووصول'),'research card captures evidence and access limits');
+expect($research_task['title']==='مهمتك الأولى: مذكرة بحث وذاكرة'&&str_contains($research_task['body_html'],'مثال مكتمل للمقارنة'),'research task has a worked one-page memo');
+expect(str_contains($research_task['body_html'],'ثلاث حالات لا تمثل المدينة')&&str_contains($research_task['body_html'],'هذه نتيجة تدريبية لا تصف واقع السويداء'),'research task labels fictional result and limitations');
+expect(str_contains($research_task['body_html'],'فهرس التسليم')&&str_contains($research_task['job_aid'],'جدول مصادر'),'research task preserves a handover index');
+expect(str_contains($research_task['body_html'],'سلّم سبعة أسطر فقط')&&str_contains($research_task['body_html'],'لا ترفع الأصول أو الشهادات'),'research task supports safe low-connectivity submission');
+expect(str_contains($research_task['body_html'],'إرشاد للمراجع')&&str_contains($research_task['body_html'],'تعديلاً واحداً قابلاً للتنفيذ'),'research task gives actionable reviewer guidance');
+expect(str_contains($research_task['body_html'],'لا تعتمد جمع بيانات أو نشراً أو ادعاء أثر')&&str_contains($research_task['body_html'],'يجيز مقابلة أو استبياناً'),'research task separates learning from collection publication and impact claims');
+$GLOBALS['meta'][1]['habaq_learning_track']='research';
+$GLOBALS['meta'][1]['habaq_learning_research-basics']=array('version'=>$research_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'research-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$research_basics['feedback']['retry'])&&!str_contains($markup,$research_basics['feedback']['complete']),'research basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_research-basics']=array('version'=>$research_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'research-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$research_basics['feedback']['complete']),'research basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_research-task']=array('version'=>$research_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'research-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$research_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'research task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.16.0)
+# Habaq member learning and onboarding (0.17.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -32,7 +32,7 @@ The pilot has one formative check per lesson and manual administrator review. No
 
 ## Validation
 
-PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 650 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production, Radio, Finance and People Operations lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
+PHP 8.3 lint passed for every plugin PHP file. Node syntax check passed for the training player. 667 isolated PHP behavioral assertions passed, covering catalog references and grading, anonymous/subscriber/member access, prerequisites, stale versions, acknowledgement, pending/revision/approval, user isolation, history, redirect validation, CSRF, privacy export/erasure, existing player progress authorization, optional specialist checks, role/search filters, all seven new functional practical-review flows and the reviewed shared, operations, Media, People, Production, Radio, Finance, People Operations and Research/Memory lesson batches. These use WordPress function stubs, not a real WordPress installation. Release-specific live smoke results are recorded in the PR; independent member identity and full review workflow remain a pilot acceptance step.
 
 An existing unowned JavaScript fragment with an unmatched closing token prevented the repository training player from parsing; it was removed. Embedded player JSON is now escaped for HTML script contexts. Completion is shown as saved only after a successful server response for signed-in users.
 
@@ -140,3 +140,11 @@ Reviewer guidance checks the budget/output link, separation of expected/confirme
 `people-ops-task` is now “مهمتك الأولى: خطة انضمام”. The assignment remains one fictional onboarding plan covering role, time, companion, small task, criteria, support, review and orderly exit. Its completed example uses a two-week, two-hours-per-week trial with a 45–60 minute fictional indexing task, a midpoint check, observable criteria, minimum access, an offline fallback and handover. The learner submits only a deidentified seven-line summary.
 
 Reviewer guidance checks the relationship and authority boundaries, a small observable task, realistic support/fallback, and separation of learning from complaints, contracts, performance and disciplinary decisions. The strategic working draft, draft HR policy, draft volunteering policy and operations-role working document were re-read on 7 October 2026. Their unfilled roles and channels remain unfilled and no draft is treated as adopted policy. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. People/policy-owner and learner acceptance remain pending.
+
+## Research and Memory path — 0.17.0
+
+`research-basics` is now “بداية العمل في البحث والذاكرة”. A fictional Suwayda researcher begins with one decision and a bounded question before collecting data. A broad-versus-clear comparison and four statement types separate a documented fact, attributed account, interpretation and recommendation. The learner creates three safe source cards recording date, location, evidence, limits, rights and access, on paper or in a light text file.
+
+`research-task` is now “مهمتك الأولى: مذكرة بحث وذاكرة”. The assignment remains a fictional one-page memo with a question, three sources, method, two limitations, labelled fictional finding, recommendation and handover index. Its completed example compares three fictional public or deidentified sources, does not treat likes as demand, marks the result as non-representative, proposes one small test, and hands over the memo, source table, readme and rights/access note. The learner submits only a deidentified seven-line summary.
+
+Reviewer guidance checks the decision/question link, what each source can and cannot establish, separation of method/finding/limits/recommendation, and safe rights/access/handover. Educational completion does not authorize interviews, surveys, sensitive-archive access, publication or an impact claim. The strategic working draft, integrated-program proposal, language/style working document, privacy draft and folder-structure working document were re-read on 8 October 2026. No proposed structure, metric, folder or role is treated as adopted. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Research/privacy-owner and learner acceptance remain pending.

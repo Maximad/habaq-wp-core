@@ -322,10 +322,35 @@ Validation and delivery:
 - People/policy-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
+## Batch 12 — Research and Memory path (0.17.0)
+
+Scope and decisions:
+
+- Rewrote `research-basics` as “بداية العمل في البحث والذاكرة” and `research-task` as “مهمتك الأولى: مذكرة بحث وذاكرة”. They now use a fictional Suwayda researcher, a broad/clear question comparison, four statement types, a completed one-page memo, low-connectivity alternatives, a handover index, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.17.0` records the editorial batch.
+- Learning completion, data-collection approval, source contact, archive access, publication, institutional finding and impact claim remain separate. The exercise uses fictional or public/deidentified sources only. It collects no testimony, participant record, private link, sensitive location or raw archive item.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: knowledge and decisions remain too concentrated, while Sweida's changes create a need for meaning, narrative and documentation. It remains a working draft.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: Think is proposed as a shared research/learning function without a new team or budget; indicators need review and audience reach alone does not prove trust or impact. It remains a proposal for implementation and internal adoption.
+- `دليل اللغة والأسلوب لحبق ميديا`, modified 28 October 2025 at 19:41:07 UTC: harmful claims require evidence, uncertainty should be labelled and corrections should explain what changed. It remains a working document whose adoption must be confirmed.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: purpose limitation, data minimization, least access, informed consent and protected storage apply to sensitive sources and testimony. It remains a draft with unfilled roles.
+- `📂 هيكلية المجلدات – Drive Structure`, modified 4 November 2025 at 08:39:30 UTC: the working structure includes Think research, background documents, data/assessments and archives, with clear names and separation of working/latest and archived originals. It is a working document, not proof that every folder exists or is approved.
+
+Validation and delivery:
+
+- 667 isolated behavioral checks passed. The 17 new Research checks cover preserved versions, assignment and answer keys; the fictional local example; broad/clear question; four statement types; safe source cards; evidence and access limits; worked memo; labelled fictional result and limitations; handover index; low-connectivity submission; reviewer guidance; separation from collection/publication/impact claims; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax and `git diff --check` passed. Both generated HTML documents parsed successfully and contain the 0.17.0 Research lesson titles and content. The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 10; both are now version 11. No duplicate artifact was created.
+- Release commit and final delivery checkpoint are recorded in the branch history and draft PR #21. Both updates use expected-head fast-forward safeguards; no force update or merge to main occurs.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.17.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- Research/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance and People Operations are complete in implementation. Actual first-task relevance chooses the next path; otherwise Research/Memory is next because source handling and transferable institutional memory support work across functions.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance, People Operations and Research/Memory are complete in implementation. Actual first-task relevance chooses the next path; otherwise Technology is next because account, WordPress and delivery boundaries affect early work across functions.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
