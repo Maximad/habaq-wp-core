@@ -536,11 +536,40 @@ Validation and delivery:
 - Release `0.24.0` remains prepared on draft PR #21 rather than live. The last independently verified live release remains `0.10.0`. Deployment was not attempted in this non-interactive run because the public-site action requires action-time confirmation. No learner state, permission or production code changed. Code rollback remains `rollback/learning-0.10.0`.
 - Production/editorial/rights/privacy/accessibility-owner review and learner acceptance remain pending. This batch is complete in implementation.
 
+## Batch 20 — Specialist audio/podcast and radio rights (0.25.0)
+
+Scope and decisions:
+
+- Rewrote optional specialist course `audio` as “صوت مفهوم، وحلقة بسيطة”. A fictional Suwayda contributor now plans a two-minute, four-part item, improves a noisy distant sample, removes an unauthorized incidental song and prepares a script, rights card and named review version.
+- Rewrote optional specialist course `radio-rights` as “قبل البث: تأكد من إذن الاستخدام”. Three fictional works now demonstrate ready, unanswered and expired permission states across linear broadcast, AutoDJ, short promotion, podcast/archive, download, video and modification.
+- Both courses add eight-line paper/light-text exercises, completed worked examples, expanded work cards, reviewer guidance and specialist retry/completion feedback. Raw answer keys remain server-side and absent from the frontend.
+- Preserved both IDs, tested outcomes, correct answer indexes and module version `2026-10-07.2`. Existing completions remain current. Plugin release `0.25.0` records this specialist creative/radio batch.
+- Learning completion, consent, rights or legal review, archive/account access, broadcast, accessibility review, signature and publishing authority remain separate. Exercises use fictional people, works, dates, permissions and audio; they collect no real recording, contact, contract, signature, private link or rights document.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: Habaq identifies local music, audio and digital distribution as opportunities while roles, procedures and specialist capacity remain incomplete. It remains a working draft.
+- `إذن محدود لبث أعمال موسيقية عبر راديو حبق`, modified 8 September 2026 at 00:39:53 UTC: the proposed permission is non-exclusive, limited and terminable; linear broadcast, AutoDJ and bounded promotion are distinct from podcast/archive, download, video, modification and third-party licensing. It remains a draft or working permission whose actual rights must be reviewed.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: Radio is within the proposed Media/Production work and at least six experimental audio items are proposed, subject to funding, rights and editorial decisions. It remains a proposal and does not prove completed production or appoint a radio lead.
+- `13- مسودة ملحق E: سياسة الأصول والمعدات في حبق`, modified 13 December 2025 at 12:38:15 UTC: sound equipment, accessories, checkout, safe transport and incident records need controlled handover. It remains a draft.
+- `17- مسودة سياسة التحرير والنشر والتصحيح وحق الرد في حبق`, modified 13 December 2025 at 12:48:25 UTC: podcasts and other published material need verification, safety, editorial review and a separate publication decision. It remains a draft.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: audio can reveal identity and needs informed consent, necessity, proportionality and specialist review when sensitive. It remains a draft.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: audio, raw files, identities and locations require purpose limitation, minimum collection and restricted access. It remains a draft with unfilled roles and channels.
+
+Validation and delivery:
+
+- 858 isolated behavioral checks passed. The 24 new checks cover preserved versions, outcomes and answer keys; fictional local cases; consent across recording/live/on-demand/raw access; incidental sound and indirect identification; audio structure and accessibility; broadcast-use separation; blank fields, expiry and replacement; worked handovers; low-connectivity exercises; authority limits; source references; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed syntax lint with isolated PHP 8.5.10. Training JavaScript and document-generator syntax, `git diff --check` and both generated HTML documents passed; each document contains 61 parsed entries.
+- The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 18. Both are now version 19. No duplicate artifact was created.
+- Saved release commit `0251a29f655a63f12c2070b542551d81f81128d1`, tree `c54021e52c06fec0ab738fd4bf46d1a4a5a77f8b`, to `codex/member-learning` using expected head `181f292e1fc278878b9a3ffc4bb3f41b8b75e1f3`, fast-forward only. No force update or merge to main occurred.
+- Release `0.25.0` remains prepared on draft PR #21 rather than live. The last independently verified live release remains `0.10.0`. Deployment was not attempted because the public-site write requires a specific direct confirmation under the hosting safety gate. No learner state, permission, radio playlist or production code changed. Code rollback remains `rollback/learning-0.10.0`.
+- Production/editorial/radio/rights/privacy/accessibility-owner review and learner acceptance remain pending. This batch is complete in implementation.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
 2. All ten two-lesson onboarding paths are complete in implementation. Domain-owner and learner review remain human acceptance steps, not completed claims.
-3. Review the remaining 26 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use, digital security, all six editorial specialist courses, photography and video are complete in implementation. Actual first-task relevance chooses the next batch; otherwise audio/podcast and radio rights are next because they support Radio and Production first outputs without expanding the required joining path.
+3. Review the remaining 24 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use, digital security, all six editorial specialist courses, photography, video, audio/podcast and radio rights are complete in implementation. Actual first-task relevance chooses the next batch; otherwise visual design and client production are next because they complete the creative specialist group without expanding the required joining path.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
 ## Decisions and human acceptance still needed
