@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.25.0)
+# Habaq member learning and onboarding (0.26.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -212,3 +212,11 @@ Both courses include crop and deidentification limits, accessible alternatives, 
 `radio-rights` is now “قبل البث: تأكد من إذن الاستخدام”. Three fictional works demonstrate a ready permission, a blank on-demand archive field and an expired permission. The expanded register distinguishes linear broadcast, AutoDJ, short promotion, podcast/archive, download, video and modification, and records expiry, withdrawal, review status and a replacement.
 
 Both courses add accessible text alternatives, eight-line paper/light-text exercises, worked handovers, expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, integrated-program proposal and draft radio permission, assets, editorial, sensitive-imagery and privacy documents were re-read on 8 October 2026. They remain working or draft sources; no right, signature, legal interpretation, broadcast or account access is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Production/editorial/radio/rights/privacy/accessibility-owner review and learner trials remain pending.
+
+## Specialist batch: visual design and client production — 0.26.0
+
+`design` is now “صمّم بلغة حبق، وبوضوح”. A fictional Suwayda designer creates a full-width image-led entrance from one sourced message, preserves the focal point in wide and narrow crops, keeps the action usable when the image fails and checks RTL, contrast, browser zoom, alt text and a non-colour review state. The completed handover includes a source/right record, editable file and named wide and narrow review versions. The working visual reference is not represented as a final brand manual.
+
+`client-production` is now “اتفق على النطاق قبل الإنتاج”. A fictional Suwayda producer converts an open request into a bounded 30-second deliverable with explicit exclusions, resource status, objective acceptance, two consolidated review rounds and a documented change path. Additional filming and social cards are added, substituted or deferred only after impact and authorization review. The service never buys editorial coverage or control.
+
+Both courses add eight-line paper/light-text exercises, worked examples, expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. Current strategy, style, imagery, event-service, finance, partnership and integrated-program sources were re-read on 8 October 2026. They remain working, draft or proposal sources; no final brand rules, right, price, contract, payment, publication or appointment is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Design/production/finance/partnerships/rights/accessibility-owner review and learner trials remain pending.

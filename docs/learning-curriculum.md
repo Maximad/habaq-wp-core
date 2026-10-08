@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.25.0
+# Habaq learning curriculum 0.26.0
+
+## Specialist checkpoint 0.26.0 — visual design and client production
+
+`design` is now “صمّم بلغة حبق، وبوضوح”. A fictional Suwayda designer begins with one sourced message and one next action, then uses a rights-cleared full-width image whose focal point survives wide and narrow crops. The worked handover keeps the title, description and button usable when the image fails, checks RTL, contrast, 200% browser zoom, non-colour status cues and alt text, and names an editable review version. It treats the existing charcoal/white/amber direction as a working visual reference rather than inventing final brand tokens.
+
+`client-production` is now “اتفق على النطاق قبل الإنتاج”. A fictional Suwayda producer converts an open request into one 30-second deliverable, explicit exclusions, confirmed/estimated/unconfirmed resources, two consolidated feedback rounds and objective acceptance criteria. A later filming day and six social cards become a documented change with add, replace or defer options. The handover records versions, rights, open items and retention while keeping service, editorial authority, price, contract, payment and publication separate.
+
+Both courses add eight-line paper/light-text exercises, expanded work cards, reviewer guidance and specialist retry/completion feedback without collecting real images, logos, client names, contacts, prices, contracts or private files. The strategic working draft, language/style working document, draft sensitive-imagery, event-service, finance and partnership documents and integrated-program proposal were re-read on 8 October 2026. They remain working, draft or proposal sources; no final identity guide, right, appointment, price, contract, payment or publication authority is invented. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Design/production/finance/partnerships/rights/accessibility-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.25.0 — audio/podcast and radio rights
 
