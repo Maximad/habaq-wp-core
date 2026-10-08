@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.23.0');
+define('HABAQ_WP_CORE_VERSION', '0.24.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -695,6 +695,41 @@ expect(str_contains($markup,$social['feedback']['complete'])&&!str_contains($mar
 $GLOBALS['meta'][1]['habaq_learning_translation']=array('version'=>$translation['version'],'status'=>'complete');
 $_GET=array('view'=>'library','lesson'=>'translation','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$translation['feedback']['complete'])&&!str_contains($markup,'"correct"'),'translation completion feedback rendered without raw key');
+// Photography and video preserve context, rights and safety without granting archive or publication authority.
+$photo=Habaq_Learning::module('photo');$video=Habaq_Learning::module('video');
+expect($photo['version']==='2026-10-07.2'&&$video['version']==='2026-10-07.2','photo and video versions preserved');
+expect($photo['quiz']['correct']===1&&$video['quiz']['correct']===2,'photo and video answer keys preserved');
+expect($photo['outcome']==='تسلم مجموعة صور مع سياق وحقوق وبدائل لحماية الهوية.','photo tested outcome preserved');
+expect($video['outcome']==='تبني تسلسلاً بصرياً واضحاً وتسلم نسخة قابلة للمراجعة دون تضليل.','video tested outcome preserved');
+expect($photo['title']==='صور تحكي، وتسليم يحفظ السياق'&&str_contains($photo['body_html'],'سلمى اسم افتراضي لمصورة جديدة من السويداء'),'photo course has a clear title and fictional local example');
+expect(str_contains($photo['body_html'],'قبول التصوير لا يعني قبول النشر')&&str_contains($photo['body_html'],'أن نشرها آمن أو ضروري'),'photo course separates capture consent from safe publication');
+expect(str_contains($photo['body_html'],'لا تفترض أن القص يحل كل خطر')&&str_contains($photo['body_html'],'اللباس أو المكان أو تسلسل الصور'),'photo course names indirect identification and crop limits');
+expect(str_contains($photo['body_html'],'مجموعة تسليم مكتملة')&&str_contains($photo['body_html'],'لا يصلح كصورة توثيقية'),'photo course includes a worked safe handover');
+expect(str_contains($photo['body_html'],'ثمانية أسطر')&&str_contains($photo['body_html'],'ملف نصي خفيف'),'photo course supports weak connectivity');
+expect(str_contains($photo['body_html'],'لا ترفع صورة ولا رابطاً خاصاً')&&str_contains($photo['body_html'],'لا يمنح وصولاً إلى الأرشيف'),'photo course avoids sensitive collection and authority claims');
+expect(str_contains($photo['job_aid'],'لماذا لا يكفي القص وحده')&&str_contains($photo['job_aid'],'اختيار صورة تعليمياً ليس إذن نشر'),'photo work card covers crop limits and publication authority');
+expect(in_array('images',$photo['sources'],true)&&in_array('privacy',$photo['sources'],true),'photo course cites imagery and privacy sources');
+expect($video['title']==='ابنِ تسلسلاً بصرياً واضحاً'&&str_contains($video['body_html'],'كريم اسم افتراضي لمساهم من السويداء'),'video course has a clear title and fictional local example');
+expect(str_contains($video['body_html'],'ترتيب لقطتين قد يوحي بسبب أو رد فعل')&&str_contains($video['body_html'],'لتوهم بتتابع لم يحدث'),'video course teaches montage meaning and chronology');
+expect(str_contains($video['body_html'],'صوت أغنية')&&str_contains($video['body_html'],'يحذف صوت الأغنية كلياً'),'video worked example protects audio rights');
+expect(str_contains($video['body_html'],'نص شاشة مقروءاً')&&str_contains($video['body_html'],'ترجمة أو تفريغاً مختصراً'),'video course includes accessible text alternatives');
+expect(str_contains($video['body_html'],'مخطط ومونتاج للمقارنة')&&str_contains($video['body_html'],'نسخة مراجعة 01'),'video course includes a worked six-shot review handover');
+expect(str_contains($video['body_html'],'ثمانية أسطر')&&str_contains($video['body_html'],'لا تنشئ تسجيلاً ولا ترفع ملفاً'),'video course supports low-data safe practice');
+expect(str_contains($video['body_html'],'إرشاد للمراجع')&&str_contains($video['body_html'],'لا تعتمد النشر'),'video course separates educational review from publication');
+expect(str_contains($video['job_aid'],'ما العلاقة التي يصنعها القص؟')&&str_contains($video['job_aid'],'ليست إذن نشر أو وصولاً إلى الحسابات'),'video work card covers meaning and authority boundaries');
+expect(in_array('images',$video['sources'],true)&&in_array('privacy',$video['sources'],true),'video course cites imagery and privacy sources');
+$GLOBALS['meta'][1]['habaq_learning_photo']=array('version'=>$photo['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'photo','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$photo['feedback']['retry'])&&!str_contains($markup,$photo['feedback']['complete']),'photo retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_photo']=array('version'=>$photo['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'photo','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$photo['feedback']['complete'])&&!str_contains($markup,'"correct"'),'photo completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_video']=array('version'=>$video['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'video','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$video['feedback']['retry'])&&!str_contains($markup,$video['feedback']['complete']),'video retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_video']=array('version'=>$video['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'video','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$video['feedback']['complete'])&&!str_contains($markup,'"correct"'),'video completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

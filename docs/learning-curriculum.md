@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.23.0
+# Habaq learning curriculum 0.24.0
+
+## Specialist checkpoint 0.24.0 — photography and video
+
+`photo` is now “صور تحكي، وتسليم يحفظ السياق”. A fictional Suwayda photographer turns one safe educational scene into a purpose-led four-shot list, checks faces, signs, documents, screens, number plates and location clues, and explains why a crop may still expose a person or alter the meaning. The completed handover replaces an unsafe wide image with another angle, labels the image as fictional training material, separates the restricted original from the review copy and records the right, safe location detail and removed metadata.
+
+`video` is now “ابنِ تسلسلاً بصرياً واضحاً”. A fictional contributor plans a 35-second six-shot paper-poster sequence with owned materials, keeps the real chronology, removes an unauthorized background song, adds readable screen text and a short transcript and names a review version with one reviewer question. The lesson explains that montage can invent cause, reaction or sequence even when individual shots are accurate.
+
+Both courses add eight-line paper/light-text exercises, expanded work cards, reviewer guidance and specialist retry/completion feedback without collecting real images, recordings, people, locations or private links. The strategic working draft and draft sensitive-imagery, privacy and editorial policies were re-read on 8 October 2026. They remain working or draft sources; no archive access, photographer credit, rights approval, reviewer or publication authority is invented. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Production/editorial/rights/privacy/accessibility-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.23.0 — social publishing and translation
 

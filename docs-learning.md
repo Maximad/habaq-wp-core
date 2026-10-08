@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.23.0)
+# Habaq member learning and onboarding (0.24.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -196,3 +196,11 @@ Both courses include expanded work cards, reviewer guidance and specialist retry
 `translation` is now “ترجمة دقيقة وعربية سهلة”. A fictional Suwayda translator restores the number, attribution and uncertainty lost from a short English sentence. The worked example, three-term glossary, open editorial question, eight-line low-connectivity exercise and two-stage comparison preserve meaning while producing readable fusha.
 
 Both courses include reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, draft editorial policy, language/style working document, draft sensitive-imagery policy and draft privacy policy were re-read on 8 October 2026. They remain working or draft sources; no account access, moderator, translator, correction channel or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/audience/rights/privacy/language-owner review and learner trials remain pending.
+
+## Specialist batch: photography and video — 0.24.0
+
+`photo` is now “صور تحكي، وتسليم يحفظ السياق”. A fictional Suwayda photographer prepares a purpose-led four-shot list for an invented pottery scene, checks direct and indirect identification, replaces a wide image whose crop would change the meaning and delivers a safe caption, rights scope, restricted-original location and review-copy metadata. An eight-line paper or light-text exercise collects no real image or private link.
+
+`video` is now “ابنِ تسلسلاً بصرياً واضحاً”. A fictional Suwayda contributor prepares a 35-second, six-shot paper-poster sequence using owned materials, preserves chronology, removes an unauthorized background song, adds readable screen text and a short transcript and hands over a named review version with one clear question. The exercise uses a storyboard only and asks for no recording or upload.
+
+Both courses include crop and deidentification limits, accessible alternatives, expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy and draft sensitive-imagery, privacy and editorial policies were re-read on 8 October 2026. They remain working or draft sources; no archive access, rights approval, reviewer or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Production/editorial/rights/privacy/accessibility-owner review and learner trials remain pending.
