@@ -347,10 +347,35 @@ Validation and delivery:
 - Research/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
+## Batch 13 — Technology path (0.18.0)
+
+Scope and decisions:
+
+- Rewrote `technology-basics` as “بداية العمل في التقنية” and `technology-task` as “مهمتك الأولى: بطاقة تغيير تقني”. They now use a fictional Suwayda contributor, a vague/clear request comparison, an approved test environment, a completed small-change card, five meaningful tests, minimum access, low-connectivity alternatives, rollback impact, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.18.0` records the editorial batch.
+- Learning completion, technical review, security or incident review, account access, code merge, purchasing, release approval and production deployment remain separate. The exercise uses fictional or deidentified test data only. It collects no password, verification code, key, private link, database copy, production data or user record.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: technology can reduce production and distribution costs, while broad scope, concentrated knowledge and limited specialist capacity require clear priorities. It remains a working draft.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: Geeks is proposed as a shared support function that should operate and document the existing stack, keep sensitive data in restricted spaces, preserve portable records, separate backups and test recovery. It remains a proposal for implementation and internal adoption.
+- `18- مسودة سياسة الأمن الرقمي والسلامة الميدانية في حبق`, modified 13 December 2025 at 12:49:31 UTC: individual accounts, strong unique passwords, two-factor authentication, protected storage, no secrets in unapproved AI tools and immediate containment are proposed minimum practices. It remains a draft with unfilled responsible roles.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: purpose limitation, data minimization, least access, protected storage and incident containment apply to personal and sensitive data. It remains a draft with unfilled roles.
+- `منسق العمليات - التوصيف الوظيفي`, modified 6 January 2026 at 16:34:09 UTC: operations and Geeks should keep the basic stack organized, document new tools, control access and backups, and distinguish who may view from who may publish. It is a working role document, not evidence of an appointment.
+
+Validation and delivery:
+
+- 686 isolated behavioral checks passed. The 19 new Technology checks cover preserved versions, assignment and answer keys, the fictional local example, test-environment scope, least access, credential and AI-tool boundaries, safe test data, cache isolation, backup limits, low-connectivity practice, rollback, a worked card, five tests, concurrent-work protection, safe seven-line submission, reviewer guidance, incident separation, formative feedback and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax, generated-document parsing and `git diff --check` passed. The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 11, both now version 12. No duplicate artifact was created.
+- Release commit and documentation checkpoint are recorded below after the fast-forward GitHub writes complete. No force update or merge to main occurs.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.18.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- Technical/security-owner review and learner acceptance remain pending. This batch is complete in implementation.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance, People Operations and Research/Memory are complete in implementation. Actual first-task relevance chooses the next path; otherwise Technology is next because account, WordPress and delivery boundaries affect early work across functions.
+2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance, People Operations, Research/Memory and Technology are complete in implementation. Actual first-task relevance chooses the next path; otherwise Leadership is next because delegated decisions and partnership boundaries affect early work across functions.
 3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 

@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.17.0');
+define('HABAQ_WP_CORE_VERSION', '0.18.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -497,6 +497,34 @@ expect(str_contains($markup,$research_basics['feedback']['complete']),'research 
 $GLOBALS['meta'][1]['habaq_learning_research-task']=array('version'=>$research_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'research-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$research_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'research task review principle rendered without raw key');
+// The Technology path makes one small change reviewable without granting production access or deployment authority.
+$technology_basics=Habaq_Learning::module('technology-basics');$technology_task=Habaq_Learning::module('technology-task');
+expect($technology_basics['version']==='2026-10-07.2'&&$technology_task['version']==='2026-10-07.2','technology editorial versions preserved');
+expect($technology_basics['quiz']['correct']===0&&$technology_task['quiz']['correct']===2,'technology answer keys preserved');
+expect($technology_task['assignment']==='جهز بطاقة تغيير افتراضي صغير مع معايير قبول وخمسة اختبارات وخطة رجوع ومالك صيانة. يمكن تقديم تعديل محلي على بيئة معتمدة؛ لا تغير الموقع الحي أو التفويض ضمن التمرين.','technology practical assignment preserved');
+expect($technology_basics['title']==='بداية العمل في التقنية'&&str_contains($technology_basics['body_html'],'يزن اسم افتراضي لمساهم جديد من السويداء'),'technology introduction and fictional local example');
+expect(str_contains($technology_basics['body_html'],'قارن بين طلب غامض وطلب واضح')&&str_contains($technology_basics['body_html'],'بيئة اختبار معتمدة'),'technology lesson compares requests and uses test environment');
+expect(str_contains($technology_basics['body_html'],'أقل صلاحية لازمة')&&str_contains($technology_basics['body_html'],'لا تطلب كلمة مرور شخص آخر'),'technology lesson applies least access and credential boundaries');
+expect(str_contains($technology_basics['body_html'],'أداة ذكاء اصطناعي غير معتمدة')&&str_contains($technology_basics['body_html'],'نسخة منزوعة البيانات'),'technology lesson protects data in tools and tests');
+expect(str_contains($technology_basics['body_html'],'التخزين المؤقت')&&str_contains($technology_basics['body_html'],'نسخة احتياطية للبيانات'),'technology lesson covers cache isolation and backup limits');
+expect(str_contains($technology_basics['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($technology_basics['body_html'],'لا يخترع الدرس اسماً أو جهة اتصال'),'technology lesson supports low connectivity without invented incident contact');
+expect(str_contains($technology_basics['job_aid'],'أقل وصول لازم')&&str_contains($technology_basics['job_aid'],'نقطة الرجوع وأثرها على البيانات'),'technology start card captures access and rollback');
+expect($technology_task['title']==='مهمتك الأولى: بطاقة تغيير تقني'&&str_contains($technology_task['body_html'],'مثال مكتمل للمقارنة'),'technology task has a worked change card');
+expect(str_contains($technology_task['body_html'],'الاختبارات الخمسة')&&str_contains($technology_task['body_html'],'عضو مخول')&&str_contains($technology_task['body_html'],'مدخل غير صالح'),'technology task covers five meaningful tests');
+expect(str_contains($technology_task['body_html'],'لا تكتب فوق عمل شخص آخر')&&str_contains($technology_task['body_html'],'أوقف الدمج'),'technology task protects concurrent work');
+expect(str_contains($technology_task['body_html'],'سلّم سبعة أسطر فقط')&&str_contains($technology_task['body_html'],'لا ترسل كلمات مرور'),'technology task supports safe low-connectivity submission');
+expect(str_contains($technology_task['body_html'],'إرشاد للمراجع')&&str_contains($technology_task['body_html'],'تعديلاً واحداً قابلاً للتنفيذ'),'technology task gives actionable reviewer guidance');
+expect(str_contains($technology_task['body_html'],'لا تعتمد من داخل نظام التعلم')&&str_contains($technology_task['body_html'],'اعتماد البطاقة تعليمياً لا يغلق حادثة'),'technology task separates learning from access release and incident closure');
+$GLOBALS['meta'][1]['habaq_learning_track']='technology';
+$GLOBALS['meta'][1]['habaq_learning_technology-basics']=array('version'=>$technology_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'technology-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$technology_basics['feedback']['retry'])&&!str_contains($markup,$technology_basics['feedback']['complete']),'technology basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_technology-basics']=array('version'=>$technology_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'technology-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$technology_basics['feedback']['complete']),'technology basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_technology-task']=array('version'=>$technology_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'technology-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$technology_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'technology task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.17.0
+# Habaq learning curriculum 0.18.0
+
+## Path checkpoint 0.18.0 — Technology
+
+`technology-basics` is now “بداية العمل في التقنية”. A fictional contributor from Suwayda starts from one observable problem and an approved test environment instead of requesting administrator access or building another platform. The lesson compares a vague request with a bounded one, applies least access and personal-account boundaries, excludes credentials and real data from learning and unapproved AI tools, and adds cache isolation, narrow-screen, keyboard, low-connectivity and rollback checks. Its seven-line exercise works on paper or in a light text file.
+
+`technology-task` is now “مهمتك الأولى: بطاقة تغيير تقني”. The assignment remains one fictional small-change card with acceptance criteria, five tests, a rollback plan and a maintenance owner by responsibility. The worked example covers an authorized member, denial for an unauthorized visitor, invalid input, keyboard and narrow-screen use, weak connectivity and cache behavior. It separates preparation, code review, release approval and production deployment. The learner submits only a safe seven-line summary without credentials, private links, production data or user records.
+
+Reviewer guidance checks scope, acceptance criteria, the five tests, minimum access, safe test data, rollback impact and maintainability before one actionable revision or educational completion. The strategic working draft, integrated-program proposal, digital-security draft, privacy draft and operations-role working document were re-read on 8 October 2026. Their proposed roles, mandatory wording and unfilled incident contacts are not treated as adopted procedure or appointments. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. Technical/security-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.17.0 — Research and Memory
 
