@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.18.0');
+define('HABAQ_WP_CORE_VERSION', '0.19.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -525,6 +525,37 @@ expect(str_contains($markup,$technology_basics['feedback']['complete']),'technol
 $GLOBALS['meta'][1]['habaq_learning_technology-task']=array('version'=>$technology_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'technology-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$technology_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'technology task review principle rendered without raw key');
+// The Leadership path makes one small decision reviewable without inventing governance or granting authority.
+$leadership_basics=Habaq_Learning::module('leadership-basics');$leadership_task=Habaq_Learning::module('leadership-task');
+expect($leadership_basics['version']==='2026-10-07.2'&&$leadership_task['version']==='2026-10-07.2','leadership editorial versions preserved');
+expect($leadership_basics['quiz']['correct']===0&&$leadership_task['quiz']['correct']===2,'leadership answer keys preserved');
+expect($leadership_task['assignment']==='اكتب مذكرة قرار افتراضية لبرنامج صغير: حاجة، نطاق، موارد، بديل، مصلحة محتملة، تفويض ومراجعة وشرط توسع. لا تصدر سياسة أو توقع اتفاقاً أثناء التدريب.','leadership practical assignment preserved');
+expect($leadership_basics['title']==='بداية العمل في القيادة'&&str_contains($leadership_basics['body_html'],'سحر اسم افتراضي لمساهمة جديدة من السويداء'),'leadership introduction and fictional local example');
+expect(str_contains($leadership_basics['body_html'],'قارن بين موافقة سريعة وقرار واضح')&&str_contains($leadership_basics['body_html'],'لا إعلان أو حجز أو توقيع'),'leadership lesson compares decisions and bounds commitments');
+expect(str_contains($leadership_basics['body_html'],'الإعداد')&&str_contains($leadership_basics['body_html'],'المراجعة')&&str_contains($leadership_basics['body_html'],'القرار')&&str_contains($leadership_basics['body_html'],'التفويض'),'leadership lesson separates four decision steps');
+expect(str_contains($leadership_basics['body_html'],'يتنحى عن الاعتماد')&&str_contains($leadership_basics['body_html'],'مراجعة مستقلة'),'leadership lesson handles conflicts without accusation');
+expect(str_contains($leadership_basics['body_html'],'لا تفترض وجود مجلس أو شركة')&&str_contains($leadership_basics['body_html'],'صاحب القرار الفعلي'),'leadership lesson avoids invented governance');
+expect(str_contains($leadership_basics['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($leadership_basics['body_html'],'لا تستخدم اسماً حقيقياً'),'leadership lesson supports safe low-connectivity practice');
+expect(str_contains($leadership_basics['job_aid'],'المصلحة المحتملة وطريقة التنحي')&&str_contains($leadership_basics['job_aid'],'شرط الاستمرار أو التعديل أو الإيقاف'),'leadership decision card captures interest and gate');
+expect($leadership_task['title']==='مهمتك الأولى: مذكرة قرار'&&str_contains($leadership_task['body_html'],'مثال مكتمل للمقارنة'),'leadership task has a worked decision memo');
+expect(str_contains($leadership_task['body_html'],'جلسة خيالية واحدة من ستين دقيقة')&&str_contains($leadership_task['body_html'],'المكان المقدم عينياً غير مؤكد'),'leadership task stays small and honest about resources');
+expect(str_contains($leadership_task['body_html'],'لا تملك قرار المحتوى أو بيانات المشاركين')&&str_contains($leadership_task['body_html'],'لا توقيع أو حجز أو إعلان أو صرف'),'leadership task protects independence and authority boundaries');
+expect(str_contains($leadership_task['body_html'],'علاقة عائلية')&&str_contains($leadership_task['body_html'],'ويُطلب مراجع مستقل'),'leadership worked example discloses and recuses');
+expect(str_contains($leadership_task['body_html'],'بوابة التوسع')&&str_contains($leadership_task['body_html'],'وإلا تعدل التجربة أو تتوقف'),'leadership task makes expansion conditional');
+expect(str_contains($leadership_task['body_html'],'القبول أو القبول المشروط أو الرفض')&&str_contains($leadership_task['body_html'],'من يملك اعتماداً فعلياً'),'leadership task documents decision options and real authority');
+expect(str_contains($leadership_task['body_html'],'سلّم ثمانية أسطر فقط')&&str_contains($leadership_task['body_html'],'لا تضع أسماء أو عروضاً حقيقية'),'leadership task supports safe low-connectivity submission');
+expect(str_contains($leadership_task['body_html'],'إرشاد للمراجع')&&str_contains($leadership_task['body_html'],'تعديلاً واحداً قابلاً للتنفيذ'),'leadership task gives actionable reviewer guidance');
+expect(str_contains($leadership_task['body_html'],'لا يثبت أن الشريك اجتاز العناية الواجبة')&&str_contains($leadership_task['body_html'],'لا يحول نجاح تجربة واحدة إلى برنامج دائم'),'leadership task separates learning from due diligence and impact claims');
+$GLOBALS['meta'][1]['habaq_learning_track']='leadership';
+$GLOBALS['meta'][1]['habaq_learning_leadership-basics']=array('version'=>$leadership_basics['version'],'status'=>'new');
+$_GET=array('lesson'=>'leadership-basics','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$leadership_basics['feedback']['retry'])&&!str_contains($markup,$leadership_basics['feedback']['complete']),'leadership basics retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_leadership-basics']=array('version'=>$leadership_basics['version'],'status'=>'complete');
+$_GET=array('lesson'=>'leadership-basics','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$leadership_basics['feedback']['complete']),'leadership basics completion principle rendered');
+$GLOBALS['meta'][1]['habaq_learning_leadership-task']=array('version'=>$leadership_task['version'],'status'=>'complete');
+$_GET=array('lesson'=>'leadership-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$leadership_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'leadership task review principle rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

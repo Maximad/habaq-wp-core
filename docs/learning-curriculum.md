@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.18.0
+# Habaq learning curriculum 0.19.0
+
+## Path checkpoint 0.19.0 — Leadership, governance and partnerships
+
+`leadership-basics` is now “بداية العمل في القيادة”. A fictional contributor from Suwayda starts with one small decision instead of a title or assumed office. The lesson compares a quick approval with a bounded proposal, separates preparation, review, decision and delegation, and explains disclosure, recusal and independent review when a personal or financial interest exists. It explicitly avoids treating alternative legal structures in draft documents as current bodies or signing authority. The seven-line exercise works on paper or in a light text file.
+
+`leadership-task` is now “مهمتك الأولى: مذكرة قرار”. The assignment remains one fictional decision memo for a small programme, with need, scope, resources, fallback, potential interest, delegation, review and an expansion condition. The worked example proposes one sixty-minute fictional reading session, labels an in-kind venue as unconfirmed, preserves Habaq's editorial and participant-data decisions, discloses a fictional family relationship and routes approval to an independent reviewer selected by the actually authorized body. The learner submits only a safe eight-line summary without real partner data, money, signatures or private minutes.
+
+Reviewer guidance checks the need, bounded scope, honest capacity, alternative, risks, interest, independence and actual decision path before one actionable revision or educational completion. The strategic working draft, integrated-program proposal, draft internal statute, draft partnership policy and draft HR regulation were re-read on 8 October 2026. Their alternative legal structures, proposed bodies, thresholds and unfilled roles are not treated as current governance, adopted policy or appointments. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completions and review history. Governance/partnership-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.18.0 — Technology
 

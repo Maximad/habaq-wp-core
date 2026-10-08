@@ -372,11 +372,36 @@ Validation and delivery:
 - Technical/security-owner review and learner acceptance remain pending. This batch is complete in implementation.
 - Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
 
+## Batch 14 — Leadership, governance and partnerships path (0.19.0)
+
+Scope and decisions:
+
+- Rewrote `leadership-basics` as “بداية العمل في القيادة” and `leadership-task` as “مهمتك الأولى: مذكرة قرار”. They now use a fictional Suwayda contributor, a quick/clear decision comparison, separate preparation, review, decision and delegation, a completed small-pilot memo, conflict disclosure and recusal, low-connectivity alternatives, an expansion gate, reviewer guidance and formative feedback.
+- Preserved both IDs, prerequisites, tested outcomes, practical assignment, correct answer indexes and module version `2026-10-07.2`. Existing completions and review history remain current. Plugin release `0.19.0` records the editorial batch.
+- Learning completion, domain review, due diligence, policy or legal adoption, representation, partnership approval, signature, spending and publication remain separate. The exercise uses fictional partners, people and resources only. It collects no real offer, partner data, amount, signature, private minutes or personal conflict detail.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: concentrated decisions, incomplete structures, limited specialist capacity and broad scope require priorities, delegation and transparent partnerships that preserve identity. It remains a working draft.
+- `برنامج حبق المتكامل — منحة حياة 2026–2027`, modified 18 September 2026 at 13:33:40 UTC: new activities start as small tests with an owner, covered time and cost, evidence and a pre-agreed continue, change or stop rule. Decisions within budgets and editorial authority remain distinct. It remains a proposal for implementation and internal adoption.
+- `مسودة النظام الداخلي لتجمع حبق`, modified 7 December 2025 at 10:00:43 UTC: the file contains alternative association and company structures, proposed bodies and authority routes, and says effectiveness depends on approval and competent registration. It remains a draft and is not proof of a current board, legal form or signing authority.
+- `14- مسودة ملحق F سياسة الشراكات`, modified 28 December 2025 at 13:07:20 UTC: partnership screening should cover value, risk, due diligence, editorial independence, conflict disclosure, a partnership owner, written terms and termination conditions. It remains a draft and does not appoint an approver.
+- `9- مسودة لائحة الموارد البشرية في تجمع حبق`, modified 13 December 2025 at 12:26:30 UTC: potential interests require disclosure, and editorial or financial roles may require recusal. Its people, conduct and safety roles remain unfilled draft fields.
+
+Validation and delivery:
+
+- 708 isolated behavioral checks passed. The 22 new Leadership checks cover preserved versions, assignment and answer keys, the fictional local example, bounded commitments, four decision steps, conflict disclosure and recusal, no invented governance, low-connectivity practice, a worked memo, honest resources, independence and authority limits, a conditional expansion gate, explicit decision options, safe eight-line submission, reviewer guidance, due-diligence and impact limits, formative feedback and hidden raw answer keys.
+- All 36 PHP files passed PHP 8.3 lint; training JavaScript syntax, generated-document parsing and `git diff --check` passed. The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 12, both now version 13. No duplicate artifact was created.
+- Release commit and documentation checkpoint are recorded below after the fast-forward GitHub writes complete. No force update or merge to main occurs.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.19.0` is prepared on draft PR #21; the last verified live release remains `0.10.0`. No learner state changed.
+- Governance/partnership-owner review and learner acceptance remain pending. This batch is complete in implementation.
+- Last verified live release remains `0.10.0`. The established WordPress deployer reauthentication blocker remains, and callable Hostinger tools do not manage this WordPress deployment. Code rollback remains `rollback/learning-0.10.0`; credentials and learner state are untouched.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
-2. Continue improving the remaining two-lesson paths in small batches: introductions, bounded first assignments, worked examples and reviewer guidance. Operations/coordination, Habaq Media, Habaq People, Habaq Production, Radio, Finance, People Operations, Research/Memory and Technology are complete in implementation. Actual first-task relevance chooses the next path; otherwise Leadership is next because delegated decisions and partnership boundaries affect early work across functions.
-3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state.
+2. All ten two-lesson onboarding paths are complete in implementation. Domain-owner and learner review remain human acceptance steps, not completed claims.
+3. Review all 36 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. Actual first-task relevance chooses the next batch; otherwise WordPress use and digital security are next because they support the site and account boundaries used across early tasks.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
 ## Decisions and human acceptance still needed
