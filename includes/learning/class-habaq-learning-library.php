@@ -126,12 +126,21 @@ class Habaq_Learning_Library {
         $state = Habaq_Learning::record($member, $module);
         echo '<p class="habaq-learning__tag">دورة تخصصية اختيارية · ' . esc_html(self::duration($module['minutes'])) . ' قراءة وتحقق + ' . esc_html(self::duration($module['practice_minutes'])) . ' تطبيق تقريباً</p><h2 id="habaq-course-title">' . esc_html($module['title']) . '</h2><p class="habaq-learning__outcome"><strong>بعد هذه الدورة:</strong> ' . esc_html($module['outcome']) . '</p>';
         echo wp_kses_post($module['body_html']);
+        $notice_key = self::query('learning_notice');
+        if ($notice_key === 'wrong' && !empty($module['feedback']['retry'])) {
+            echo '<p class="habaq-learning__feedback" role="status"><strong>فكرة تساعدك:</strong> ' . esc_html($module['feedback']['retry']) . '</p>';
+        }
         echo '<details><summary>بطاقة عمل سريعة قابلة للطباعة</summary><div class="habaq-learning__job-aid">' . wp_kses_post($module['job_aid']) . '</div><p>يمكن طباعة الصفحة أو حفظها PDF من المتصفح.</p></details><details><summary>المراجع وحالة المحتوى</summary><p>بنينا هذا الدرس على الوثائق التالية، وبعضها ما زال مسودة. التعلم منها لا يعني اعتمادها أو منح صلاحيات جديدة. قد تحتاج إذناً لفتح المصدر.</p><ul>';
         foreach (Habaq_Learning::catalog()['sources'] as $source) {
             if (in_array($source['id'], $module['sources'], true)) { echo '<li><a href="' . esc_url($source['url']) . '" target="_blank" rel="noopener">' . esc_html($source['title']) . '</a> · ' . esc_html($source['updated']) . '</li>'; }
         }
         echo '</ul></details><h3>تحقق من الفهم</h3><p>فكّر في المثال، ثم اختر الإجابة الأقرب. يمكنك العودة إلى الدرس والمحاولة مرة أخرى. لا نحفظ ملاحظات تمرينك هنا؛ ناقشها مع مرافقك إذا أردت ملاحظات على التطبيق.</p>';
-        if ($state['status'] === 'complete') { echo '<p class="habaq-learning__feedback">تم حفظ التحقق من الفهم لهذا الإصدار. لا يمثل شهادة أو اعتماداً للمهارة.</p>'; return; }
+        if ($state['status'] === 'complete') {
+            echo '<p class="habaq-learning__feedback">تم حفظ التحقق من الفهم لهذا الإصدار. لا يمثل شهادة أو اعتماداً للمهارة.';
+            if (!empty($module['feedback']['complete'])) { echo ' <strong>تذكّر:</strong> ' . esc_html($module['feedback']['complete']); }
+            echo '</p>';
+            return;
+        }
         echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         wp_nonce_field('habaq_learning');
         echo '<input type="hidden" name="action" value="habaq_learning"><input type="hidden" name="op" value="lesson"><input type="hidden" name="return" value="' . esc_attr($return) . '"><input type="hidden" name="lesson" value="' . esc_attr($module['id']) . '"><input type="hidden" name="version" value="' . esc_attr($module['version']) . '"><fieldset><legend>' . esc_html($module['quiz']['prompt']) . '</legend>';

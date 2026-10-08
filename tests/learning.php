@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.19.0');
+define('HABAQ_WP_CORE_VERSION', '0.20.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -556,6 +556,40 @@ expect(str_contains($markup,$leadership_basics['feedback']['complete']),'leaders
 $GLOBALS['meta'][1]['habaq_learning_leadership-task']=array('version'=>$leadership_task['version'],'status'=>'complete');
 $_GET=array('lesson'=>'leadership-task','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$leadership_task['feedback']['complete'])&&!str_contains($markup,'"correct"'),'leadership task review principle rendered without raw key');
+// The first specialist batch makes WordPress drafting and phishing response useful without granting access or publication authority.
+$wordpress=Habaq_Learning::module('wordpress');$digital_security=Habaq_Learning::module('digital-security');
+expect($wordpress['version']==='2026-10-07.2'&&$digital_security['version']==='2026-10-07.2','first specialist editorial versions preserved');
+expect($wordpress['quiz']['correct']===1&&$digital_security['quiz']['correct']===2,'first specialist answer keys preserved');
+expect($wordpress['outcome']==='تستخدم حساباً شخصياً وتفرق بين إعداد مسودة واعتماد نشرها.','wordpress tested outcome preserved');
+expect($digital_security['outcome']==='تميز تصيداً محتملاً وتستخدم مسار إبلاغ لا يكشف الأسرار.','digital security tested outcome preserved');
+expect($wordpress['title']==='جهّز مسودة على الموقع'&&str_contains($wordpress['body_html'],'راما اسم افتراضي لمساهمة جديدة من السويداء'),'wordpress course has a clear title and fictional local example');
+expect(str_contains($wordpress['body_html'],'habaq.media')&&str_contains($wordpress['body_html'],'habaq.online')&&str_contains($wordpress['body_html'],'ليس صلاحية يمنحها الدرس'),'wordpress course distinguishes proposed site purposes without granting authority');
+expect(str_contains($wordpress['body_html'],'ملف التحضير')&&str_contains($wordpress['body_html'],'مسودة')&&str_contains($wordpress['body_html'],'بانتظار المراجعة')&&str_contains($wordpress['body_html'],'منشور'),'wordpress course distinguishes four content states');
+expect(str_contains($wordpress['body_html'],'مثال مكتمل للمقارنة')&&str_contains($wordpress['body_html'],'جلسة قراءة تجريبية'),'wordpress course includes a worked draft example');
+expect(str_contains($wordpress['body_html'],'رابط الملف المباشر')&&str_contains($wordpress['body_html'],'حذف الصورة من الصفحة لا يثبت حذف الملف'),'wordpress course explains media-library exposure');
+expect(str_contains($wordpress['body_html'],'ملف نصي أو على ورق')&&str_contains($wordpress['body_html'],'سبعة أسطر'),'wordpress course supports weak connectivity');
+expect(str_contains($wordpress['body_html'],'إرشاد للمراجع')&&str_contains($wordpress['body_html'],'لا تعتمد النشر أو الوصول من داخل الدرس'),'wordpress course gives reviewer guidance and authority boundaries');
+expect(str_contains($wordpress['job_aid'],'مصدر الصورة وحق استخدامها')&&str_contains($wordpress['job_aid'],'المراجع وصاحب قرار النشر'),'wordpress work card captures rights and publication authority');
+expect($digital_security['title']==='احمِ حسابك، وانتبه للرسائل المشبوهة'&&str_contains($digital_security['body_html'],'مازن اسم افتراضي لمساهم جديد من السويداء'),'digital security course has a clear title and fictional local example');
+expect(str_contains($digital_security['body_html'],'رسالة مصطنعة')&&str_contains($digital_security['body_html'],'الرابط في التمرين غير فعّال'),'digital security course uses an inert synthetic phishing example');
+expect(str_contains($digital_security['body_html'],'الاستعجال')&&str_contains($digital_security['body_html'],'طلب السر')&&str_contains($digital_security['body_html'],'قناة الدعم'),'digital security course explains phishing signs');
+expect(str_contains($digital_security['body_html'],'أوقف التفاعل')&&str_contains($digital_security['body_html'],'قناة مستقلة معروفة'),'digital security course teaches stop and independent verification');
+expect(str_contains($digital_security['body_html'],'إذا تفاعلت أو فُقد الجهاز')&&str_contains($digital_security['body_html'],'لا تخفِ ما حدث'),'digital security course covers honest incident escalation');
+expect(str_contains($digital_security['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($digital_security['body_html'],'ستة أسطر'),'digital security course supports safe weak-connectivity practice');
+expect(str_contains($digital_security['body_html'],'إرشاد للمراجع')&&str_contains($digital_security['body_html'],'لا يغلق حادثة'),'digital security course separates learning from incident closure');
+expect(str_contains($digital_security['job_aid'],'هل فتحت أو أدخلت شيئاً؟')&&str_contains($digital_security['job_aid'],'خطر محتمل على أشخاص أو مصادر'),'digital security work card captures exposure and human risk');
+$GLOBALS['meta'][1]['habaq_learning_wordpress']=array('version'=>$wordpress['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'wordpress','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$wordpress['feedback']['retry'])&&!str_contains($markup,$wordpress['feedback']['complete']),'wordpress retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_wordpress']=array('version'=>$wordpress['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'wordpress','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$wordpress['feedback']['complete'])&&!str_contains($markup,'"correct"'),'wordpress completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_digital-security']=array('version'=>$digital_security['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'digital-security','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$digital_security['feedback']['retry'])&&!str_contains($markup,$digital_security['feedback']['complete']),'digital security retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_digital-security']=array('version'=>$digital_security['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'digital-security','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$digital_security['feedback']['complete'])&&!str_contains($markup,'"correct"'),'digital security completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

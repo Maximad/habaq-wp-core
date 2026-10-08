@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.19.0)
+# Habaq member learning and onboarding (0.20.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -164,3 +164,11 @@ The strategic working draft, integrated-program proposal, draft digital-security
 `leadership-task` is now “مهمتك الأولى: مذكرة قرار”. The practical assignment remains one fictional memo with need, scope, resources, fallback, potential interest, delegation, review and a condition for expansion. Its completed example uses one sixty-minute fictional reading session, an unconfirmed in-kind venue, a separate independent reviewer and an explicit stop or revision gate. The learner submits only a safe eight-line summary, and a human reviewer checks capacity, risks, interest, independence and the actual decision path before one actionable revision or educational completion.
 
 The strategic working draft, integrated-program proposal, draft internal statute, draft partnership policy and draft HR regulation were re-read on 8 October 2026. Their alternative legal forms, proposed bodies, approval routes and unfilled roles remain proposals or drafts. Learning completion does not adopt them or authorize representation, signing, spending, partnership approval or publication. IDs, tested outcomes, assignment, answer keys and module versions `2026-10-07.2` remain unchanged. Governance/partnership-owner and learner acceptance remain pending.
+
+## Specialist batch: WordPress and digital security — 0.20.0
+
+`wordpress` is now “جهّز مسودة على الموقع”. A fictional Suwayda contributor prepares one safe draft and distinguishes a preparation file, draft, pending review and published content. The worked example covers purpose, a short text, an authorized training image, alt text, a non-live link, mobile crop, reviewer and publication decision. It explains that media-library file URLs may remain reachable, and that hiding or removing an image from a page does not prove deletion of the file or its copies. A seven-line paper or text-only content pack supports weak connections.
+
+`digital-security` is now “احمِ حسابك، وانتبه للرسائل المشبوهة”. An inert synthetic phishing message demonstrates urgency, a request for a verification code, an unfamiliar login route, bypassed support and excessive access. The learner stops interaction, verifies through an independent known channel and reports only necessary facts. A six-line offline exercise and incident card record whether any interaction occurred, without collecting credentials, source identity, private links or real account settings.
+
+Optional specialist lessons now render their own retry and completion feedback in the library, without exposing answer keys. The strategic working draft, integrated-program proposal, draft digital-security policy, draft privacy policy and draft editorial policy were re-read on 8 October 2026. Their mandatory language, publishing workflow, proposed roles and incident contacts are not treated as adopted procedure or appointments. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Technical/editorial/security/privacy-owner review and trials with new learners remain pending.

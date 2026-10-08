@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.19.0
+# Habaq learning curriculum 0.20.0
+
+## Specialist checkpoint 0.20.0 — WordPress and digital security
+
+`wordpress` is now “جهّز مسودة على الموقع”. A fictional contributor from Suwayda prepares one small safe page and distinguishes preparation, draft, pending review and published states. The worked example includes purpose, text, an authorized image, alt text, a non-live link, mobile crop, reviewer and publication decision. The lesson explains direct media-library exposure, uses a seven-line paper or light-text pack for weak connections and keeps account access, plugin changes and publication outside the educational completion.
+
+`digital-security` is now “احمِ حسابك، وانتبه للرسائل المشبوهة”. An inert synthetic phishing message gives observable signs: urgency, a request for a secret, an unfamiliar login route, bypassed support and excessive access. The learner stops interaction, verifies through an independent known channel and reports necessary facts without credentials or source data. If an interaction already occurred, the lesson asks for an honest report and authorized containment rather than concealment, deletion of evidence or uncontrolled changes.
+
+Both courses add expanded printable cards, low-connectivity practice, reviewer guidance and formative retry/completion feedback. The specialist library now renders that feedback without exposing answer keys. The strategic working draft, integrated-program proposal, digital-security draft, privacy draft and editorial-policy draft were re-read on 8 October 2026. Their proposed roles, channels and mandatory wording are not treated as adopted procedure or appointments. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Technical/editorial/security/privacy-owner review and trials with new learners remain pending.
 
 ## Path checkpoint 0.19.0 — Leadership, governance and partnerships
 
