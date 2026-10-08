@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.22.0
+# Habaq learning curriculum 0.23.0
+
+## Specialist checkpoint 0.23.0 — social publishing and translation
+
+`social` is now “من مادة معتمدة إلى منشور واضح”. A fictional Suwayda contributor turns an approved fictional service story into a bounded platform package, keeps the number and uncertainty intact, records image rights and alt text, separates questions, criticism, correction requests and privacy threats, and avoids treating likes as trust or impact. The worked package, seven-line paper/light-text exercise, reviewer guidance and expanded card do not grant account access, moderation or publication authority.
+
+`translation` is now “ترجمة دقيقة وعربية سهلة”. A fictional translator restores the number, attribution and uncertainty lost from a short English sentence, records a three-term glossary and leaves one open editorial question rather than inventing meaning. The eight-line paper/light-text exercise, two-stage comparison, reviewer guidance and expanded card keep educational completion separate from translation approval and publication.
+
+The strategic working draft, draft editorial policy, language/style working document, draft sensitive-imagery policy and draft privacy policy were re-read on 8 October 2026. Their roles, channels and mandatory language are not treated as adopted procedure or appointments. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Editorial, audience, rights, privacy and language-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.22.0 — reporting and editing
 

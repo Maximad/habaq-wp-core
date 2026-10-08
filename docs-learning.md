@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.22.0)
+# Habaq member learning and onboarding (0.23.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -188,3 +188,11 @@ Both lessons include actionable reviewer guidance and specialist retry/completio
 `editing` is now “راجع المادة، وصحّح بوضوح”. A fictional editor identifies a wrong time span, unsupported generalizations, an unverified cause and a missing right of reply. The worked edit narrows the language to the available fictional record and preserves unknowns. A separate correction example identifies the original error, the corrected figure, the date and the dependent text, graphic and social post that need updating instead of silently replacing the number.
 
 Both courses include expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, journalism-training consultation document, draft editorial policy, language/style working document and draft sensitive-imagery policy were re-read on 8 October 2026. They remain working, consultation or draft sources; no editor, reporting channel, fixed deadline or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/rights/safety-owner review and learner trials remain pending.
+
+## Specialist batch: social publishing and translation — 0.23.0
+
+`social` is now “من مادة معتمدة إلى منشور واضح”. A fictional Suwayda contributor converts one approved fictional story into a small platform package, preserves its number and uncertainty, records link, image rights, alt text and crop, and separates a question, legitimate criticism, correction request and privacy threat. A seven-line paper or light-text exercise and expanded card keep account access, moderation and publication outside educational completion.
+
+`translation` is now “ترجمة دقيقة وعربية سهلة”. A fictional Suwayda translator restores the number, attribution and uncertainty lost from a short English sentence. The worked example, three-term glossary, open editorial question, eight-line low-connectivity exercise and two-stage comparison preserve meaning while producing readable fusha.
+
+Both courses include reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, draft editorial policy, language/style working document, draft sensitive-imagery policy and draft privacy policy were re-read on 8 October 2026. They remain working or draft sources; no account access, moderator, translator, correction channel or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/audience/rights/privacy/language-owner review and learner trials remain pending.

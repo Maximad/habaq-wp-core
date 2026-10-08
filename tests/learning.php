@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.22.0');
+define('HABAQ_WP_CORE_VERSION', '0.23.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -663,6 +663,38 @@ expect(str_contains($markup,$editing['feedback']['retry'])&&!str_contains($marku
 $GLOBALS['meta'][1]['habaq_learning_editing']=array('version'=>$editing['version'],'status'=>'complete');
 $_GET=array('view'=>'library','lesson'=>'editing','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$editing['feedback']['complete'])&&!str_contains($markup,'"correct"'),'editing completion feedback rendered without raw key');
+// Social publishing and translation preserve editorial meaning without granting account or publication authority.
+$social=Habaq_Learning::module('social');$translation=Habaq_Learning::module('translation');
+expect($social['version']==='2026-10-07.2'&&$translation['version']==='2026-10-07.2','social and translation versions preserved');
+expect($social['quiz']['correct']===2&&$translation['quiz']['correct']===0,'social and translation answer keys preserved');
+expect($social['outcome']==='تحول مادة معتمدة إلى منشور دقيق وتتعامل مع التعليقات بمسار واضح.','social tested outcome preserved');
+expect($translation['outcome']==='تراجع ترجمة تحافظ على المعنى واليقين والأسماء والأرقام.','translation tested outcome preserved');
+expect($social['title']==='من مادة معتمدة إلى منشور واضح'&&str_contains($social['body_html'],'نور اسم افتراضي لمساهمة من السويداء'),'social course has a clear title and fictional local example');
+expect(str_contains($social['body_html'],'ابدأ من النسخة المعتمدة')&&str_contains($social['body_html'],'لا تجعل المنشور أكثر إثارة أو يقيناً'),'social course preserves approved meaning');
+expect(str_contains($social['body_html'],'سؤالاً ونقداً وطلب تصحيح')&&str_contains($social['body_html'],'لا تعيد كتابة البيانات في رد علني'),'social course separates dialogue correction and privacy');
+expect(str_contains($social['body_html'],'حزمة نشر مكتملة')&&str_contains($social['body_html'],'إلغاء شامل يشعل غضب المدينة'),'social course includes a worked platform package');
+expect(str_contains($social['body_html'],'عدد الإعجابات لا يثبت الثقة أو الأثر')&&str_contains($social['job_aid'],'ما لا يثبته القياس'),'social course limits metric claims');
+expect(str_contains($social['body_html'],'سبعة أسطر')&&str_contains($social['body_html'],'ملف نصي خفيف'),'social course supports weak connectivity');
+expect(str_contains($social['body_html'],'إرشاد للمراجع')&&str_contains($social['body_html'],'لا يمنح وصولاً إلى الحساب'),'social course separates review from account authority');
+expect(str_contains($social['job_aid'],'الوصف البديل')&&str_contains($social['job_aid'],'لا نشر أو إخفاء أو رد باسم حبق'),'social work card covers accessibility and authority');
+expect(in_array('images',$social['sources'],true)&&in_array('privacy',$social['sources'],true),'social course cites imagery and privacy sources');
+expect($translation['title']==='ترجمة دقيقة وعربية سهلة'&&str_contains($translation['body_html'],'سامر اسم افتراضي لمترجم من السويداء'),'translation course has a clear title and fictional local example');
+expect(str_contains($translation['body_html'],'ثبّت الأصل قبل أن تصوغ العربية')&&str_contains($translation['body_html'],'لا تحذف قيداً أو نفياً'),'translation course fixes the reference and preserves constraints');
+expect(str_contains($translation['body_html'],'انقل «قد» و«بحسب» و«لم نتحقق» بدقة')&&str_contains($translation['body_html'],'لا ترجمة حرفية ثقيلة'),'translation course preserves certainty in clear Arabic');
+expect(str_contains($translation['body_html'],'Two evening sessions may have been rescheduled')&&str_contains($translation['body_html'],'ربما أُعيد تحديد موعد جلستين'),'translation course includes a worked example');
+expect(str_contains($translation['body_html'],'ثمانية أسطر')&&str_contains($translation['body_html'],'ملف نصي خفيف'),'translation course supports weak connectivity');
+expect(str_contains($translation['body_html'],'إرشاد للمراجع')&&str_contains($translation['body_html'],'لا يعتمد الترجمة'),'translation course separates educational review from approval');
+expect(str_contains($translation['job_aid'],'الأرقام والوحدات والتواريخ')&&str_contains($translation['job_aid'],'الترجمة التعليمية ليست إذن نشر'),'translation work card preserves facts and authority limits');
+expect(in_array('privacy',$translation['sources'],true),'translation course cites privacy source');
+$GLOBALS['meta'][1]['habaq_learning_social']=array('version'=>$social['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'social','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$social['feedback']['retry'])&&!str_contains($markup,$social['feedback']['complete']),'social retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_social']=array('version'=>$social['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'social','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$social['feedback']['complete'])&&!str_contains($markup,'"correct"'),'social completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_translation']=array('version'=>$translation['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'translation','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$translation['feedback']['complete'])&&!str_contains($markup,'"correct"'),'translation completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');
