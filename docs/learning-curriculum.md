@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.20.0
+# Habaq learning curriculum 0.21.0
+
+## Specialist checkpoint 0.21.0 — verification and interviewing/consent
+
+`verification` is now “كيف نتحقق قبل أن نشارك؟”. A fictional contributor from Suwayda separates one caption into four claims: date, place, cause and scope. The worked example finds an older fictional copy without pretending that this alone proves the place or cause. It records the origin, an independent check, what is known, what remains unknown and a justified wait/do-not-use recommendation. A seven-line paper or light-text exercise and expanded work card support weak connections without collecting real images, source identities or private links.
+
+`interview` is now “مقابلة مريحة، وأسئلة واضحة”. A fictional craft interview separates consent to speak, record, quote, name, photograph and publish. The worked opening explains purpose, audience, raw-recording access, refusal and stopping choices before five open questions. The lesson checks indirect identification through voice, workplace, profession, relationship and event sequence; it stops for distress and routes children, survivors and other high-risk interviews to a specialist process rather than making them a general exercise. The learner submits only a safe eight-line fictional card.
+
+Both courses add reviewer guidance, expanded printable cards and specialist retry/completion feedback without exposing answer keys. The strategic working draft, draft editorial policy, language/style working document, draft digital-security policy, draft safeguarding policy, Safe Voices proposal, draft sensitive-imagery policy and draft privacy policy were re-read on 8 October 2026. Their roles, channels and mandatory language are not treated as adopted procedure or appointments. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Editorial/visual-verification/safeguarding/privacy-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.20.0 — WordPress and digital security
 

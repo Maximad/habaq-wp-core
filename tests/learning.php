@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.20.0');
+define('HABAQ_WP_CORE_VERSION', '0.21.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -590,6 +590,41 @@ expect(str_contains($markup,$digital_security['feedback']['retry'])&&!str_contai
 $GLOBALS['meta'][1]['habaq_learning_digital-security']=array('version'=>$digital_security['version'],'status'=>'complete');
 $_GET=array('view'=>'library','lesson'=>'digital-security','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$digital_security['feedback']['complete'])&&!str_contains($markup,'"correct"'),'digital security completion feedback rendered without raw key');
+// Verification and interviewing support the Media first task without contacting sources or granting publication authority.
+$verification=Habaq_Learning::module('verification');$interview=Habaq_Learning::module('interview');
+expect($verification['version']==='2026-10-07.2'&&$interview['version']==='2026-10-07.2','editorial specialist versions preserved');
+expect($verification['quiz']['correct']===2&&$interview['quiz']['correct']===1,'editorial specialist answer keys preserved');
+expect($verification['outcome']==='تنشئ سجل تحقق وتختار لغة تطابق مستوى الدليل.','verification tested outcome preserved');
+expect($interview['outcome']==='تخطط لمقابلة تحترم الاختيار وتقلل كشف الهوية.','interview tested outcome preserved');
+expect($verification['title']==='كيف نتحقق قبل أن نشارك؟'&&str_contains($verification['body_html'],'نور اسم افتراضي لمساهمة جديدة من السويداء'),'verification course has a clear title and fictional local example');
+expect(str_contains($verification['body_html'],'تاريخ الصورة')&&str_contains($verification['body_html'],'مكانها')&&str_contains($verification['body_html'],'سبب ما يظهر فيها')&&str_contains($verification['body_html'],'نطاق التوقف'),'verification course separates four claims');
+expect(str_contains($verification['body_html'],'أقدم نسخة')&&str_contains($verification['body_html'],'مصدر مستقل')&&str_contains($verification['body_html'],'نتيجة أداة واحدة'),'verification course checks origin and independent evidence without tool overclaim');
+expect(str_contains($verification['body_html'],'سجل تحقق مكتمل للمقارنة')&&str_contains($verification['body_html'],'لا نستخدم الصورة الآن'),'verification course includes a bounded worked evidence log');
+expect(str_contains($verification['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($verification['body_html'],'سبعة أسطر فقط'),'verification course supports weak connectivity');
+expect(str_contains($verification['body_html'],'إرشاد للمراجع')&&str_contains($verification['body_html'],'لا يحول هذا الإكمال السجل إلى مادة معتمدة للنشر'),'verification course separates educational review from publication');
+expect(str_contains($verification['job_aid'],'أقدم أصل وجدته وسياقه')&&str_contains($verification['job_aid'],'القرار واللغة المقترحة'),'verification work card captures provenance, limits and decision');
+expect(in_array('images',$verification['sources'],true),'verification course cites the current sensitive-imagery source');
+expect($interview['title']==='مقابلة مريحة، وأسئلة واضحة'&&str_contains($interview['body_html'],'ميساء اسم افتراضي لفنانة خزف من السويداء'),'interview course has a clear title and fictional local example');
+expect(str_contains($interview['body_html'],'الحديث، والتسجيل، والاقتباس، ونشر الاسم أو الصورة')&&str_contains($interview['body_html'],'قراران منفصلان'),'interview course separates specific consent decisions');
+expect(str_contains($interview['body_html'],'افتتاحية وأسئلة مكتملة للمقارنة')&&str_contains($interview['body_html'],'ما الفكرة التي بدأتِ منها؟'),'interview course includes a worked opening and open questions');
+expect(str_contains($interview['body_html'],'المهنة أو القرابة أو الصوت أو مكان العمل')&&str_contains($interview['body_html'],'عدم النشر حتى مع وجود موافقة'),'interview course covers indirect identification and protection beyond consent');
+expect(str_contains($interview['body_html'],'أوقف التسجيل')&&str_contains($interview['body_html'],'المقابلة ليست علاجاً ولا تحقيقاً'),'interview course handles distress without claiming specialist practice');
+expect(str_contains($interview['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($interview['body_html'],'ثمانية أسطر'),'interview course supports weak connectivity');
+expect(str_contains($interview['body_html'],'طفل أو ناجٍ أو شخص تحت ضغط')&&str_contains($interview['body_html'],'لا يمنح إذن اتصال أو تسجيل أو نشر'),'interview course routes high-risk work and limits authority');
+expect(str_contains($interview['job_aid'],'هل وافق على الحديث؟')&&str_contains($interview['job_aid'],'متى نعيد طلب الموافقة؟'),'interview work card records granular and renewed consent');
+expect(in_array('images',$interview['sources'],true)&&in_array('privacy',$interview['sources'],true),'interview course cites imagery and privacy sources');
+$GLOBALS['meta'][1]['habaq_learning_verification']=array('version'=>$verification['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'verification','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$verification['feedback']['retry'])&&!str_contains($markup,$verification['feedback']['complete']),'verification retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_verification']=array('version'=>$verification['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'verification','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$verification['feedback']['complete'])&&!str_contains($markup,'"correct"'),'verification completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_interview']=array('version'=>$interview['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'interview','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$interview['feedback']['retry'])&&!str_contains($markup,$interview['feedback']['complete']),'interview retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_interview']=array('version'=>$interview['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'interview','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$interview['feedback']['complete'])&&!str_contains($markup,'"correct"'),'interview completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

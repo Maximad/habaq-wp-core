@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.20.0)
+# Habaq member learning and onboarding (0.21.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -172,3 +172,11 @@ The strategic working draft, integrated-program proposal, draft internal statute
 `digital-security` is now “احمِ حسابك، وانتبه للرسائل المشبوهة”. An inert synthetic phishing message demonstrates urgency, a request for a verification code, an unfamiliar login route, bypassed support and excessive access. The learner stops interaction, verifies through an independent known channel and reports only necessary facts. A six-line offline exercise and incident card record whether any interaction occurred, without collecting credentials, source identity, private links or real account settings.
 
 Optional specialist lessons now render their own retry and completion feedback in the library, without exposing answer keys. The strategic working draft, integrated-program proposal, draft digital-security policy, draft privacy policy and draft editorial policy were re-read on 8 October 2026. Their mandatory language, publishing workflow, proposed roles and incident contacts are not treated as adopted procedure or appointments. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Technical/editorial/security/privacy-owner review and trials with new learners remain pending.
+
+## Specialist batch: verification and interviewing/consent — 0.21.0
+
+`verification` is now “كيف نتحقق قبل أن نشارك؟”. A fictional Suwayda example splits one image caption into date, place, cause and scope, then traces an older copy without treating it as proof of every claim. The learner records the origin, an independent check, contradiction, knowns, unknowns and a proposed publish/wait/do-not-use decision. A seven-line paper or light-text exercise, worked evidence log and expanded work card make the next action explicit while excluding real images, private links and source identities.
+
+`interview` is now “مقابلة مريحة، وأسئلة واضحة”. A fictional craft interview separates agreement to speak, record, quote, use a name, use an image and publish. The worked opening gives refusal and stopping choices before five open questions. The lesson checks indirect identification, limits raw-recording access, stops when distress appears and sends high-risk interviews to a specialist process. It does not ask learners to contact a real person or collect testimony.
+
+Both lessons include actionable reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, draft editorial, security, safeguarding, imagery and privacy policies, language/style working document and Safe Voices proposal were re-read on 8 October 2026. They remain working, draft or proposal sources; no reporting contact, reviewer or protection role is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/visual-verification/safeguarding/privacy-owner review and learner trials remain pending.
