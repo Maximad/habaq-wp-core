@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.21.0
+# Habaq learning curriculum 0.22.0
+
+## Specialist checkpoint 0.22.0 — reporting and editing
+
+`reporting` is now “ابدأ بسؤال محلي واضح”. A fictional Suwayda contributor turns a broad claim about a fictional cultural centre into one answerable service question, four separate claims and an evidence map. The worked assignment distinguishes public records, attributed fictional observations and unknown causes; it includes a safe right-of-reply plan, publication limits, an eight-line paper/light-text exercise, reviewer guidance and an expanded reporting card.
+
+`editing` is now “راجع المادة، وصحّح بوضوح”. A fictional editor finds a false time span, two unsupported generalizations, an unverified cause and a missing right of reply in a short draft. The worked edit preserves what the fictional evidence supports and labels what remains unknown. A separate correction example shows the original error, the corrected figure, the date and the dependent text, graphic and social post that need updating rather than silently replacing one number.
+
+Both courses add specialist retry/completion feedback without exposing answer keys. The strategic working draft, journalism-training consultation document, draft editorial policy, language/style working document and draft sensitive-imagery policy were re-read on 8 October 2026. Their roles, timelines and mandatory language are not treated as adopted procedure or appointments. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Editorial/rights/safety-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.21.0 — verification and interviewing/consent
 

@@ -1,10 +1,10 @@
-# Habaq visual and course review plan — 0.21.0
+# Habaq visual and course review plan — 0.22.0
 
 The learning portal now uses a full-width photograph from Habaq's existing WordPress media collection, attachment 2564 / ADN4981-scaled.jpg. No location or photographer credit is invented from the filename. The UI keeps the site font, reduces reading text to 16px, supporting labels to 12–13px, section headings to 22–24px and hero headings to 27–34px. A dark directional overlay keeps text and actions legible. The lesson header is shorter than the landing header. Image width/height, native srcset, eager hero loading and high fetch priority are supplied by WordPress. Missing media leaves the dark background usable. No carousel, new font download, analytics or JavaScript is added.
 
 A native editable block pattern `Habaq / حبق: صورة واسعة ونص وأزرار` is registered for other pages. Editors replace the photograph, heading, brief introduction and button target. This establishes a reusable site-wide visual approach; it does not bulk rewrite unrelated pages or stretch every instructional image. Port the approach to the organization home, project/unit entrances and opportunities as those pages are reviewed. Keep detailed reading and forms on quiet light surfaces. Require an identified source, right to use, privacy review and appropriate crop before selecting a new photograph. Do not guess photo locations or credits.
 
-The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and all ten two-lesson onboarding paths now implement that editorial direction. The reviewed specialist courses are WordPress drafting, digital security, verification, and interviewing/consent. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. Other specialist rows below are proposals, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
+The wording is warm, direct fusha: short sentences, familiar verbs, a clear next action and precise safety boundaries. All five shared lessons and all ten two-lesson onboarding paths now implement that editorial direction. The reviewed specialist courses are WordPress drafting, digital security, verification, interviewing/consent, reporting and editing/correction. Their tested outcomes, assignments, quiz keys and module versions remain unchanged, so existing completions stay valid. Domain-owner review and trials with new learners remain pending. Other specialist rows below are proposals, not claims that each course has already passed review. Proposed reviewers are responsibilities to assign, not appointments.
 
 ## A manageable review process
 
@@ -313,6 +313,7 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Proposed reviewer: مراجع التحرير
 - Example to add/refine: فكرة تقرير عن الوصول إلى خدمة عامة، مع مصادر وأدلة افتراضية متعارضة.
 - Acceptance: تكليف محدود يميّز ما نعرفه وما نحتاج إلى التحقق منه.
+- Implementation: Rewritten in release 0.22.0 as “ابدأ بسؤال محلي واضح” with a fictional Suwayda cultural-centre case, four separated claims, an evidence and right-of-reply map, a completed bounded assignment, an eight-line low-connectivity exercise, expanded work card, reviewer guidance and formative feedback. Tested outcome, key and module version remain unchanged; editorial/rights/safety-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### التحقق من الادعاءات والصور (`verification`)
@@ -332,6 +333,7 @@ Keep necessary technical terms when they are accurate, followed by a short expla
 - Proposed reviewer: مراجع التحرير
 - Example to add/refine: نسخة قصيرة فيها تعميم وخطأ رقمي ونقص في حق الرد.
 - Acceptance: تحرير يغيّر مواضع الخطأ وتصحيح مفهوم للقارئ.
+- Implementation: Rewritten in release 0.22.0 as “راجع المادة، وصحّح بوضوح” with a fictional Suwayda editing case, a worked before/after edit, separate correction example, right-of-reply and media checks, an eight-line low-connectivity exercise, expanded work card, reviewer guidance and formative feedback. Tested outcome, key and module version remain unchanged; editorial/rights/safety-owner and learner review remain pending.
 - Current content version: 2026-10-07.2; keep source references during review.
 
 ### المقابلة والموافقة والسرد الآمن (`interview`)

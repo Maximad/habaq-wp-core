@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.21.0');
+define('HABAQ_WP_CORE_VERSION', '0.22.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -625,6 +625,44 @@ expect(str_contains($markup,$interview['feedback']['retry'])&&!str_contains($mar
 $GLOBALS['meta'][1]['habaq_learning_interview']=array('version'=>$interview['version'],'status'=>'complete');
 $_GET=array('view'=>'library','lesson'=>'interview','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$interview['feedback']['complete'])&&!str_contains($markup,'"correct"'),'interview completion feedback rendered without raw key');
+// Reporting and editing turn the Media first task into a bounded evidence and correction workflow.
+$reporting=Habaq_Learning::module('reporting');$editing=Habaq_Learning::module('editing');
+expect($reporting['version']==='2026-10-07.2'&&$editing['version']==='2026-10-07.2','reporting and editing versions preserved');
+expect($reporting['quiz']['correct']===1&&$editing['quiz']['correct']===0,'reporting and editing answer keys preserved');
+expect($reporting['outcome']==='تكتب تكليفاً صحفياً قابلاً للتحقق وتفصل الدليل عن الافتراض.','reporting tested outcome preserved');
+expect($editing['outcome']==='تراجع مادة قبل النشر وتصوغ تصحيحاً واضحاً عند اكتشاف خطأ.','editing tested outcome preserved');
+expect($reporting['title']==='ابدأ بسؤال محلي واضح'&&str_contains($reporting['body_html'],'ندى اسم افتراضي لمساهمة جديدة من السويداء'),'reporting course has a clear title and fictional local example');
+expect(str_contains($reporting['body_html'],'ابدأ بسؤال، لا بخلاصة جاهزة')&&str_contains($reporting['body_html'],'يترك مساحة لنتيجة تخالف انطباعك الأول'),'reporting course starts from an answerable question');
+expect(str_contains($reporting['body_html'],'عدد الأنشطة المتوقفة')&&str_contains($reporting['body_html'],'السبب'),'reporting course separates the broad claim');
+expect(str_contains($reporting['body_html'],'الرسائل التي تعود إلى الشخص نفسه ليست مصادر مستقلة')&&str_contains($reporting['body_html'],'دليلاً قد يثبته أو ينفيه'),'reporting course maps claims to independent evidence');
+expect(str_contains($reporting['body_html'],'تكليف مكتمل للمقارنة')&&str_contains($reporting['body_html'],'خبر خدمي خيالي من ٣٥٠ كلمة'),'reporting course includes a bounded worked assignment');
+expect(str_contains($reporting['body_html'],'حق الرد')&&str_contains($reporting['body_html'],'يؤجل التواصل إذا كان يكشف شخصاً'),'reporting course covers safe right of reply');
+expect(str_contains($reporting['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($reporting['body_html'],'ثمانية أسطر'),'reporting course supports weak connectivity');
+expect(str_contains($reporting['body_html'],'إرشاد للمراجع')&&str_contains($reporting['body_html'],'لا يجيز التواصل أو النشر'),'reporting course separates educational review from authority');
+expect(str_contains($reporting['job_aid'],'الادعاء ٢')&&str_contains($reporting['job_aid'],'ما لا نعرفه بعد')&&str_contains($reporting['job_aid'],'حدود القرار'),'reporting work card captures evidence unknowns and authority');
+expect(in_array('images',$reporting['sources'],true)&&in_array('media',$reporting['sources'],true),'reporting course cites media and imagery sources');
+expect($editing['title']==='راجع المادة، وصحّح بوضوح'&&str_contains($editing['body_html'],'لينا اسم افتراضي لمحررة جديدة من السويداء'),'editing course has a clear title and fictional local example');
+expect(str_contains($editing['body_html'],'راجع المعنى قبل تجميل الجملة')&&str_contains($editing['body_html'],'العنوان أقوى من المتن'),'editing course protects meaning before style');
+expect(str_contains($editing['body_html'],'منذ شهر')&&str_contains($editing['body_html'],'لم يعد أحد')&&str_contains($editing['body_html'],'سبب غير متحقق'),'editing course identifies number generalization and certainty problems');
+expect(str_contains($editing['body_html'],'من الملاحظة إلى نسخة أوضح')&&str_contains($editing['body_html'],'لم نتحقق من سبب التغيير أو مدته'),'editing course includes a worked before and after edit');
+expect(str_contains($editing['body_html'],'مثال تصحيح واضح')&&str_contains($editing['body_html'],'عدلنا النص والرسم والمنشور المرتبط'),'editing course corrects dependent versions visibly');
+expect(str_contains($editing['body_html'],'تحديث يضيف معلومة جديدة وتصحيح يعالج خطأ سابقاً')&&str_contains($editing['body_html'],'لا تحذف أثراً جوهرياً بصمت'),'editing course distinguishes update from correction');
+expect(str_contains($editing['body_html'],'على ورق أو في ملف نصي خفيف')&&str_contains($editing['body_html'],'ثمانية أسطر'),'editing course supports weak connectivity');
+expect(str_contains($editing['body_html'],'إرشاد للمراجع')&&str_contains($editing['body_html'],'لا يمنح هذا الإكمال اعتماد تحرير نهائي أو نشر'),'editing course separates learning review from publication');
+expect(str_contains($editing['job_aid'],'العنوان مقارنة بالمتن')&&str_contains($editing['job_aid'],'إن كان تصحيحاً')&&str_contains($editing['job_aid'],'النسخ التابعة التي ستُحدّث'),'editing work card covers headline correction and dependent copies');
+expect(in_array('images',$editing['sources'],true)&&in_array('media',$editing['sources'],true),'editing course cites media and imagery sources');
+$GLOBALS['meta'][1]['habaq_learning_reporting']=array('version'=>$reporting['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'reporting','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$reporting['feedback']['retry'])&&!str_contains($markup,$reporting['feedback']['complete']),'reporting retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_reporting']=array('version'=>$reporting['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'reporting','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$reporting['feedback']['complete'])&&!str_contains($markup,'"correct"'),'reporting completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_editing']=array('version'=>$editing['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'editing','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$editing['feedback']['retry'])&&!str_contains($markup,$editing['feedback']['complete']),'editing retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_editing']=array('version'=>$editing['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'editing','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$editing['feedback']['complete'])&&!str_contains($markup,'"correct"'),'editing completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');

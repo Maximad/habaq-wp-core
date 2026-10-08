@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.21.0)
+# Habaq member learning and onboarding (0.22.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -180,3 +180,11 @@ Optional specialist lessons now render their own retry and completion feedback i
 `interview` is now “مقابلة مريحة، وأسئلة واضحة”. A fictional craft interview separates agreement to speak, record, quote, use a name, use an image and publish. The worked opening gives refusal and stopping choices before five open questions. The lesson checks indirect identification, limits raw-recording access, stops when distress appears and sends high-risk interviews to a specialist process. It does not ask learners to contact a real person or collect testimony.
 
 Both lessons include actionable reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, draft editorial, security, safeguarding, imagery and privacy policies, language/style working document and Safe Voices proposal were re-read on 8 October 2026. They remain working, draft or proposal sources; no reporting contact, reviewer or protection role is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/visual-verification/safeguarding/privacy-owner review and learner trials remain pending.
+
+## Specialist batch: reporting and editing — 0.22.0
+
+`reporting` is now “ابدأ بسؤال محلي واضح”. A fictional Suwayda contributor turns a broad claim about a fictional cultural centre into one answerable question, four claim parts and an evidence map. The worked assignment records its audience and size, evidence and limits for two claims, a safe right-of-reply path, unknowns, risk and publication boundaries. An eight-line paper or light-text exercise excludes real names, contact details, documents and private links.
+
+`editing` is now “راجع المادة، وصحّح بوضوح”. A fictional editor identifies a wrong time span, unsupported generalizations, an unverified cause and a missing right of reply. The worked edit narrows the language to the available fictional record and preserves unknowns. A separate correction example identifies the original error, the corrected figure, the date and the dependent text, graphic and social post that need updating instead of silently replacing the number.
+
+Both courses include expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, journalism-training consultation document, draft editorial policy, language/style working document and draft sensitive-imagery policy were re-read on 8 October 2026. They remain working, consultation or draft sources; no editor, reporting channel, fixed deadline or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Editorial/rights/safety-owner review and learner trials remain pending.
