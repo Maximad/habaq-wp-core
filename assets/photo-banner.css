@@ -1,0 +1,9 @@
+/* Reusable Habaq Cover pattern. Native WordPress controls edit the image, copy and links. */
+.habaq-photo-banner{font-family:inherit;color:#fff;padding:40px 24px;min-height:420px}
+.habaq-photo-banner .wp-block-cover__inner-container{max-width:1140px;margin-inline:auto}
+.habaq-photo-banner h2{font-size:clamp(27px,2.5vw,34px);line-height:1.5;max-width:500px}
+.habaq-photo-banner p{font-size:16px;line-height:1.9;max-width:500px}
+.habaq-photo-banner .wp-block-button__link{font-size:15px;line-height:1.6;border-radius:6px;padding:10px 20px;background:#f5f1e8;color:#24251f;min-height:44px}
+.habaq-photo-banner :focus-visible{outline:3px solid #f2ca95;outline-offset:4px}
+@media(max-width:480px){.habaq-photo-banner{padding:32px 16px;min-height:380px}}
+@media print{.habaq-photo-banner{min-height:0!important;color:#000!important;padding:0}.habaq-photo-banner .wp-block-cover__image-background,.habaq-photo-banner .wp-block-cover__background,.habaq-photo-banner .wp-block-buttons{display:none}}

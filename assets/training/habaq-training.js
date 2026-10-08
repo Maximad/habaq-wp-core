@@ -665,31 +665,34 @@
     }
 
     function markCompleted() {
-      state.completed = true;
-      state.completedAt = nowTs();
-      saveLocalProgress();
-
-      if (!isLoggedIn || !canTrackServer || !ajaxUrl || !nonce) {
+      function commitCompletion() {
+        completeBadge.textContent = 'مكتمل ✓';
+        state.completed = true;
+        state.completedAt = nowTs();
+        saveLocalProgress();
         renderCompletionState();
+      }
+      if (!isLoggedIn || !canTrackServer || !ajaxUrl || !nonce) {
+        commitCompletion();
         return;
       }
-
       var bodyData = new URLSearchParams();
       bodyData.set('action', 'habaq_training_mark_complete');
+      bodyData.set('ack', ack.checked ? '1' : '0');
       bodyData.set('nonce', nonce);
       bodyData.set('slug', config.slug || 'default');
       bodyData.set('version', meta.version || '1');
       bodyData.set('current_slide', String(state.current));
-
       fetch(ajaxUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-        body: bodyData.toString(),
-        credentials: 'same-origin'
-      }).then(function () {
-        renderCompletionState();
+        body: bodyData.toString(), credentials: 'same-origin'
+      }).then(function (response) { return response.json(); }).then(function (result) {
+        if (!result.success) { throw new Error('save_failed'); }
+        commitCompletion();
       }).catch(function () {
-        renderCompletionState();
+        completeBadge.hidden = false;
+        completeBadge.textContent = 'تعذر حفظ الإكمال. تحقق من الاتصال وحدّث الصفحة ثم حاول مجدداً.';
       });
     }
 
@@ -918,12 +921,6 @@
       }
     });
 
-      if (!!meta.autoadvance && state.current < config.slides.length - 1) {
-        changeSlide(state.current + 1, true, true);
-      }
-      updateButtons();
-      updateVh();
-    });
 
     document.addEventListener('fullscreenchange', function () {
       if (!document.fullscreenElement && !state.immersive) {
