@@ -424,11 +424,41 @@ Validation and delivery:
 - Publication was not retried against the established WordPress reauthentication blocker. Release `0.20.0` is prepared on draft PR #21. The last verified live release remains `0.10.0`, and no learner state or permission changed.
 - Technical/editorial/security/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
 
+## Batch 16 — Specialist verification and interviewing/consent (0.21.0)
+
+Scope and decisions:
+
+- Rewrote optional specialist course `verification` as “كيف نتحقق قبل أن نشارك؟”. It now uses a fictional Suwayda contributor, separates one caption into date, place, cause and scope, traces an older fictional copy without treating it as complete proof, and records what is known, unknown and independently needed before a publish/wait/do-not-use recommendation.
+- Rewrote optional specialist course `interview` as “مقابلة مريحة، وأسئلة واضحة”. It now uses a fictional Suwayda craft interview, separates consent to speak, record, quote, name, photograph and publish, gives a worked opening and five open questions, checks indirect identification and stops for distress.
+- Both courses add paper/light-text exercises, expanded work cards, reviewer guidance and specialist retry/completion feedback. Raw answer keys remain server-side and absent from the frontend.
+- Preserved both IDs, tested outcomes, correct answer indexes and module version `2026-10-07.2`. Existing completions remain current. Plugin release `0.21.0` records this specialist editorial batch.
+- Learning completion, domain review, source contact, recording, specialist safeguarding review and publication remain separate. Exercises use fictional people, images, links and claims. They collect no testimony, source identity, contact detail, real image, raw recording or private link.
+
+Sources re-read on 8 October 2026:
+
+- `التخطيط الاستراتيجي | تدريب حياة`, modified 6 October 2026 at 18:04:46 UTC: Habaq aims to produce locally grounded knowledge and narratives while incomplete roles and procedures still require institutional development. It remains a working draft.
+- `17- مسودة سياسة التحرير والنشر والتصحيح وحق الرد في حبق`, modified 13 December 2025 at 12:48:25 UTC: claims need traceable evidence and language matching verification strength; editorial review and publication remain distinct. It remains a draft.
+- `دليل اللغة والأسلوب لحبق ميديا`, modified 28 October 2025 at 19:41:07 UTC: uncertainty should be named, images need time/place checks and corrections should say what changed. It remains a working document whose adoption must be confirmed.
+- `18- مسودة سياسة الأمن الرقمي والسلامة الميدانية في حبق`, modified 13 December 2025 at 12:49:31 UTC: source identities, precise locations and sensitive materials need restricted channels and storage. It remains a draft with unfilled roles.
+- `16- مسودة سياسة حماية الأطفال والفئات الأضعف في حبق`, modified 13 December 2025 at 12:46:44 UTC: informed consent, safe alternatives and stopping when a person is distressed are proposed safeguards. It remains a draft with unfilled protection roles.
+- `أصوات آمنة: نواة إعلامية نسوية لمواجهة العنف ضد النساء والعنف الرقمي في السويداء`, modified 19 September 2026 at 14:14:44 UTC: no story is more important than a participant's safety, identity protection or right to decline. It remains a proposal, not proof of a completed programme or appointed reviewer.
+- `12- مسودة ملحق D: سياسة الصور والمحتوى الحساس في حبق`, modified 5 September 2026 at 18:38:54 UTC: consent, verification, necessity, dignity and protection beyond consent apply to sensitive visual and audio material. It remains a draft.
+- `15- مسودة سياسة حماية البيانات والخصوصية في حبق`, modified 13 December 2025 at 12:45:38 UTC: purpose limitation, data minimization, least access and deidentification apply to source and interview material. It remains a draft with unfilled roles and channels.
+
+Validation and delivery:
+
+- 757 isolated behavioral checks passed. The 25 new checks cover preserved versions, outcomes and answer keys; fictional local cases; four-part claim analysis; provenance, independent evidence and tool limits; worked evidence and consent examples; granular and renewed consent; indirect identification; distress and high-risk routing; low-connectivity exercises; expanded work cards; source references; authority limits; formative feedback; and hidden raw answer keys.
+- All 36 PHP files passed syntax lint with isolated PHP 8.5.10. Training JavaScript syntax, curriculum JSON parsing, generated-document parsing and `git diff --check` passed.
+- The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 14. Both are now version 15. No duplicate artifact was created.
+- Saved release commit `bde95de05f1e187d95e5453810f23ca8f41ffb30`, tree `3ebc098f85835c84f6809cabe807abd53d8fda06`, to `codex/member-learning` using expected head `4b042817d42091cf876c89ef4683468d399bf998`, fast-forward only. No force update or merge to main occurred.
+- Publication was not retried against the established WordPress reauthentication blocker. Release `0.21.0` is prepared on draft PR #21. The last verified live release remains `0.10.0`, and no learner state or permission changed.
+- Editorial/visual-verification/safeguarding/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
+
 ## Remaining approved work
 
 1. Verify the interface on a real narrow viewport, keyboard and larger browser text; print/save a work card. This run has no documented browser viewport-emulation control, so do not claim real mobile acceptance from CSS or isolated tests alone.
 2. All ten two-lesson onboarding paths are complete in implementation. Domain-owner and learner review remain human acceptance steps, not completed claims.
-3. Review the remaining 34 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use and digital security are complete in implementation. Actual first-task relevance chooses the next batch; otherwise verification and interviewing/consent are next because they support current Habaq Media first assignments.
+3. Review the remaining 32 specialist courses against `docs/learning-design-and-review.md` in small batches, with current sources and explicit draft/domain review state. WordPress use, digital security, verification and interviewing/consent are complete in implementation. Actual first-task relevance chooses the next batch; otherwise reporting and editing are next because they support current Habaq Media first assignments.
 4. Finish content-maintenance register, reviewer/support setup guidance and concise pilot checklist. Update existing Library artifact identities only when their content actually changes.
 
 ## Decisions and human acceptance still needed
