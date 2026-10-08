@@ -451,7 +451,8 @@ Validation and delivery:
 - All 36 PHP files passed syntax lint with isolated PHP 8.5.10. Training JavaScript syntax, curriculum JSON parsing, generated-document parsing and `git diff --check` passed.
 - The existing 61-card review plan and 61-lesson curriculum were replaced in place using expected Library version 14. Both are now version 15. No duplicate artifact was created.
 - Saved release commit `bde95de05f1e187d95e5453810f23ca8f41ffb30`, tree `3ebc098f85835c84f6809cabe807abd53d8fda06`, to `codex/member-learning` using expected head `4b042817d42091cf876c89ef4683468d399bf998`, fast-forward only. No force update or merge to main occurred.
-- Publication was not retried against the established WordPress reauthentication blocker. Release `0.21.0` is prepared on draft PR #21. The last verified live release remains `0.10.0`, and no learner state or permission changed.
+- Authenticated WordPress access was available on 8 October 2026. The Deployer for Git dashboard visibly showed one linked plugin, repository `Maximad/habaq-wp-core`, branch `codex/member-learning`, and a `Deploy Plugin` action. The installed-plugins screen independently confirmed that the active Habaq Engine release remains `0.10.0`.
+- Release `0.21.0` remains prepared on draft PR #21 rather than live. The deployment button was not pressed in this non-interactive run because that UI action would change the public site and requires action-time confirmation. No learner state, permission or production code changed. Code rollback remains `rollback/learning-0.10.0`.
 - Editorial/visual-verification/safeguarding/privacy-owner review and learner acceptance remain pending. This batch is complete in implementation.
 
 ## Remaining approved work
