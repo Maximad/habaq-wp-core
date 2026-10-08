@@ -1,4 +1,12 @@
-# Habaq learning curriculum 0.24.0
+# Habaq learning curriculum 0.25.0
+
+## Specialist checkpoint 0.25.0 — audio/podcast and radio rights
+
+`audio` is now “صوت مفهوم، وحلقة بسيطة”. A fictional Suwayda contributor plans a two-minute, four-part audio item with her own voice and text, compares a distant noisy sample with a clear controlled one, removes an unauthorized incidental song and records the remaining room sound. The worked handover includes the script, rights card, named review version and one reviewer question. It separates consent to record, live broadcast, downloadable podcast and raw-file access, and includes a transcript for accessibility and weak connections.
+
+`radio-rights` is now “قبل البث: تأكد من إذن الاستخدام”. Three fictional works model ready, unanswered and expired permission states. The register distinguishes linear broadcast, AutoDJ, credit/link, a time-bounded promotional excerpt, podcast or permanent archive, download, video and modification. A blank field is treated as a question, not permission; expired or disputed use is stopped and replaced pending specialist review.
+
+Both courses add eight-line paper/light-text exercises, expanded work cards, reviewer guidance and specialist retry/completion feedback without collecting real recordings, names, contacts, contracts or private links. The strategic working draft, integrated-program proposal, draft radio permission, draft assets, draft editorial, draft sensitive-imagery and draft privacy documents were re-read on 8 October 2026. They remain working or draft sources; no right, appointment, legal interpretation, account access, signature or broadcast is invented. IDs, tested outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving completion history. Production/editorial/radio/rights/privacy/accessibility-owner review and trials with new learners remain pending.
 
 ## Specialist checkpoint 0.24.0 — photography and video
 

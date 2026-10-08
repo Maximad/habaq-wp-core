@@ -1,4 +1,4 @@
-# Habaq member learning and onboarding (0.24.0)
+# Habaq member learning and onboarding (0.25.0)
 
 Operating model: [docs/learning-operating-model.md](docs/learning-operating-model.md). Expanded curriculum, roles and maintenance: [docs/learning-curriculum.md](docs/learning-curriculum.md).
 
@@ -204,3 +204,11 @@ Both courses include reviewer guidance and specialist retry/completion feedback 
 `video` is now “ابنِ تسلسلاً بصرياً واضحاً”. A fictional Suwayda contributor prepares a 35-second, six-shot paper-poster sequence using owned materials, preserves chronology, removes an unauthorized background song, adds readable screen text and a short transcript and hands over a named review version with one clear question. The exercise uses a storyboard only and asks for no recording or upload.
 
 Both courses include crop and deidentification limits, accessible alternatives, expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy and draft sensitive-imagery, privacy and editorial policies were re-read on 8 October 2026. They remain working or draft sources; no archive access, rights approval, reviewer or publication authority is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Production/editorial/rights/privacy/accessibility-owner review and learner trials remain pending.
+
+## Specialist batch: audio/podcast and radio rights — 0.25.0
+
+`audio` is now “صوت مفهوم، وحلقة بسيطة”. A fictional Suwayda contributor creates a paper plan for a two-minute audio item, compares a distant noisy sample with a clearer setup, removes an unauthorized incidental song and prepares a script, rights card and named review version. Consent to record, live broadcast, downloadable podcast and raw-file access are separate decisions.
+
+`radio-rights` is now “قبل البث: تأكد من إذن الاستخدام”. Three fictional works demonstrate a ready permission, a blank on-demand archive field and an expired permission. The expanded register distinguishes linear broadcast, AutoDJ, short promotion, podcast/archive, download, video and modification, and records expiry, withdrawal, review status and a replacement.
+
+Both courses add accessible text alternatives, eight-line paper/light-text exercises, worked handovers, expanded work cards, reviewer guidance and specialist retry/completion feedback without exposing answer keys. The current strategy, integrated-program proposal and draft radio permission, assets, editorial, sensitive-imagery and privacy documents were re-read on 8 October 2026. They remain working or draft sources; no right, signature, legal interpretation, broadcast or account access is invented. IDs, outcomes, answer keys and module versions `2026-10-07.2` remain unchanged, preserving prior completions. Production/editorial/radio/rights/privacy/accessibility-owner review and learner trials remain pending.

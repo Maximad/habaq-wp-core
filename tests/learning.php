@@ -2,7 +2,7 @@
 /** Isolated behavioral checks; not a replacement for live WordPress staging QA. */
 define('ABSPATH', __DIR__);
 define('HABAQ_WP_CORE_URL', 'https://example.test/plugin/');
-define('HABAQ_WP_CORE_VERSION', '0.24.0');
+define('HABAQ_WP_CORE_VERSION', '0.25.0');
 $GLOBALS['uid'] = 1;
 $GLOBALS['caps'] = array('habaq_insider_access');
 $GLOBALS['meta'] = array();
@@ -730,6 +730,40 @@ expect(str_contains($markup,$video['feedback']['retry'])&&!str_contains($markup,
 $GLOBALS['meta'][1]['habaq_learning_video']=array('version'=>$video['version'],'status'=>'complete');
 $_GET=array('view'=>'library','lesson'=>'video','learning_notice'=>'saved');$markup=Habaq_Learning::render();
 expect(str_contains($markup,$video['feedback']['complete'])&&!str_contains($markup,'"correct"'),'video completion feedback rendered without raw key');
+// Audio and radio-rights courses keep consent, rights and broadcast authority explicit.
+$audio=Habaq_Learning::module('audio');$radio_rights=Habaq_Learning::module('radio-rights');
+expect($audio['version']==='2026-10-07.2'&&$radio_rights['version']==='2026-10-07.2','audio and radio-rights versions preserved');
+expect($audio['quiz']['correct']===0&&$radio_rights['quiz']['correct']===1,'audio and radio-rights answer keys preserved');
+expect($audio['outcome']==='تخطط لحلقة قصيرة بصوت مفهوم وحقوق واضحة وتسليم منظم.','audio tested outcome preserved');
+expect($radio_rights['outcome']==='تميز البث الخطي عن الاستخدامات الأخرى وتنشئ سجل إذن لكل عمل.','radio-rights tested outcome preserved');
+expect($audio['title']==='صوت مفهوم، وحلقة بسيطة'&&str_contains($audio['body_html'],'ميس اسم افتراضي لمساهمة من السويداء'),'audio course has a clear title and fictional local example');
+expect(str_contains($audio['body_html'],'الموافقة على البث المباشر لا تعني تلقائياً')&&str_contains($audio['body_html'],'بودكاست قابل للتنزيل'),'audio course separates live and on-demand consent');
+expect(str_contains($audio['body_html'],'موسيقى عارضة أو حديث خاص')&&str_contains($audio['body_html'],'اللهجة أو المهنة أو التفاصيل'),'audio course checks incidental capture and indirect identification');
+expect(str_contains($audio['body_html'],'من عينة مربكة إلى تسليم واضح')&&str_contains($audio['body_html'],'نسخة مراجعة 01'),'audio course includes a worked improved sample handover');
+expect(str_contains($audio['body_html'],'ثمانية أسطر')&&str_contains($audio['body_html'],'لا تنشئ تسجيلاً ولا ترفع ملفاً'),'audio course supports low-data safe practice');
+expect(str_contains($audio['body_html'],'إرشاد للمراجع')&&str_contains($audio['body_html'],'لا تثبت إذن ضيف'),'audio course separates educational review from consent');
+expect(str_contains($audio['job_aid'],'حديث أو موسيقى عارضة')&&str_contains($audio['job_aid'],'ليست إذن نشر أو أرشفة'),'audio work card covers incidental audio and authority');
+expect(in_array('images',$audio['sources'],true)&&in_array('privacy',$audio['sources'],true),'audio course cites sensitive-media and privacy sources');
+expect($radio_rights['title']==='قبل البث: تأكد من إذن الاستخدام'&&str_contains($radio_rights['body_html'],'ليان ونور اسمان خياليان لفنانتين من السويداء'),'radio-rights course has a clear title and fictional local example');
+expect(str_contains($radio_rights['body_html'],'غير حصري ومحدود وقابل للإنهاء')&&str_contains($radio_rights['body_html'],'لا ينقل ملكية'),'radio-rights course states permission boundaries');
+expect(str_contains($radio_rights['body_html'],'الخانة الفارغة ليست موافقة')&&str_contains($radio_rights['body_html'],'لا تفسر الصمت أو المجانية أو ذكر الاسم كإذن'),'radio-rights course prevents implied permission');
+expect(str_contains($radio_rights['body_html'],'سجل إذن افتراضي مكتمل')&&str_contains($radio_rights['body_html'],'«مسافة 02»'),'radio-rights course includes a three-state worked register');
+expect(str_contains($radio_rights['body_html'],'البث الخطي لا يمنح تلقائياً')&&str_contains($radio_rights['body_html'],'نسخة الأرشيف'),'radio-rights course separates linear broadcast from archive');
+expect(str_contains($radio_rights['body_html'],'ثمانية أسطر')&&str_contains($radio_rights['body_html'],'لا تستخدم اسماً أو رابطاً أو عقداً حقيقياً'),'radio-rights course supports safe low-connectivity practice');
+expect(str_contains($radio_rights['body_html'],'إرشاد للمراجع')&&str_contains($radio_rights['body_html'],'لا يقدم رأياً قانونياً'),'radio-rights course separates learning from legal approval');
+expect(str_contains($radio_rights['job_aid'],'بودكاست أو أرشيف عند الطلب')&&str_contains($radio_rights['job_aid'],'السجل التعليمي ليس إذناً أو توقيعاً'),'radio-rights work card covers on-demand use and authority limits');
+$GLOBALS['meta'][1]['habaq_learning_audio']=array('version'=>$audio['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'audio','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$audio['feedback']['retry'])&&!str_contains($markup,$audio['feedback']['complete']),'audio retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_audio']=array('version'=>$audio['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'audio','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$audio['feedback']['complete'])&&!str_contains($markup,'"correct"'),'audio completion feedback rendered without raw key');
+$GLOBALS['meta'][1]['habaq_learning_radio-rights']=array('version'=>$radio_rights['version'],'status'=>'new');
+$_GET=array('view'=>'library','lesson'=>'radio-rights','learning_notice'=>'wrong');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$radio_rights['feedback']['retry'])&&!str_contains($markup,$radio_rights['feedback']['complete']),'radio-rights retry feedback only after attempt');
+$GLOBALS['meta'][1]['habaq_learning_radio-rights']=array('version'=>$radio_rights['version'],'status'=>'complete');
+$_GET=array('view'=>'library','lesson'=>'radio-rights','learning_notice'=>'saved');$markup=Habaq_Learning::render();
+expect(str_contains($markup,$radio_rights['feedback']['complete'])&&!str_contains($markup,'"correct"'),'radio-rights completion feedback rendered without raw key');
 // The first path editorial batch makes operations work concrete without changing tested requirements.
 $operations_basics=Habaq_Learning::module('operations-basics');$operations_task=Habaq_Learning::module('operations-task');
 expect($operations_basics['version']==='2026-10-07.2'&&$operations_task['version']==='2026-10-07.2','operations editorial versions preserved');
